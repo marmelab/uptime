@@ -3,16 +3,12 @@ nginx:
     ports:
         - "8000:80"
     volumes:
-        - ./nginxContainer/static-html-directory:/usr/share/nginx/html
-
-
-
-
+        - ./public:/usr/share/nginx/html
 watcher:
     image: golang
     working_dir: /usr/src/watcher
     volumes:
-        - .:/user/src/watcher
+        - .:/usr/src/watcher
     command: sleep 10000
     links:
         - nginx:nginx
