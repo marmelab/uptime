@@ -36,10 +36,10 @@ func Ping(domainName string) int {
 }
 
 func main() {
-	url := flag.String("url","8.8.8.8","url to ping")
+	dst := flag.String("dst","8.8.8.8","destination to ping")
 	flag.Parse()
-	fmt.Println("Ping on : " + *url)
-	duration := Ping(*url)
+	fmt.Println("Ping on : " + *dst)
+	duration := Ping(*dst)
 	fmt.Println("It works ! Time : ")
 	fmt.Println(duration)
 
