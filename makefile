@@ -8,4 +8,5 @@ docker_run:
 		--tty \
 		--volume=${CURDIR}:/srv \
 		marmelab/go
+
 		
