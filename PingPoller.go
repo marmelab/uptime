@@ -1,47 +1,46 @@
 package main
 
-import "golang.org/x/net/icmp"
-import "os"
-import "fmt"
-import "net"
+import (
+	"fmt"
+	"golang.org/x/net/icmp"
+	"net"
+	"time"
+	"flag"
+)
 
-
-type Destination struct{
-	url string
-}
-
-
-
-func Ping(s string) int{
-	//var packetConn *icmp.PacketConn
-	var errorCode int
+func Ping(domainName string) int {
+	var duration int
 	var data []byte
-	ip,err := net.ResolveIPAddr("ip",s)
-	if(err==nil){
-		var dst net.Addr = ip
-		packetConn, err := icmp.ListenPacket("ip4:icmp","")
-		if(err==nil){
-			errorCode,err := packetConn.WriteTo(data,dst)
-			return errorCode
-			if(err!=nil){
+	ip, err := net.ResolveIPAddr("ip", domainName)
+	if err == nil {
+		var destination net.Addr = ip
+		packetConn, err := icmp.ListenPacket("ip4:icmp", "")
+		if err == nil {
+			timeNow := time.Now().Nanosecond()
+			errorCode, err := packetConn.WriteTo(data, destination)
+			duration = time.Now().Nanosecond() - timeNow
+			if errorCode == 0 {	
+				return duration/1000
+			}
+			if err != nil {
 				fmt.Println("error on writeTo")
 			}
-		}else{
+		} else {
 			fmt.Println("error on ListenPacket")
 		}
-	}else{
-		errorCode := -1
-		return errorCode
+	}else {
+		fmt.Println("error on domainName")
 	}
-	return errorCode
+
+	return duration/1000
 }
 
 func main() {
-	fmt.Println("Ping on : " + os.Args[1])
-	errorCode :=Ping(os.Args[1])
-	if(errorCode==0){
-		fmt.Println("It works !")
-	}else{
-		fmt.Println("Ping failed....")
-	}
+	url := flag.String("url","8.8.8.8","url to ping")
+	flag.Parse()
+	fmt.Println("Ping on : " + *url)
+	duration := Ping(*url)
+	fmt.Println("It works ! Time : ")
+	fmt.Println(duration)
+
 }
