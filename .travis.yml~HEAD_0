@@ -1,8 +1,7 @@
 language: go
 install:
 - go get golang.org/x/net/icmp
-before_script:
-- cd app/poller
 script:
 - cd app/poller
 - go test
+
