@@ -1,19 +1,17 @@
-package main
+package poller
 
 import (
-	"flag"
-	"fmt"
 	"golang.org/x/net/icmp"
 	"net"
 	"time"
 )
 
-type Request struct{
-	doPing bool
-	timeBetweenPing time.Duration
+type Request struct {
+	DoPing          bool
+	TimeBetweenPing time.Duration
 }
 
-func Ping(domainName string) int {
+func Ping(domainName string) (int, error) {
 	var duration int
 	var data []byte
 	ip, err := net.ResolveIPAddr("ip", domainName)
@@ -25,49 +23,27 @@ func Ping(domainName string) int {
 			errorCode, err := packetConn.WriteTo(data, destination)
 			duration = time.Now().Nanosecond() - timeNow
 			if errorCode == 0 {
-				return duration / 1000
+				return duration / 1000, err
 			}
 			if err != nil {
-				fmt.Println("error on WriteTo")
-				fmt.Println(err)
+				return duration, err
 			}
 		} else {
-			fmt.Println("error on ListenPacket")
-			fmt.Println(err)
+			return duration, err
 		}
 	} else {
-		fmt.Println("error on domainName")
-		fmt.Println(err)
+		return duration, err
 	}
 
-	return duration / 1000
+	return duration / 1000, err
 }
 
-func (request *Request) setdoPing(doPing bool) {
-	request.doPing = doPing
+func (request *Request) SetdoPing(doPing bool) {
+	request.DoPing = doPing
 }
 
-func (request *Request) settimeBetweenPing(timeBetweenPing time.Duration) {
-	request.timeBetweenPing = timeBetweenPing
+func (request *Request) SettimeBetweenPing(timeBetweenPing time.Duration) {
+	request.TimeBetweenPing = timeBetweenPing
 }
 
-func main() {
-	request :=  Request{}
-	var duration int
-	dst := flag.String("dst", "8.8.8.8", "destination to ping")
-	flag.Parse()
-	fmt.Println("Ping on : " + *dst)
-	request.setdoPing(true)
-	request.settimeBetweenPing(1000000000)
-	for(request.doPing){
-	duration = Ping(*dst)
-		if duration != 0 {
-			fmt.Println("It works ! Time : ")
-			fmt.Println(duration)
-		} else {
-			fmt.Println("It failed...")
-		}
-		time.Sleep(request.timeBetweenPing)
-	}
 
-}
