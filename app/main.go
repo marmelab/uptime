@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	poller.RetrieveIpsFromJsonFile("/usr/src/watcher/app/poller/ips.json")
 	var duration int
 	var err error
 	var ip *net.IPAddr

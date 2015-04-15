@@ -4,8 +4,25 @@ import (
 	"golang.org/x/net/icmp"
 	"net"
 	"time"
+	"io/ioutil"
+	"encoding/json"
+	"fmt"
 )
 
+func RetrieveIpsFromJsonFile(fileName string) {
+	content,err := ioutil.ReadFile(fileName)
+	ips := json.RawMessage{}
+	if(err==nil){
+		error := ips.UnmarshalJSON(content)
+		if(error==nil){
+			fmt.Println(ips)
+		}else{
+			fmt.Println("error json")
+		}
+	}else{
+		fmt.Println("error file")
+	}
+}
 
 func FromDomainNameToIp(domainName string) (ip *net.IPAddr,err error){
 	ip, err = net.ResolveIPAddr("ip", domainName) 
