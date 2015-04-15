@@ -6,16 +6,15 @@ import (
 	"time"
 )
 
-type Request struct {
-	DoPing          bool
-	TimeBetweenPing time.Duration
+
+func FromDomainNameToIp(domainName string) (ip *net.IPAddr,err error){
+	ip, err = net.ResolveIPAddr("ip", domainName) 
+	return ip, err
 }
 
-func Ping(domainName string) (int, error) {
+func Ping(ip *net.IPAddr) (int, error) {
 	var duration int
 	var data []byte
-	ip, err := net.ResolveIPAddr("ip", domainName)
-	if err == nil {
 		var destination net.Addr = ip
 		packetConn, err := icmp.ListenPacket("ip4:icmp", "")
 		if err == nil {
@@ -31,19 +30,10 @@ func Ping(domainName string) (int, error) {
 		} else {
 			return duration, err
 		}
-	} else {
-		return duration, err
-	}
 
 	return duration / 1000, err
 }
 
-func (request *Request) SetdoPing(doPing bool) {
-	request.DoPing = doPing
-}
 
-func (request *Request) SettimeBetweenPing(timeBetweenPing time.Duration) {
-	request.TimeBetweenPing = timeBetweenPing
-}
 
 
