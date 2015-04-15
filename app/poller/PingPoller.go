@@ -2,22 +2,26 @@ package poller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
+	"log"
 	"net"
 	"time"
-	"errors"
-	"log"
 )
 
 type Response struct {
 	Destination string
 	Status      string
 	Time        int
-	Key         string
 	Error       error
-}
+)
+
+
+
+
+
 
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	content, err := ioutil.ReadFile(fileName)
