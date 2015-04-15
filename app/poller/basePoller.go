@@ -1,14 +1,19 @@
 package poller
 
-import "net/http" // package pour les requêtes http
-import "fmt"	// package pour écrire
-import "os"		// pacckage fonction système
-import "strings"// package chaîne de caractères
-import "net/url"
-import "time"
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"os"
+	"strings"
+	"time"
+)
 
-type httpPoller struct{
-	target,timeout,isDebugEnabled,timer
+type httpPoller struct {
+	target
+	timeout
+	isDebugEnabled
+	timer
 }
 
 func (basePoller *basePoller) Init(t string, ti Time) {
@@ -26,14 +31,14 @@ func (basePoller *basePoller) Debug(s string) {
 }
 
 func (basePoller *basePoller) Poll(d Duration) {
-	basePoller.timer = new Timer(d)
+	//basePoller.timer = new Timer(d)
 }
 
-func (basePoller *basePoller) GetTimer() (t Timer){
-	t :=basePoller.timer
+func (basePoller *basePoller) GetTimer() (t Timer) {
+	t := basePoller.timer
 	return t
 }
 
-func (basePoller *basePoller) ValidateTarget(target string) (b boolean){
+func (basePoller *basePoller) ValidateTarget(target string) (b boolean) {
 	return false
 }
