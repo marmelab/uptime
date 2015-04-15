@@ -3,6 +3,11 @@ package poller
 import (
 	"golang.org/x/net/icmp"
 	"net"
+<<<<<<< HEAD
+=======
+	"net/http"
+	"net/http/httptest"
+>>>>>>> add PingPoller_test.go
 	"testing"
 )
 
@@ -80,6 +85,7 @@ func TestPingWithValidIpShouldNotTriggerError(t *testing.T) {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 type Net struct {
 }
 
@@ -103,6 +109,17 @@ func TestPingWithValidIpShouldNotTriggerError(t *testing.T) {
 	_, err := Ping(myIp, myPacket)
 	if err != nil {
 		t.Error("Pinging a valid IP should not raise an error, got ", err)
+=======
+func TestPingWrongDestination(t *testing.T) {
+	_, err := net.ResolveIPAddr("ip", "localhost?Ithasnosense")
+	if err == nil {
+		duration, error := Ping(ip)
+		if error != nil {
+			t.Error("Expected error, got", error)
+		} else if duration <= 0 {
+			t.Error("Expected duration < 0, got", duration)
+		}
+>>>>>>> add PingPoller_test.go
 	}
 }
 
@@ -118,6 +135,7 @@ func TestPingingWithNoIpShouldTriggerError(t *testing.T) {
 	}
 }
 
+<<<<<<< HEAD
 func TestPingingWithNoPacketConnShouldTriggerError(t *testing.T) {
 >>>>>>>  code and test fixed
 =======
@@ -133,5 +151,20 @@ func TestPingingWithNoIPConnShouldTriggerError(t *testing.T) {
 =======
 		t.Error("Pinging a nil IP should raise an error got", err)
 >>>>>>>  code and test fixed
+=======
+func TestPingNoDestination(t *testing.T) {
+	ip, err := net.ResolveIPAddr("ip", "")
+	if err == nil {
+		duration, error := Ping(ip)
+		if error == nil {
+			t.Error("Expected no error, got", error)
+		} else if duration > 0 {
+			t.Error("Expected duration < 0, got", duration)
+		}
+>>>>>>> add PingPoller_test.go
 	}
 }
+
+
+
+
