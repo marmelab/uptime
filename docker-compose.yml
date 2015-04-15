@@ -1,14 +1,15 @@
 nginx:
-    image: nginx
+    build: ./var/dockerfile/nginx/
     ports:
         - "8000:80"
     volumes:
         - ./public:/usr/share/nginx/html
+
 watcher:
-    image: golang
+    build: ./var/dockerfile/go/
     working_dir: /usr/src/watcher
     volumes:
         - .:/usr/src/watcher
-    command: sleep 10000
+    command: sleep 123456789
     links:
         - nginx:nginx
