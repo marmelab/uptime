@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+type Request struct{
+	doPing bool
+	timeBetweenPing time.Duration
+}
+
 func Ping(domainName string) int {
 	var duration int
 	var data []byte
@@ -38,16 +43,31 @@ func Ping(domainName string) int {
 	return duration / 1000
 }
 
+func (request *Request) setdoPing(doPing bool) {
+	request.doPing = doPing
+}
+
+func (request *Request) settimeBetweenPing(timeBetweenPing time.Duration) {
+	request.timeBetweenPing = timeBetweenPing
+}
+
 func main() {
+	request :=  Request{}
+	var duration int
 	dst := flag.String("dst", "8.8.8.8", "destination to ping")
 	flag.Parse()
 	fmt.Println("Ping on : " + *dst)
-	duration := Ping(*dst)
-	if duration != 0 {
-		fmt.Println("It works ! Time : ")
-		fmt.Println(duration)
-	} else {
-		fmt.Println("It failed...")
+	request.setdoPing(true)
+	request.settimeBetweenPing(1000000000)
+	for(request.doPing){
+	duration = Ping(*dst)
+		if duration != 0 {
+			fmt.Println("It works ! Time : ")
+			fmt.Println(duration)
+		} else {
+			fmt.Println("It failed...")
+		}
+		time.Sleep(request.timeBetweenPing)
 	}
 
 }
