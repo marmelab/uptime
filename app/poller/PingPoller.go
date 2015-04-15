@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
+	"log"
 	"net"
 	"time"
 )
@@ -15,7 +16,12 @@ type Response struct {
 	Status      string
 	Time        int
 	Error       error
-}
+)
+
+
+
+
+
 
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	content, err := ioutil.ReadFile(fileName)

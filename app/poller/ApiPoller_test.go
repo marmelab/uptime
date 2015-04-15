@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 package poller
 
+=======
+
+package poller
+
+
+>>>>>>> add PingPoller_test.go
 import (
 	"encoding/json"
 	"net/http"
@@ -8,7 +15,15 @@ import (
 )
 
 func TestDoPostOnWithoutUrl(t *testing.T) {
+<<<<<<< HEAD
 	response := Response{"localhost", "good", 50, nil}
+=======
+	response := Response{}
+	response.Time = 50
+	response.Destination = "localhost"
+	response.Status = "good"
+	response.Error = nil
+>>>>>>> add PingPoller_test.go
 	err := DoPostOn(&response, "")
 	if err == nil {
 		t.Error("Expected error, got", err)
@@ -27,7 +42,15 @@ func TestDoPostOnWithUrl(t *testing.T) {
 		}
 	}))
 	defer ts.Close()
+<<<<<<< HEAD
 	response := Response{"localhost", "good", 50, nil}
+=======
+	response := Response{}
+	response.Time = 50
+	response.Destination = "localhost"
+	response.Status = "good"
+	response.Error = nil
+>>>>>>> add PingPoller_test.go
 	err := DoPostOn(&response, ts.URL)
 	if err != nil {
 		t.Error("Expected no error, got", err)

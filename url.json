@@ -1,6 +1,10 @@
 {
 	"urlIps": "/usr/src/watcher/app/poller/ips.json",
+<<<<<<< HEAD
 	"urlApiIp": "http://localhost:8000/ips",
+=======
+	"urlApiIp": "http://localhost:8000/ips/",
+>>>>>>> add PingPoller_test.go
 	"urlApiResults": "http://localhost:8000/ips/results"
 }
 
