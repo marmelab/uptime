@@ -7,12 +7,18 @@ import (
 	"fmt"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"golang.org/x/net/icmp"
 =======
 >>>>>>> add PingPoller_test.go
 =======
 	"golang.org/x/net/icmp"
 >>>>>>>  code and test fixed
+=======
+	"golang.org/x/net/icmp"
+=======
+>>>>>>> add PingPoller_test.go
+>>>>>>> add PingPoller_test.go
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -21,6 +27,7 @@ import (
 
 func main() {
 	response := poller.Response{}
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	var listOfDestination []model.Ip
@@ -84,6 +91,8 @@ func main() {
 =======
 	listOfDestination := model.Ips{}
 =======
+=======
+>>>>>>> add PingPoller_test.go
 	var listOfDestination []model.Ip
 >>>>>>>  code and test fixed
 	var duration int
@@ -143,9 +152,69 @@ func main() {
 			for i := 0; i < len(listOfDestination); i++ {
 				c <- listOfDestination[i].Destination
 			}
+<<<<<<< HEAD
+=======
+=======
+	listOfDestination := model.Ips{}
+	var duration int
+	var url string
+	for true {
+		res, err := http.Get(poller.RetrieveIpsFromJsonFile("url.json")["urlApiIp"])
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			body, err := ioutil.ReadAll(res.Body)
+			res.Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = json.Unmarshal(body, &listOfDestination)
+			if err != nil {
+				log.Fatal(err)
+			}
+			c := make(chan string,len(listOfDestination))
+			go func(){
+				for i := 0; i < len(listOfDestination); i++ {
+					c <- listOfDestination[i].Destination
+				}
+				}()
+			for i := 0; i < len(listOfDestination); i++ {
+				url = <-c
+				ip, err := poller.FromDomainNameToIp(url)
+				response.Destination = listOfDestination[i].Destination
+				if err == nil {
+					duration, err = poller.Ping(ip)
+					response.Time = duration
+					response.Error = err
+					if (err != nil) || (duration <= 0) {
+						response.Status = "failed"
+						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+						if err != nil {
+							log.Print(err)
+						}
+					} else {
+						response.Status = "good"
+						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+						if err != nil {
+							log.Print(err)
+						}
+					}
+				} else {
+					response.Status = "failed"
+					response.Time = duration
+					response.Error = err
+					err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+					if err != nil {
+						log.Print(err)
+					}
+				}
+
+			}
+>>>>>>> add PingPoller_test.go
 >>>>>>> add PingPoller_test.go
 		}
 		time.Sleep(time.Second * 10)
 		fmt.Println("===============================")
 	}
+i
 }

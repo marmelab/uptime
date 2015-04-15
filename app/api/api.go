@@ -1,5 +1,8 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add PingPoller_test.go
 package main
 
 import (
@@ -12,11 +15,14 @@ package main
 import (
 
 >>>>>>> add PingPoller_test.go
+<<<<<<< HEAD
 =======
 package main
 
 import (
 >>>>>>> test failed again
+=======
+>>>>>>> add PingPoller_test.go
 	"../poller"
 	"./model"
 	"encoding/json"
@@ -29,13 +35,19 @@ func main() {
 		if r.Method == "GET" {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> add PingPoller_test.go
 			var ips [2]model.Ip
 			ips[0].Destination = "google.fr"
 			ips[1].Destination = "failfailfail.fail"
 			listIp := ips
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add PingPoller_test.go
 =======
 			listIp := model.Ips{
 				model.Ip{Destination: "google.fr"},
@@ -44,8 +56,11 @@ func main() {
 				model.Ip{Destination: "szszdzdadafdff.fr"},
 			}
 >>>>>>> add PingPoller_test.go
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> add PingPoller_test.go
 			json.NewEncoder(w).Encode(listIp)
 		}
 
@@ -53,12 +68,18 @@ func main() {
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> add PingPoller_test.go
 =======
 		if r.Method == "GET" {
 		}
 >>>>>>> add PingPoller_test.go
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> add PingPoller_test.go
 		if r.Method == "POST" {
 			decoder := json.NewDecoder(r.Body)
 			newResultat := poller.Response{}
@@ -73,8 +94,14 @@ func main() {
 }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>> test failed again
+=======
+=======
+
+>>>>>>> add PingPoller_test.go
+>>>>>>> add PingPoller_test.go
