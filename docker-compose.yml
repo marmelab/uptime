@@ -1,5 +1,7 @@
 watcher:
     build: ./var/dockerfile/go/
+    ports:
+        - "8000:8000"
     working_dir: /usr/src/watcher
     volumes:
         - .:/usr/src/watcher

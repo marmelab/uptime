@@ -14,6 +14,7 @@ import (
 
 func main() {
 	response := poller.Response{}
+<<<<<<< HEAD
 	var listOfDestination []model.Ip
 	var duration int
 	var url string
@@ -76,4 +77,5 @@ func main() {
 		time.Sleep(time.Second * 10)
 		fmt.Println("===============================")
 	}
+i
 }
