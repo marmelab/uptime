@@ -24,12 +24,15 @@ func Ping(domainName string) int {
 			}
 			if err != nil {
 				fmt.Println("error on writeTo")
+				fmt.Println(err)
 			}
 		} else {
 			fmt.Println("error on ListenPacket")
+			fmt.Println(err)
 		}
 	}else {
 		fmt.Println("error on domainName")
+		fmt.Println(err)
 	}
 
 	return duration/1000
@@ -40,7 +43,11 @@ func main() {
 	flag.Parse()
 	fmt.Println("Ping on : " + *dst)
 	duration := Ping(*dst)
-	fmt.Println("It works ! Time : ")
-	fmt.Println(duration)
+	if(duration!=0){
+		fmt.Println("It works ! Time : ")
+		fmt.Println(duration)
+	}else{
+		fmt.Println("It failed...")
+	}
 
 }
