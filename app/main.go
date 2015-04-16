@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	response := poller.Response{}
 	var ip *net.IPAddr
 	var err error
 	var duration int
@@ -19,14 +20,35 @@ func main() {
 					duration,err = poller.Ping(ip)
 					if(duration >= 0){
 						if(err ==nil){
-							fmt.Println("It works ! Ping on ", value,"key : ",key, " time : ", duration)
+							response.Destination = value
+							response.Status = "good"
+							response.Time = duration
+							response.Key = key
+							response.Error = err
+							fmt.Println(response)
 						}else{
-						fmt.Println(" it failed....", err)						}
+							response.Destination = value
+							response.Status = "failed"
+							response.Time = duration
+							response.Key = key	
+							response.Error = err
+							fmt.Println(response)												
+						}
 					}else {
-						fmt.Println(" it failed....", err)
+						response.Destination = value
+						response.Status = "failed"
+						response.Time = duration
+						response.Key = key
+						response.Error = err
+						fmt.Println(response)						
 					}
 				}else{
-					fmt.Println("it failed... error wrong name : ",err)
+					response.Destination = value
+					response.Status = "failed"
+					response.Time = duration
+					response.Key = key
+					response.Error = err
+					fmt.Println(response)
 				}
 			}
 			time.Sleep(1000000000)

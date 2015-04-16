@@ -10,6 +10,18 @@ import (
 
 )
 
+type Response struct{
+	Destination string
+	Status string
+	Time int
+	Key string 
+	Error error
+}
+
+func fromResponseToJSON(response Response,) (data []byte, err error){
+	return json.Marshal(response)
+}
+
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]map[string]string){
 	content,err := ioutil.ReadFile(fileName)
 	if(err==nil){
