@@ -18,7 +18,7 @@ type Response struct{
 	Error error
 }
 
-func fromResponseToJSON(response Response,) (data []byte, err error){
+func fromResponseToJSON(response Response) (data []byte, err error){
 	return json.Marshal(response)
 }
 
@@ -61,7 +61,3 @@ func Ping(ip *net.IPAddr) (int, error) {
 
 	return duration / 1000, err
 }
-
-
-
-
