@@ -7,21 +7,20 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"fmt"
+
 )
 
-func RetrieveIpsFromJsonFile(fileName string) {
+func RetrieveIpsFromJsonFile(fileName string) (data map[string]map[string]string){
 	content,err := ioutil.ReadFile(fileName)
-	ips := json.RawMessage{}
 	if(err==nil){
-		error := ips.UnmarshalJSON(content)
-		if(error==nil){
-			fmt.Println(ips)
-		}else{
+		error := json.Unmarshal(content,&data)
+		if(error!=nil){
 			fmt.Println("error json")
 		}
 	}else{
 		fmt.Println("error file")
 	}
+	return data
 }
 
 func FromDomainNameToIp(domainName string) (ip *net.IPAddr,err error){

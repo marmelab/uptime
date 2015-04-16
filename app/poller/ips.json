@@ -1,3 +1,7 @@
 {
-	"ip": "google.fr"
+	"ips": {
+		"1": "google.fr",
+		"2": "youtube.fr",
+		"3": "bing.frsssss"
+	}
 }
