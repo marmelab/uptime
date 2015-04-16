@@ -17,11 +17,7 @@ type Response struct {
 	Error       error
 }
 
-func fromResponseToJSON(response Response) (data []byte, err error) {
-	return json.Marshal(response)
-}
-
-func RetrieveIpsFromJsonFile(fileName string) (data map[string]map[string]string) {
+func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	content, err := ioutil.ReadFile(fileName)
 	if err == nil {
 		error := json.Unmarshal(content, &data)
@@ -42,11 +38,10 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 func Ping(ip *net.IPAddr) (int, error) {
 	var duration int
 	var data []byte
-	var destination net.Addr = ip
 	packetConn, err := icmp.ListenPacket("ip4:icmp", "")
 	if err == nil {
 		timeNow := time.Now().Nanosecond()
-		errorCode, err := packetConn.WriteTo(data, destination)
+		errorCode, err := packetConn.WriteTo(data, ip)
 		duration = time.Now().Nanosecond() - timeNow
 		if errorCode == 0 {
 			return duration / 1000, err
