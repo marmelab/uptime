@@ -6,10 +6,7 @@ watcher:
     volumes:
         - .:/usr/src/watcher
     command: sleep 123456789
-<<<<<<< HEAD
     links:
         - bd:bd
-=======
->>>>>>>  docker file postresql
 bd:
     build: ./var/dockerfile/postgreSql
