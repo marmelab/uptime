@@ -53,21 +53,6 @@ func main() {
 				log.Fatal(error)
 			}
 			log.Print(newResultat)
-			/*
-			    newDestination := model.Ip{}
-			    body, err := ioutil.ReadAll(r.Body)
-			    r.Body.Close()
-			    if(err!=nil){
-			        log.Fatal(err)
-			    }
-			    err = json.Unmarshal(body, &newDestination)
-			    if(err!=nil){
-			        log.Fatal(err)
-			    }
-			    listIp := model.Ips{
-			    model.Ip{Destination: newDestination.Destination},
-			    }
-			json.NewEncoder(w).Encode(listIp)*/
 		}
 	})
 	log.Fatal(http.ListenAndServe(":8000", nil))
