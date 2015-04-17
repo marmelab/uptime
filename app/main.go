@@ -34,7 +34,7 @@ func main() {
 					response.Status = "failed"
 					response.Time = -1
 					response.Error = err
-					poller.DoPostOn(&response,"http://localhost:8000/ips/results")
+					poller.DoPostOn(&response, "http://localhost:8000/ips/results")
 				} else {
 					duration, error := poller.Ping(ip)
 					if error != nil {
@@ -42,20 +42,20 @@ func main() {
 						response.Status = "failed"
 						response.Time = duration
 						response.Error = err
-						poller.DoPostOn(&response,"http://localhost:8000/ips/results")
+						poller.DoPostOn(&response, "http://localhost:8000/ips/results")
 					}
 					if duration <= 0 {
 						response.Destination = listOfDestination[i].Destination
 						response.Status = "failed"
 						response.Time = duration
 						response.Error = err
-						poller.DoPostOn(&response,"http://localhost:8000/ips/results")
+						poller.DoPostOn(&response, "http://localhost:8000/ips/results")
 					}
 					response.Destination = listOfDestination[i].Destination
 					response.Status = "good"
 					response.Time = duration
 					response.Error = err
-					poller.DoPostOn(&response,"http://localhost:8000/ips/results")
+					poller.DoPostOn(&response, "http://localhost:8000/ips/results")
 				}
 
 			}
