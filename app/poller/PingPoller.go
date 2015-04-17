@@ -13,7 +13,6 @@ type Response struct {
 	Destination string
 	Status      string
 	Time        int
-	Key         string
 	Error       error
 }
 

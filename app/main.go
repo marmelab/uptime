@@ -1,55 +1,66 @@
 package main
 
 import (
+	"./api/model"
 	"./poller"
+	"encoding/json"
 	"fmt"
-	"net"
+	"io/ioutil"
+	"log"
+	"net/http"
 	"time"
 )
 
 func main() {
 	response := poller.Response{}
-	var ip *net.IPAddr
-	var err error
-	var duration int
+	listOfDestination := api.Ips{}
 	for true {
-		listOfIp := poller.RetrieveIpsFromJsonFile("/usr/src/watcher/app/poller/ips.json")
-		for key, value := range listOfIp {
-			ip, err = poller.FromDomainNameToIp(value)
-			if err == nil {
-				duration, err = poller.Ping(ip)
-				if duration >= 0 {
-					if err == nil {
-						response.Destination = value
-						response.Status = "good"
-						response.Time = duration
-						response.Key = key
-						response.Error = err
-						fmt.Println(response)
-					} else {
-						response.Destination = value
+		res, err := http.Get("http://localhost:8000/ips/")
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			body, err := ioutil.ReadAll(res.Body)
+			res.Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = json.Unmarshal(body, &listOfDestination)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := 0; i < len(listOfDestination); i++ {
+				ip, err := poller.FromDomainNameToIp(listOfDestination[i].Destination)
+				if err != nil {
+					response.Destination = listOfDestination[i].Destination
+					response.Status = "failed"
+					response.Time = -1
+					response.Error = err
+					fmt.Println(response)
+				} else {
+					duration, error := poller.Ping(ip)
+					if error != nil {
+						response.Destination = listOfDestination[i].Destination
 						response.Status = "failed"
 						response.Time = duration
-						response.Key = key
 						response.Error = err
 						fmt.Println(response)
 					}
-				} else {
-					response.Destination = value
-					response.Status = "failed"
+					if duration <= 0 {
+						response.Destination = listOfDestination[i].Destination
+						response.Status = "failed"
+						response.Time = duration
+						response.Error = err
+						fmt.Println(response)
+					}
+					response.Destination = listOfDestination[i].Destination
+					response.Status = "good"
 					response.Time = duration
-					response.Key = key
 					response.Error = err
 					fmt.Println(response)
 				}
-			} else {
-				response.Destination = value
-				response.Status = "failed"
-				response.Time = duration
-				response.Key = key
-				response.Error = err
-				fmt.Println(response)
+
 			}
+
 		}
 		time.Sleep(10000000000)
 		fmt.Println("===============================")
