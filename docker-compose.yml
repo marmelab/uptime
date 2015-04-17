@@ -6,4 +6,5 @@ watcher:
     volumes:
         - .:/usr/src/watcher
     command: sleep 123456789
-
+bd:
+    build: ./var/dockerfile/postgreSql
