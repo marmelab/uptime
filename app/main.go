@@ -4,12 +4,10 @@ import (
 	"./api/model"
 	"./poller"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
-	"bytes"
 )
 
 func main() {
@@ -36,9 +34,7 @@ func main() {
 					response.Status = "failed"
 					response.Time = -1
 					response.Error = err
-					fmt.Println(response)
-					var result = []byte(`{"Destination":"lolking.com"}`)
-					http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))
+					poller.DoPostOn(&response,"http://localhost:8000/ips/results")
 				} else {
 					duration, error := poller.Ping(ip)
 					if error != nil {
@@ -46,32 +42,26 @@ func main() {
 						response.Status = "failed"
 						response.Time = duration
 						response.Error = err
-						fmt.Println(response)
-						var result = []byte(`{"Destination":"lolking.com"}`)
-						http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))
+						poller.DoPostOn(&response,"http://localhost:8000/ips/results")
 					}
 					if duration <= 0 {
 						response.Destination = listOfDestination[i].Destination
 						response.Status = "failed"
 						response.Time = duration
 						response.Error = err
-						fmt.Println(response)
-						var result = []byte(`{"Destination":"lolking.com"}`)
-						http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))	
+						poller.DoPostOn(&response,"http://localhost:8000/ips/results")
 					}
 					response.Destination = listOfDestination[i].Destination
 					response.Status = "good"
 					response.Time = duration
 					response.Error = err
-					fmt.Println(response)
-					var result = []byte(`{"Destination":"lolking.com"}`)
-					http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))
+					poller.DoPostOn(&response,"http://localhost:8000/ips/results")
 				}
 
 			}
 
 		}
 		time.Sleep(10000000000)
-		fmt.Println("===============================")
+		log.Println("===============================")
 	}
 }
