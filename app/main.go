@@ -9,11 +9,12 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"bytes"
 )
 
 func main() {
 	response := poller.Response{}
-	listOfDestination := api.Ips{}
+	listOfDestination := model.Ips{}
 	for true {
 		res, err := http.Get("http://localhost:8000/ips/")
 		if err != nil {
@@ -36,6 +37,8 @@ func main() {
 					response.Time = -1
 					response.Error = err
 					fmt.Println(response)
+					var result = []byte(`{"Destination":"lolking.com"}`)
+					http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))
 				} else {
 					duration, error := poller.Ping(ip)
 					if error != nil {
@@ -44,6 +47,8 @@ func main() {
 						response.Time = duration
 						response.Error = err
 						fmt.Println(response)
+						var result = []byte(`{"Destination":"lolking.com"}`)
+						http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))
 					}
 					if duration <= 0 {
 						response.Destination = listOfDestination[i].Destination
@@ -51,12 +56,16 @@ func main() {
 						response.Time = duration
 						response.Error = err
 						fmt.Println(response)
+						var result = []byte(`{"Destination":"lolking.com"}`)
+						http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))	
 					}
 					response.Destination = listOfDestination[i].Destination
 					response.Status = "good"
 					response.Time = duration
 					response.Error = err
 					fmt.Println(response)
+					var result = []byte(`{"Destination":"lolking.com"}`)
+					http.Post("http://localhost:8000/ips/results","json",bytes.NewBuffer(result))
 				}
 
 			}
