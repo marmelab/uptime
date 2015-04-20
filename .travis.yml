@@ -3,6 +3,6 @@ before_script:
 - docker-compose up
 - docker exec -i -t uptime2_watcher1 /bin/bash
 - go get golang.org/x/net/icmp
- script:
+script:
 - cd app/poller
 - go test
