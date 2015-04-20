@@ -39,7 +39,7 @@ func TestPingNoDestination(t *testing.T) {
 		duration, error := Ping(ip)
 		if error == nil {
 			t.Error("Expected no error, got", error)
-		} else if duration >= 0 {
+		} else if duration > 0 {
 			t.Error("Expected duration < 0, got", duration)
 		}
 	}
