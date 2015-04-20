@@ -12,8 +12,10 @@ func main() {
 	var ip *net.IPAddr
 	var err error
 	var duration int
+	c := make(chan string)
 	for true {
-		listOfIp := poller.RetrieveIpsFromJsonFile("/usr/src/watcher/app/poller/ips.json")
+		listOfUrl := poller.RetrieveIpsFromJsonFile("url.json")
+		listOfIp := poller.RetrieveIpsFromJsonFile(listOfUrl["urlIps"])
 		for key, value := range listOfIp {
 			ip, err = poller.FromDomainNameToIp(value)
 			response.Destination = value

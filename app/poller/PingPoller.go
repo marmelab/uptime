@@ -22,10 +22,10 @@ func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	if err == nil {
 		error := json.Unmarshal(content, &data)
 		if error != nil {
-			fmt.Println("error json")
+			fmt.Println("error Unmarshal json : ",error)
 		}
 	} else {
-		fmt.Println("error file")
+		fmt.Println("error read file : ",err)
 	}
 	return data
 }
