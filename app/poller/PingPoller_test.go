@@ -37,10 +37,10 @@ func TestPingNoDestination(t *testing.T) {
 	ip, err := net.ResolveIPAddr("ip", "")
 	if err == nil {
 		duration, error := Ping(ip)
-		if error != nil {
+		if error == nil {
 			t.Error("Expected no error, got", error)
-		} else if duration <= 0 {
-			t.Error("Expected duration > 0, got", duration)
+		} else if duration >= 0 {
+			t.Error("Expected duration < 0, got", duration)
 		}
 	}
 }
