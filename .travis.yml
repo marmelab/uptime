@@ -1,13 +1,6 @@
-sudo: false
 language: go
 install:
-- wget
-- wget -qO- https://get.docker.com/ | sh
-- -U docker-compose
 - go get golang.org/x/net/icmp
-before_script:
-- docker-compose up
-- docker exec -i -t uptime2_watcher1 /bin/bash
 script:
 - cd app/poller
 - go test
