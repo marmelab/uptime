@@ -7,11 +7,22 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"database/sql"
+	_ "github.com/lib/pq"
 )
 
 func main() {
+	db,errordb := sql.Open("postgres","user=postgres dbname=uptime sslmode=verify-full")
+	if(errordb!=nil){
+		log.Fatal(errordb)
+	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
+			rows,errorrows := db.Query("Select * from Destination")
+			if(errorrows!=nil){
+				log.Print(errorrows)
+			}
+			log.Print(rows)
 			listIp := model.Ips{
 				model.Ip{Destination: "google.fr"},
 				model.Ip{Destination: "youtube.fr"},

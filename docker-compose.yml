@@ -10,3 +10,5 @@ watcher:
         - bd:bd
 bd:
     build: ./var/dockerfile/postgreSql
+    ports:
+        - "5432:5432"
