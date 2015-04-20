@@ -31,14 +31,13 @@ func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 }
 
 func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
-	ip, err = net.ResolveIPAddr("ip", domainName)
-	return ip, err
+	return net.ResolveIPAddr("ip", domainName)
 }
 
 func Ping(ip *net.IPAddr) (int, error) {
 	var duration int
 	var data []byte
-	packetConn, err := icmp.ListenPacket("ip4:icmp", "")
+	packetConn, err := icmp.ListenPacket("ip4:icmp","")
 	if err == nil {
 		timeNow := time.Now().Nanosecond()
 		errorCode, err := packetConn.WriteTo(data, ip)

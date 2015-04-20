@@ -16,37 +16,27 @@ func main() {
 		listOfIp := poller.RetrieveIpsFromJsonFile("/usr/src/watcher/app/poller/ips.json")
 		for key, value := range listOfIp {
 			ip, err = poller.FromDomainNameToIp(value)
+			response.Destination = value
+			response.Key = key
 			if err == nil {
 				duration, err = poller.Ping(ip)
+				response.Time = duration
+				response.Error = err
 				if duration >= 0 {
 					if err == nil {
-						response.Destination = value
 						response.Status = "good"
-						response.Time = duration
-						response.Key = key
-						response.Error = err
 						fmt.Println(response)
 					} else {
-						response.Destination = value
 						response.Status = "failed"
-						response.Time = duration
-						response.Key = key
-						response.Error = err
 						fmt.Println(response)
 					}
 				} else {
-					response.Destination = value
 					response.Status = "failed"
-					response.Time = duration
-					response.Key = key
-					response.Error = err
 					fmt.Println(response)
 				}
 			} else {
-				response.Destination = value
 				response.Status = "failed"
 				response.Time = duration
-				response.Key = key
 				response.Error = err
 				fmt.Println(response)
 			}
