@@ -12,7 +12,7 @@ func main() {
 	var ip *net.IPAddr
 	var err error
 	var duration int
-	c := make(chan string)
+	//c := make(chan string)
 	for true {
 		listOfUrl := poller.RetrieveIpsFromJsonFile("url.json")
 		listOfIp := poller.RetrieveIpsFromJsonFile(listOfUrl["urlIps"])
@@ -24,16 +24,11 @@ func main() {
 				duration, err = poller.Ping(ip)
 				response.Time = duration
 				response.Error = err
-				if duration >= 0 {
-					if err == nil {
-						response.Status = "good"
-						fmt.Println(response)
-					} else {
-						response.Status = "failed"
-						fmt.Println(response)
-					}
-				} else {
+				if (err != nil) || (duration <= 0) {
 					response.Status = "failed"
+					fmt.Println(response)
+				} else {
+					response.Status = "good"
 					fmt.Println(response)
 				}
 			} else {

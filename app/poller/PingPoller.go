@@ -22,10 +22,10 @@ func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	if err == nil {
 		error := json.Unmarshal(content, &data)
 		if error != nil {
-			fmt.Println("error Unmarshal json : ",error)
+			fmt.Println("error Unmarshal json : ", error)
 		}
 	} else {
-		fmt.Println("error read file : ",err)
+		fmt.Println("error read file : ", err)
 	}
 	return data
 }
@@ -37,7 +37,7 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 func Ping(ip *net.IPAddr) (int, error) {
 	var duration int
 	var data []byte
-	packetConn, err := icmp.ListenPacket("ip4:icmp","")
+	packetConn, err := icmp.ListenPacket("ip4:icmp", "")
 	if err == nil {
 		timeNow := time.Now().Nanosecond()
 		errorCode, err := packetConn.WriteTo(data, ip)
