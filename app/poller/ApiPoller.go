@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func DoPostOn(response *Response, url string)error{
+func DoPostOn(response *Response, url string) error {
 	var result = []byte(`{"Destination": "` + response.Destination + `","Time": ` + strconv.Itoa(response.Time) + `,"Status": "` + response.Status + `"}`)
 	req, error := http.NewRequest("POST", url, bytes.NewBuffer(result))
 	if error != nil {
