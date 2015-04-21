@@ -1,10 +1,17 @@
 package poller
 
-import "testing"
-import "net"
+import (
+	"net"
+	"net/http/httptest"
+	"testing"
+	"net/http"
+	"log"
+)
 
 func TestPingValidDestination(t *testing.T) {
-	ip, err := net.ResolveIPAddr("ip", "localhost")
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	}))
+	ip, err := net.ResolveIPAddr("ip", ts.URL)
 	if err == nil {
 		duration, error := Ping(ip)
 		if error != nil {
@@ -16,25 +23,23 @@ func TestPingValidDestination(t *testing.T) {
 }
 
 func TestPingWrongDestination(t *testing.T) {
-	ip, err := net.ResolveIPAddr("ip", "localhost?Ithasnosense")
+	_, err := net.ResolveIPAddr("ip", "localhost?Ithasnosense")
 	if err == nil {
-		duration, error := Ping(ip)
-		if error != nil {
-			t.Error("Expected error, got", err)
-		} else if duration <= 0 {
-			t.Error("Expected duration < 0, got", duration)
-		}
+		t.Error("Expected error, got", err)
 	}
+
 }
 
 func TestPingNoDestination(t *testing.T) {
-	ip, err := net.ResolveIPAddr("ip", "")
+	ip, err := net.ResolveIPAddr("ip","")
+	log.Print("ip : ",ip)
+	log.Printf("ip %v", &ip)
 	if err == nil {
 		duration, error := Ping(ip)
-		if error != nil {
-			t.Error("Expected no error, got", err)
-		} else if duration <= 0 {
-			t.Error("Expected duration > 0, got", duration)
+		if error == nil {
+			t.Error("Expected error, got", error)
+		} else if duration > 0 {
+			t.Error("Expected duration <= 0, got", duration)
 		}
 	}
 }
