@@ -32,8 +32,6 @@ func TestPingWrongDestination(t *testing.T) {
 
 func TestPingNoDestination(t *testing.T) {
 	ip, err := net.ResolveIPAddr("ip","")
-	log.Print("ip : ",ip)
-	log.Printf("ip %v", &ip)
 	if err == nil {
 		duration, error := Ping(ip)
 		if error == nil {
