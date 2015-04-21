@@ -1,34 +1,72 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"time"
 	"./poller"
+	"fmt"
 	"net"
+	"time"
 )
 
 func main() {
-	var duration int
-	var err error
+	response := poller.Response{}
 	var ip *net.IPAddr
-	dst := flag.String("dst", "8.8.8.8", "destination to ping")
-	flag.Parse()
-	fmt.Println("Ping on : " + *dst)
+	var url string
+	var err error
+	var duration int
 	for true {
-		ip, err = poller.FromDomainNameToIp(*dst)
-		if(err==nil){
-			duration, err = poller.Ping(ip)
-			if duration != 0 || err == nil {
-				fmt.Println("It works ! Time : ")
-				fmt.Println(duration)
-			} else {
-				fmt.Println("It failed...")
-				fmt.Println(err)
-				break
+		listOfUrl := poller.RetrieveIpsFromJsonFile("url.json")
+		listOfIp := poller.RetrieveIpsFromJsonFile(listOfUrl["urlIps"])
+		c := make(chan string, len(listOfIp))
+		go func() {
+			for _, value := range listOfIp {
+				c <- value
 			}
-			time.Sleep(1000000000)
+		}()
+		for range listOfIp {
+			url = <-c
+			ip, err = poller.FromDomainNameToIp(url)
+			response.Destination = url
+			if err == nil {
+				duration, err = poller.Ping(ip)
+				response.Time = duration
+				response.Error = err
+				if (err != nil) || (duration <= 0) {
+					response.Status = "failed"
+					fmt.Println(response)
+				} else {
+					response.Status = "good"
+					fmt.Println(response)
+				}
+			} else {
+				response.Status = "failed"
+				response.Time = duration
+				response.Error = err
+				fmt.Println(response)
+			}
 		}
+		/*fr key, value := range listOfIp {
+			ip, err = poller.FromDomainNameToIp(value)
+			response.Destination = value
+			response.Key = key
+			if err == nil {
+				duration, err = poller.Ping(ip)
+				response.Time = duration
+				response.Error = err
+				if (err != nil) || (duration <= 0) {
+					response.Status = "failed"
+					fmt.Println(response)
+				} else {
+					response.Status = "good"
+					fmt.Println(response)
+				}
+			} else {
+				response.Status = "failed"
+				response.Time = duration
+				response.Error = err
+				fmt.Println(response)
+			}
+		}*/
+		time.Sleep(time.Second * 10)
+		fmt.Println("===============================")
 	}
-
 }
