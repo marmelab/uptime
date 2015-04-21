@@ -5,7 +5,6 @@ import (
 	"net/http/httptest"
 	"testing"
 	"net/http"
-	"log"
 )
 
 func TestPingValidDestination(t *testing.T) {
