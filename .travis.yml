@@ -1,6 +1,6 @@
 language: go
 install:
 - go get golang.org/x/net/icmp
-sctipt:
 - cd app/poller
+sctipt:
 - go test
