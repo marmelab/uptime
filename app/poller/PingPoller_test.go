@@ -6,17 +6,25 @@ import (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>> tests fixed
 =======
 	"net/http"
 	"net/http/httptest"
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> tests fixed
 =======
 >>>>>>> add PingPoller_test.go
+=======
+=======
+>>>>>>> tests fixed
+>>>>>>> tests fixed
 	"testing"
 )
 
@@ -64,15 +72,23 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 	ip, _ := net.ResolveIPAddr("ip", "localhost")
 >>>>>>> tests fixed
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> tests fixed
 =======
+=======
+>>>>>>> tests fixed
 =======
 func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	}))
 	ip, err := net.ResolveIPAddr("ip", ts.URL)
 >>>>>>> test failed again
+<<<<<<< HEAD
 >>>>>>> test failed again
+=======
+=======
+>>>>>>> tests fixed
+>>>>>>> tests fixed
 		duration, error := Ping(ip)
 		if error != nil {
 			t.Error("Expected no error, got", error)
