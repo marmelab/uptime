@@ -12,6 +12,7 @@ import (
 )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 <<<<<<< HEAD
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -20,12 +21,19 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 =======
 	ip, _ := net.ResolveIPAddr("ip", "localhost")
 >>>>>>> tests fixed
+=======
+func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	}))
+	ip, err := net.ResolveIPAddr("ip", ts.URL)
+>>>>>>> test failed again
 		duration, error := Ping(ip)
 		if error != nil {
 			t.Error("Expected no error, got", error)
 		} else if duration <= 0 {
 			t.Error("Expected duration > 0, got", duration)
 		}
+<<<<<<< HEAD
 =======
 type Packet struct {
 >>>>>>>  code and test fixed
@@ -99,9 +107,14 @@ func TestPingNoDestination(t *testing.T) {
 			t.Error("Expected duration < 0, got", duration)
 		}
 >>>>>>> add PingPoller_test.go
-	}
+=======
 }
 
 
-
-
+func TestPingingWithNoIpShouldTriggerError(t *testing.T) {
+	_, err := Ping(nil)
+	if (err == nil) {
+		t.Error("Pinging a nil IP should raise an error got", err);
+>>>>>>> test failed again
+	}
+}
