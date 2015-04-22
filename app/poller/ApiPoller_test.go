@@ -1,6 +1,4 @@
-
 package poller
-
 
 import (
 	"encoding/json"
