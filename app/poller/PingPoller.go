@@ -2,7 +2,6 @@ package poller
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
@@ -38,11 +37,17 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 =======
 func Ping(ip *net.IPAddr) (int, error) {
+<<<<<<< HEAD
 	 if ip == nil && &ip != nil {
 	 	error := errors.New("ip = nil ")
 	 	return 0, error
 	 }
+<<<<<<< HEAD
 >>>>>>> test failed again
+=======
+=======
+>>>>>>> tests fixed
+>>>>>>> tests fixed
 	 var duration int
 	 var data []byte
 	 packetConn, err := icmp.ListenPacket("ip4:icmp", "")

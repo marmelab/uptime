@@ -4,10 +4,13 @@ import (
 	"golang.org/x/net/icmp"
 	"net"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	"net/http"
 	"net/http/httptest"
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>> tests fixed
 	"testing"
 )
 
@@ -34,6 +37,7 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	}))
 	ip, err := net.ResolveIPAddr("ip", ts.URL)
+<<<<<<< HEAD
 >>>>>>>  code and test fixed
 =======
 func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
@@ -43,6 +47,11 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 	}))
 	ip, err := net.ResolveIPAddr("ip", ts.URL)
 >>>>>>> test failed again
+=======
+=======
+	ip, _ := net.ResolveIPAddr("ip", "localhost")
+>>>>>>> tests fixed
+>>>>>>> tests fixed
 		duration, error := Ping(ip)
 		if error != nil {
 			t.Error("Expected no error, got", error)
