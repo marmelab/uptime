@@ -4,5 +4,4 @@ install:
 before_script:
 - cd app/poller
 script:
-- cd app/poller
 - go test
