@@ -2,7 +2,6 @@ package poller
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
@@ -34,6 +33,7 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
+<<<<<<< HEAD
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	if ip == nil {
 		return -1, errors.New("error argument ip nil")
