@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
-	"log"
 	"net"
 	"time"
 )
@@ -16,12 +15,7 @@ type Response struct {
 	Status      string
 	Time        int
 	Error       error
-)
-
-
-
-
-
+}
 
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	content, err := ioutil.ReadFile(fileName)
@@ -40,7 +34,15 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
+<<<<<<< HEAD
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+=======
+func Ping(ip *net.IPAddr) (int, error) {
+	 if ip == nil && &ip != nil {
+	 	error := errors.New("ip = nil ")
+	 	return 0, error
+	 }
+>>>>>>> test failed again
 	 var duration int
 	 var data []byte
 	 packetConn, err := icmp.ListenPacket("ip4:icmp", "")
@@ -59,6 +61,7 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	 }
 
 	 return duration / 1000, err
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -81,4 +84,6 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	return duration / 1000, nil
 >>>>>>>  code and test fixed
 >>>>>>>  add instance of packetConn if it is nil
+=======
+>>>>>>> test failed again
 }

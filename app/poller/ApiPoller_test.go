@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 package poller
 
 =======
@@ -7,6 +8,10 @@ package poller
 
 
 >>>>>>> add PingPoller_test.go
+=======
+package poller
+
+>>>>>>> test failed again
 import (
 	"encoding/json"
 	"net/http"

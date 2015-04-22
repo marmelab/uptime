@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 package main
 
 import (
@@ -11,6 +12,11 @@ package main
 import (
 
 >>>>>>> add PingPoller_test.go
+=======
+package main
+
+import (
+>>>>>>> test failed again
 	"../poller"
 	"./model"
 	"encoding/json"
@@ -57,6 +63,9 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>> test failed again
