@@ -1,8 +1,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>> test failed again
 package main
 
 import (
@@ -16,13 +19,19 @@ import (
 
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> test failed again
 =======
 package main
 
 import (
 >>>>>>> test failed again
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>> test failed again
 	"../poller"
 	"./model"
 	"encoding/json"
@@ -95,6 +104,7 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> add PingPoller_test.go
@@ -105,3 +115,10 @@ func main() {
 
 >>>>>>> add PingPoller_test.go
 >>>>>>> add PingPoller_test.go
+=======
+=======
+
+>>>>>>> add PingPoller_test.go
+=======
+>>>>>>> test failed again
+>>>>>>> test failed again

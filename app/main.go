@@ -172,12 +172,12 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			c := make(chan string,len(listOfDestination))
-			go func(){
+			c := make(chan string, len(listOfDestination))
+			go func() {
 				for i := 0; i < len(listOfDestination); i++ {
 					c <- listOfDestination[i].Destination
 				}
-				}()
+			}()
 			for i := 0; i < len(listOfDestination); i++ {
 				url = <-c
 				ip, err := poller.FromDomainNameToIp(url)
@@ -216,5 +216,4 @@ func main() {
 		time.Sleep(time.Second * 10)
 		fmt.Println("===============================")
 	}
-i
 }
