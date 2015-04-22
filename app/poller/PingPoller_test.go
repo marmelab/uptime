@@ -2,15 +2,10 @@ package poller
 
 import (
 	"net"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 )
 
 func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	}))
-	ip, err := net.ResolveIPAddr("ip", ts.URL)
 		duration, error := Ping(ip)
 		if error != nil {
 			t.Error("Expected no error, got", error)
