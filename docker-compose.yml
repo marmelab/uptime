@@ -1,8 +1,16 @@
 watcher:
     build: ./var/dockerfile/go/
-    ports:
-        - "8000:8000"
     working_dir: /usr/src/watcher
     volumes:
         - .:/usr/src/watcher
     command: sleep 123456789
+    links:
+        - api:api
+api:
+    build: ./var/dockerfile/go/
+    working_dir: /usr/src/api
+    volumes:
+        - .:/usr/src/api
+    command: sleep 123456789
+    expose:
+        - "8000"
