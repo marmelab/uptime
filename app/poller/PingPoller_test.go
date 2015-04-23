@@ -199,7 +199,7 @@ func (ipad Net) ResolveIPAddr(p string, a string) (*net.IPAddr, error) {
 	return ptr, nil
 }
 
-func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
+func TestPingWithValidIpShouldNotTriggerError(t *testing.T) {
 	myIcmp := Packet{}
 	myNet := Net{}
 	myIp, _ := myNet.ResolveIPAddr("ip", "google.fr")
@@ -210,6 +210,7 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 	}
 }
 
+<<<<<<< HEAD
 func TestPingingWithNoIpShouldTriggerError(t *testing.T) {
 <<<<<<< HEAD
 	_, err := Ping(nil)
@@ -224,8 +225,10 @@ func TestPingingWithNoIpShouldTriggerError(t *testing.T) {
 		t.Error("Pinging a nil IP should raise an error got", err)
 	}
 }
+=======
+>>>>>>>  add instance of packetConn if it is nil
 
-func TestPingingWithNoPacketConnShouldTriggerError(t *testing.T) {
+func TestPingingWithNoIPConnShouldTriggerError(t *testing.T) {
 	myIcmp := Packet{}
 	myPacket := myIcmp.ListenPacket("ip4:icmp", "")
 	_, err := Ping(nil, myPacket)
