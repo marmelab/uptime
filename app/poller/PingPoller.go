@@ -53,4 +53,26 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	 }
 
 	 return duration / 1000, err
+<<<<<<< HEAD
+=======
+=======
+func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+	if ip == nil {
+		return -1, errors.New("error argument ip nil")
+	}
+	var duration int
+	var data []byte
+	var err error
+	timeNow := time.Now().Nanosecond()
+	if packetConn == nil {
+		packetConn,err = icmp.ListenPacket("ip4:icmp", "")
+		if(err != nil){
+			return -1,err
+		}
+	}
+	_, _ = packetConn.WriteTo(data, ip)
+	duration = time.Now().Nanosecond() - timeNow
+	return duration / 1000, nil
+>>>>>>>  code and test fixed
+>>>>>>>  add instance of packetConn if it is nil
 }
