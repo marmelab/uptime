@@ -3,18 +3,27 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>>  code and test fixed
 	"urlApiIp": "http://localhost:8000/ips",
 =======
 	"urlApiIp": "http://localhost:8000/ips/",
 >>>>>>> add PingPoller_test.go
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 	"urlApiIp": "http://localhost:8000/ips",
 >>>>>>>  code and test fixed
 =======
 >>>>>>> add PingPoller_test.go
+=======
+=======
+	"urlApiIp": "http://localhost:8000/ips",
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 	"urlApiResults": "http://localhost:8000/ips/results"
 }
 

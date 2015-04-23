@@ -45,18 +45,26 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
 >>>>>>> add PingPoller_test.go
+=======
+=======
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 			var ips [2]model.Ip
 			ips[0].Destination = "google.fr"
 			ips[1].Destination = "failfailfail.fail"
 			listIp := ips
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>>  code and test fixed
 =======
 			listIp := model.Ips{
 				model.Ip{Destination: "google.fr"},
@@ -66,10 +74,15 @@ func main() {
 			}
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
 >>>>>>> add PingPoller_test.go
+=======
+=======
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 			json.NewEncoder(w).Encode(listIp)
 		}
 
@@ -78,17 +91,25 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>>  code and test fixed
 =======
 		if r.Method == "GET" {
 		}
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
 >>>>>>> add PingPoller_test.go
+=======
+=======
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 		if r.Method == "POST" {
 			decoder := json.NewDecoder(r.Body)
 			newResultat := poller.Response{}

@@ -38,8 +38,11 @@ func TestDoPostOnWithoutUrl(t *testing.T) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>>  code and test fixed
 	response := Response{"localhost", "good", 50, nil}
 =======
 	response := Response{}
@@ -49,11 +52,17 @@ func TestDoPostOnWithoutUrl(t *testing.T) {
 	response.Error = nil
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	response := Response{"localhost", "good", 50, nil}
 >>>>>>>  code and test fixed
 =======
 >>>>>>> add PingPoller_test.go
+=======
+=======
+	response := Response{"localhost", "good", 50, nil}
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 	err := DoPostOn(&response, "")
 	if err == nil {
 		t.Error("Expected error, got", err)
@@ -75,6 +84,9 @@ func TestDoPostOnWithUrl(t *testing.T) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>>  code and test fixed
 	response := Response{"localhost", "good", 50, nil}
 =======
 	response := Response{}
@@ -86,6 +98,7 @@ func TestDoPostOnWithUrl(t *testing.T) {
 =======
 	response := Response{"localhost", "good", 50, nil}
 >>>>>>>  code and test fixed
+<<<<<<< HEAD
 =======
 	response := Response{"localhost", "good", 50, nil}
 =======
@@ -96,6 +109,8 @@ func TestDoPostOnWithUrl(t *testing.T) {
 	response.Error = nil
 >>>>>>> add PingPoller_test.go
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>>  code and test fixed
 	err := DoPostOn(&response, ts.URL)
 	if err != nil {
 		t.Error("Expected no error, got", err)

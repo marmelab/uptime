@@ -32,6 +32,7 @@ import (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 type Packet struct {
 }
 
@@ -52,6 +53,10 @@ func TestPingValidDestination(t *testing.T) {
 >>>>>>>  code and test fixed
 =======
 >>>>>>> test failed again
+=======
+=======
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 <<<<<<< HEAD
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -98,16 +103,24 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
 >>>>>>> test failed again
+=======
+=======
+>>>>>>>  code and test fixed
+>>>>>>>  code and test fixed
 =======
 type Packet struct {
 >>>>>>>  code and test fixed
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>>  code and test fixed
 type IcmpMock interface {
 	ListenPacket(network string, address string) *icmp.PacketConn
 }
@@ -120,6 +133,7 @@ func (pack Packet) ListenPacket(n string, a string) *icmp.PacketConn {
 
 type Net struct {
 }
+<<<<<<< HEAD
 =======
 func TestPingWrongDestination(t *testing.T) {
 	_, err := net.ResolveIPAddr("ip", "localhost?Ithasnosense")
@@ -296,14 +310,56 @@ func TestPingingWithNoIPConnShouldTriggerError(t *testing.T) {
 	}
 =======
 =======
+<<<<<<< HEAD
 >>>>>>> test failed again
+=======
+
+type NetMock interface {
+	ResolveIPAddr(proto string, address string) (*net.IPAddr, error)
+>>>>>>>  code and test fixed
 }
 
+func (ipad Net) ResolveIPAddr(p string, a string) (*net.IPAddr, error) {
+	var i net.IPAddr
+	i.Zone = "france"
+	i.IP = net.ParseIP("localhost")
+	ptr := &i
+	return ptr, nil
+>>>>>>>  code and test fixed
+}
+
+func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
+	myIcmp := Packet{}
+	myNet := Net{}
+	myIp, _ := myNet.ResolveIPAddr("ip", "google.fr")
+	myPacket := myIcmp.ListenPacket("ip4:icmp", "")
+	_, err := Ping(myIp, myPacket)
+	if err != nil {
+		t.Error("Pinging a valid IP should not raise an error, got ", err)
+	}
+}
 
 func TestPingingWithNoIpShouldTriggerError(t *testing.T) {
+<<<<<<< HEAD
 	_, err := Ping(nil)
 	if (err == nil) {
 		t.Error("Pinging a nil IP should raise an error got", err);
 >>>>>>> test failed again
+=======
+	myNet := Net{}
+	myIp, _ := myNet.ResolveIPAddr("ip", "google.fr")
+	_, err := Ping(myIp, nil)
+	if err == nil {
+		t.Error("Pinging a nil IP should raise an error got", err)
+	}
+}
+
+func TestPingingWithNoPacketConnShouldTriggerError(t *testing.T) {
+	myIcmp := Packet{}
+	myPacket := myIcmp.ListenPacket("ip4:icmp", "")
+	_, err := Ping(nil, myPacket)
+	if err == nil {
+		t.Error("Pinging a nil IP should raise an error got", err)
+>>>>>>>  code and test fixed
 	}
 }
