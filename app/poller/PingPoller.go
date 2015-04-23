@@ -2,6 +2,7 @@ package poller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
@@ -33,6 +34,7 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
+<<<<<<< HEAD
 func Ping(ip *net.IPAddr) (int, error) {
 <<<<<<< HEAD
 	 if ip == nil && &ip != nil {
@@ -59,4 +61,19 @@ func Ping(ip *net.IPAddr) (int, error) {
 	 }
 
 	 return duration / 1000, err
+=======
+func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+	if packetConn == nil {
+		return -1, errors.New("error argument packetConn nil")
+	}
+	if ip == nil {
+		return -1, errors.New("error argument ip nil")
+	}
+	var duration int
+	var data []byte
+	timeNow := time.Now().Nanosecond()
+	_, _ = packetConn.WriteTo(data, ip)
+	duration = time.Now().Nanosecond() - timeNow
+	return duration / 1000, nil
+>>>>>>>  code and test fixed
 }

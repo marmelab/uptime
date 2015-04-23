@@ -5,6 +5,7 @@ import (
 	"./poller"
 	"encoding/json"
 	"fmt"
+	"golang.org/x/net/icmp"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,35 +14,19 @@ import (
 
 func main() {
 	response := poller.Response{}
-	listOfDestination := model.Ips{}
+	var listOfDestination []model.Ip
 	var duration int
 	var url string
-	for true {
-		res, err := http.Get(poller.RetrieveIpsFromJsonFile("url.json")["urlApiIp"])
-		if err != nil {
-			log.Fatal(err)
-		} else {
-			body, err := ioutil.ReadAll(res.Body)
-			res.Body.Close()
-			if err != nil {
-				log.Fatal(err)
-			}
-			err = json.Unmarshal(body, &listOfDestination)
-			if err != nil {
-				log.Fatal(err)
-			}
-			c := make(chan string, len(listOfDestination))
-			go func() {
-				for i := 0; i < len(listOfDestination); i++ {
-					c <- listOfDestination[i].Destination
-				}
-			}()
-			for i := 0; i < len(listOfDestination); i++ {
-				url = <-c
+	c := make(chan string, len(listOfDestination))
+	packetConn, _ := icmp.ListenPacket("ip4:icmp", "")
+	go func() {
+		for {
+			select {
+			case url = <-c:
 				ip, err := poller.FromDomainNameToIp(url)
-				response.Destination = listOfDestination[i].Destination
+				response.Destination = url
 				if err == nil {
-					duration, err = poller.Ping(ip)
+					duration, err = poller.Ping(ip, packetConn)
 					response.Time = duration
 					response.Error = err
 					if (err != nil) || (duration <= 0) {
@@ -66,7 +51,26 @@ func main() {
 						log.Print(err)
 					}
 				}
-
+				break
+			}
+		}
+	}()
+	for {
+		res, err := http.Get(poller.RetrieveIpsFromJsonFile("url.json")["urlApiIp"])
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			body, err := ioutil.ReadAll(res.Body)
+			res.Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = json.Unmarshal(body, &listOfDestination)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := 0; i < len(listOfDestination); i++ {
+				c <- listOfDestination[i].Destination
 			}
 		}
 		time.Sleep(time.Second * 10)
