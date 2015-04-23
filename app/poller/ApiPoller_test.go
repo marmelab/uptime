@@ -8,11 +8,7 @@ import (
 )
 
 func TestDoPostOnWithoutUrl(t *testing.T) {
-	response := Response{}
-	response.Time = 50
-	response.Destination = "localhost"
-	response.Status = "good"
-	response.Error = nil
+	response := Response{"localhost", "good", 50, nil}
 	err := DoPostOn(&response, "")
 	if err == nil {
 		t.Error("Expected error, got", err)
@@ -31,11 +27,7 @@ func TestDoPostOnWithUrl(t *testing.T) {
 		}
 	}))
 	defer ts.Close()
-	response := Response{}
-	response.Time = 50
-	response.Destination = "localhost"
-	response.Status = "good"
-	response.Error = nil
+	response := Response{"localhost", "good", 50, nil}
 	err := DoPostOn(&response, ts.URL)
 	if err != nil {
 		t.Error("Expected no error, got", err)
