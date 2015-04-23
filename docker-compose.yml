@@ -1,10 +1,3 @@
-nginx:
-    build: ./var/dockerfile/nginx/
-    ports:
-        - "8000:80"
-    volumes:
-        - ./public:/usr/share/nginx/html
-
 watcher:
     build: ./var/dockerfile/go/
     working_dir: /usr/src/watcher
@@ -12,4 +5,12 @@ watcher:
         - .:/usr/src/watcher
     command: sleep 123456789
     links:
-        - nginx:nginx
+        - api:api
+api:
+    build: ./var/dockerfile/go/
+    working_dir: /usr/src/api
+    volumes:
+        - .:/usr/src/api
+    command: sleep 123456789
+    expose:
+        - "8000"
