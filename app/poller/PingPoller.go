@@ -82,15 +82,19 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 =======
 =======
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+<<<<<<< HEAD
 	if packetConn == nil {
 		return -1, errors.New("error argument packetConn nil")
 	}
 >>>>>>>  code and test fixed
+=======
+>>>>>>>  add instance of packetConn if it is nil
 	if ip == nil {
 		return -1, errors.New("error argument ip nil")
 	}
 	var duration int
 	var data []byte
+<<<<<<< HEAD
 <<<<<<< HEAD
 	var err error
 	timeNow := time.Now().Nanosecond()
@@ -103,6 +107,16 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 =======
 	timeNow := time.Now().Nanosecond()
 >>>>>>>  code and test fixed
+=======
+	var err error
+	timeNow := time.Now().Nanosecond()
+	if packetConn == nil {
+		packetConn,err = icmp.ListenPacket("ip4:icmp", "")
+		if(err != nil){
+			return -1,err
+		}
+	}
+>>>>>>>  add instance of packetConn if it is nil
 	_, _ = packetConn.WriteTo(data, ip)
 	duration = time.Now().Nanosecond() - timeNow
 	return duration / 1000, nil
