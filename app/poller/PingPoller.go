@@ -2,6 +2,7 @@ package poller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
@@ -34,8 +35,11 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 =======
+=======
+>>>>>>>  code and test fixed
 func Ping(ip *net.IPAddr) (int, error) {
 <<<<<<< HEAD
 	 if ip == nil && &ip != nil {
@@ -68,14 +72,23 @@ func Ping(ip *net.IPAddr) (int, error) {
 	 return duration / 1000, err
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+=======
+=======
+func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+	if packetConn == nil {
+		return -1, errors.New("error argument packetConn nil")
+	}
+>>>>>>>  code and test fixed
 	if ip == nil {
 		return -1, errors.New("error argument ip nil")
 	}
 	var duration int
 	var data []byte
+<<<<<<< HEAD
 	var err error
 	timeNow := time.Now().Nanosecond()
 	if packetConn == nil {
@@ -84,11 +97,17 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 			return -1,err
 		}
 	}
+=======
+	timeNow := time.Now().Nanosecond()
+>>>>>>>  code and test fixed
 	_, _ = packetConn.WriteTo(data, ip)
 	duration = time.Now().Nanosecond() - timeNow
 	return duration / 1000, nil
 >>>>>>>  code and test fixed
+<<<<<<< HEAD
 >>>>>>>  add instance of packetConn if it is nil
 =======
 >>>>>>> test failed again
+=======
+>>>>>>>  code and test fixed
 }

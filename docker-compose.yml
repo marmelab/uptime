@@ -1,12 +1,13 @@
 watcher:
     build: ./var/dockerfile/go/
-    ports:
-        - "8000:8000"
     working_dir: /usr/src/watcher
     volumes:
         - .:/usr/src/watcher
     command: sleep 123456789
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>>  code and test fixed
     links:
         - api:api
 api:
@@ -17,5 +18,8 @@ api:
     command: sleep 123456789
     expose:
         - "8000"
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>>  code and test fixed
