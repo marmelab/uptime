@@ -1,6 +1,6 @@
 language: go
 install:
 - go get golang.org/x/net/icmp
-- cd src/marmelab.com/uptime/watcher
+- cd /usr/src/watcher/src/marmelab.com/uptime/watcher
 script:
 - go test
