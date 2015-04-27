@@ -6,16 +6,22 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"flag"
 )
 
 func main() {
+
+	port := flag.String("port","8000","port for the api listen")
+	flag.Parse()
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != "GET"{
+			w.Header().Set("Statuscode","404")
+		}
 		if r.Method == "GET" {
 			var ips [2]model.Ip
 			ips[0].Destination = "google.fr"
 			ips[1].Destination = "failfailfail.fail"
-			listIp := ips
-			json.NewEncoder(w).Encode(listIp)
+			json.NewEncoder(w).Encode(ips)
 		}
 
 	})
@@ -26,9 +32,10 @@ func main() {
 			error := decoder.Decode(&newResultat)
 			if error != nil {
 				log.Fatal(error)
+				w.Header().Set("Statuscode","500")
 			}
 			log.Print(newResultat)
 		}
 	})
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }
