@@ -2,6 +2,7 @@
 	"urlIps": "/usr/src/watcher/app/poller/ips.json",
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"urlApiIp": "http://localhost:8000/ips",
 =======
 	"urlApiIp": "http://localhost:8000/ips/",
@@ -9,6 +10,9 @@
 =======
 	"urlApiIp": "http://localhost:8000/ips",
 >>>>>>>  code and test fixed
+=======
+	"urlApiIp": "http://localhost:8000/ips",
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 	"urlApiResults": "http://localhost:8000/ips/results"
 }
 

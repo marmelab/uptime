@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 package poller
 
 =======
@@ -12,6 +13,10 @@ package poller
 package poller
 
 >>>>>>> test failed again
+=======
+package poller
+
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 import (
 	"encoding/json"
 	"net/http"
@@ -20,6 +25,7 @@ import (
 )
 
 func TestDoPostOnWithoutUrl(t *testing.T) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 	response := Response{"localhost", "good", 50, nil}
@@ -33,6 +39,9 @@ func TestDoPostOnWithoutUrl(t *testing.T) {
 =======
 	response := Response{"localhost", "good", 50, nil}
 >>>>>>>  code and test fixed
+=======
+	response := Response{"localhost", "good", 50, nil}
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 	err := DoPostOn(&response, "")
 	if err == nil {
 		t.Error("Expected error, got", err)
@@ -53,6 +62,7 @@ func TestDoPostOnWithUrl(t *testing.T) {
 	defer ts.Close()
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	response := Response{"localhost", "good", 50, nil}
 =======
 	response := Response{}
@@ -64,6 +74,9 @@ func TestDoPostOnWithUrl(t *testing.T) {
 =======
 	response := Response{"localhost", "good", 50, nil}
 >>>>>>>  code and test fixed
+=======
+	response := Response{"localhost", "good", 50, nil}
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 	err := DoPostOn(&response, ts.URL)
 	if err != nil {
 		t.Error("Expected no error, got", err)

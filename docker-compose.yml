@@ -19,7 +19,10 @@ api:
     expose:
         - "8000"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19

@@ -7,12 +7,16 @@ import (
 	"fmt"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	"golang.org/x/net/icmp"
 =======
 >>>>>>> add PingPoller_test.go
 =======
 	"golang.org/x/net/icmp"
 >>>>>>>  code and test fixed
+=======
+	"golang.org/x/net/icmp"
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -23,6 +27,9 @@ func main() {
 	response := poller.Response{}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 	var listOfDestination []model.Ip
 	var duration int
 	var url string
@@ -77,6 +84,7 @@ func main() {
 			err = json.Unmarshal(body, &listOfDestination)
 			if err != nil {
 				log.Fatal(err)
+<<<<<<< HEAD
 			}
 			for i := 0; i < len(listOfDestination); i++ {
 				c <- listOfDestination[i].Destination
@@ -139,11 +147,16 @@ func main() {
 			err = json.Unmarshal(body, &listOfDestination)
 			if err != nil {
 				log.Fatal(err)
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 			}
 			for i := 0; i < len(listOfDestination); i++ {
 				c <- listOfDestination[i].Destination
 			}
+<<<<<<< HEAD
 >>>>>>> add PingPoller_test.go
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
 		}
 		time.Sleep(time.Second * 10)
 		fmt.Println("===============================")
