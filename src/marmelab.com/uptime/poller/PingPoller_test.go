@@ -51,7 +51,7 @@ func TestPingWithNoIpShouldNotTriggerError(t *testing.T) {
 		t.Error("Pinging a nil IP raise an error, got ", err)
 	}
 }
-func TestPingingWithNoIPConnShouldTriggerError(t *testing.T) {
+func TestPingingWithNoIPConnShouldNotTriggerError(t *testing.T) {
 	myNet := Net{}
 	myIp, _ := myNet.ResolveIPAddr("ip", "")
 	_, err := Ping(myIp, nil)
