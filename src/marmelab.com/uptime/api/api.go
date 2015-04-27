@@ -6,9 +6,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	_"github.comlib/pq"
+	"database/sql"
 )
 
 func main() {
+	db,err := sql.Open("postgres","user=postgres dbname=uptime sslmode=verify-full")
+	if(err!=nil){
+		log.Fatal("error open db")
+	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			var ips [2]model.Ip
