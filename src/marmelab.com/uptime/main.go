@@ -10,7 +10,6 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -22,8 +21,8 @@ func main() {
 	var duration int
 	packetConn, _ := icmp.ListenPacket("ip4:icmp", "")
 	for true {
-		log.Print(os.Getenv("CONFIG_PATH"))
-		res, err := http.Get(poller.RetrieveIpsFromJsonFile(os.Getenv("CONFIG_PATH"))["urlApiIp"])
+		log.Print(poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiIp"])
+		res, err := http.Get(poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiIp"])
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -52,13 +51,13 @@ func main() {
 					response.Error = err
 					if (err != nil) || (duration <= 0) {
 						response.Status = "failed"
-						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiResults"])
 						if err != nil {
 							log.Print(err)
 						}
 					} else {
 						response.Status = "good"
-						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiResults"])
 						if err != nil {
 							log.Print(err)
 						}
@@ -67,7 +66,7 @@ func main() {
 					response.Status = "failed"
 					response.Time = duration
 					response.Error = err
-					err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+					err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiResults"])
 					if err != nil {
 						log.Print(err)
 					}
