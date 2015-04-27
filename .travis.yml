@@ -3,7 +3,6 @@ language: go
 install:
     - go get golang.org/x/net/icmp
     - cd src/marmelab.com/uptime/poller
-    - touch testetst
 
 script:
     - go test

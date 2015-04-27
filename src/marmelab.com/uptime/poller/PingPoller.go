@@ -48,20 +48,16 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	if packetConn == nil {
 		packetConn, err = icmp.ListenPacket("ip4:icmp", "")
 		if err != nil {
-			log.Print("erreur dans nv packet")
-			return -1, err
+			log.Print("icmp ListenPacket error ")
 		}
 	}
 	errorCode, err := packetConn.WriteTo(data, ip)
 	duration = time.Now().Nanosecond() - timeNow
 	if errorCode == 0 {
-		log.Print("erreur dans errcode")
 		return duration / 1000, nil
 	}
 	if err != nil {
-		log.Print("erreur dans err ping")
 		return duration, err
 	}
-	log.Print("pas d'erreur")
 	return duration / 1000, err
 }
