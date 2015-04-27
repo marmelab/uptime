@@ -1,6 +1,0 @@
-{
-	"urlIps": "/usr/src/watcher/app/poller/ips.json",
-	"urlApiIp": "http://localhost:8000/ips",
-	"urlApiResults": "http://localhost:8000/ips/results"
-}
-
