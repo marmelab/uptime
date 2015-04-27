@@ -3,8 +3,9 @@ package poller
 import (
 	"golang.org/x/net/icmp"
 	"net"
-		"testing"
+	"testing"
 )
+
 type IcmpMock interface {
 	ListenPacket(network string, address string) *icmp.PacketConn
 }
@@ -14,8 +15,13 @@ func (pack Packet) ListenPacket(n string, a string) *icmp.PacketConn {
 	ptr := &p
 	return ptr
 }
+
 type NetMock interface {
 	ResolveIPAddr(proto string, address string) (*net.IPAddr, error)
+}
+type Packet struct {
+}
+type Net struct {
 }
 
 func (ipad Net) ResolveIPAddr(p string, a string) (*net.IPAddr, error) {
@@ -24,6 +30,7 @@ func (ipad Net) ResolveIPAddr(p string, a string) (*net.IPAddr, error) {
 	i.IP = net.ParseIP("localhost")
 	ptr := &i
 	return ptr, nil
+}
 
 func TestPingWithValidIpShouldNotTriggerError(t *testing.T) {
 	myIcmp := Packet{}
@@ -35,12 +42,20 @@ func TestPingWithValidIpShouldNotTriggerError(t *testing.T) {
 		t.Error("Pinging a valid IP should not raise an error, got ", err)
 	}
 }
-func TestPingingWithNoIPConnShouldTriggerError(t *testing.T) {	myIcmp := Packet{}
+
+func TestPingWithNoIpShouldNotTriggerError(t *testing.T) {
+	myIcmp := Packet{}
 	myPacket := myIcmp.ListenPacket("ip4:icmp", "")
 	_, err := Ping(nil, myPacket)
 	if err == nil {
-		t.Error("Pinging a nil IP should raise an error got", err)
-	if err == nil {
-		t.Error("Pinging a nil IP should raise an error got", err)
+		t.Error("Pinging a nil IP raise an error, got ", err)
+	}
+}
+func TestPingingWithNoIPConnShouldTriggerError(t *testing.T) {
+	myNet := Net{}
+	myIp, _ := myNet.ResolveIPAddr("ip", "google.fr")
+	_, err := Ping(myIp, nil)
+	if err != nil {
+		t.Error("Pinging a nil PacketConn should not raise an error got", err)
 	}
 }

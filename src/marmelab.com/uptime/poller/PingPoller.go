@@ -26,7 +26,6 @@ func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 			fmt.Println("error Unmarshal json : ", error)
 		}
 	} else {
-		
 		fmt.Println("error read file : ", err)
 	}
 	return data
@@ -54,7 +53,7 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	errorCode, err := packetConn.WriteTo(data, ip)
 	duration = time.Now().Nanosecond() - timeNow
 	if errorCode == 0 {
-		return duration / 1000, err
+		return duration / 1000, nil
 	}
 	if err != nil {
 		return duration, err
