@@ -7,6 +7,7 @@ import (
 )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 <<<<<<< HEAD
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -24,6 +25,9 @@ func TestPingWithValidIpShouldNotTrigger(t *testing.T) {
 =======
 type Packet struct {
 >>>>>>>  code and test fixed
+=======
+type Packet struct {
+>>>>>>> d09aa0ab1d64898cc222c40cd23103b41a95c1e5
 }
 
 type IcmpMock interface {
@@ -35,6 +39,7 @@ func (pack Packet) ListenPacket(n string, a string) *icmp.PacketConn {
 	ptr := &p
 	return ptr
 }
+<<<<<<< HEAD
 
 type Net struct {
 }
@@ -43,6 +48,16 @@ type NetMock interface {
 	ResolveIPAddr(proto string, address string) (*net.IPAddr, error)
 }
 
+=======
+
+type Net struct {
+}
+
+type NetMock interface {
+	ResolveIPAddr(proto string, address string) (*net.IPAddr, error)
+}
+
+>>>>>>> d09aa0ab1d64898cc222c40cd23103b41a95c1e5
 func (ipad Net) ResolveIPAddr(p string, a string) (*net.IPAddr, error) {
 	var i net.IPAddr
 	i.Zone = "france"

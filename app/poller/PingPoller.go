@@ -35,6 +35,7 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 func Ping(ip *net.IPAddr) (int, error) {
 <<<<<<< HEAD
 	 if ip == nil && &ip != nil {
@@ -62,6 +63,8 @@ func Ping(ip *net.IPAddr) (int, error) {
 
 	 return duration / 1000, err
 =======
+=======
+>>>>>>> d09aa0ab1d64898cc222c40cd23103b41a95c1e5
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	if ip == nil {
 		return -1, errors.New("error argument ip nil")
@@ -79,5 +82,8 @@ func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	_, _ = packetConn.WriteTo(data, ip)
 	duration = time.Now().Nanosecond() - timeNow
 	return duration / 1000, nil
+<<<<<<< HEAD
 >>>>>>>  code and test fixed
+=======
+>>>>>>> d09aa0ab1d64898cc222c40cd23103b41a95c1e5
 }
