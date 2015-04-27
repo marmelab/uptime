@@ -1,6 +1,8 @@
 language: go
+
 install:
-- go get golang.org/x/net/icmp
-- cd app/poller
+    - go get golang.org/x/net/icmp
+    - cd src/marmelab.com/uptime/poller
+
 script:
-- go test
+    - go test

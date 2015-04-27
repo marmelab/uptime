@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"os"
 )
 
 func main() {
@@ -14,7 +15,7 @@ func main() {
 	var err error
 	var duration int
 	for true {
-		listOfUrl := poller.RetrieveIpsFromJsonFile("url.json")
+		listOfUrl := poller.RetrieveIpsFromJsonFile(os.Getenv("CONFIG_PATH"))
 		listOfIp := poller.RetrieveIpsFromJsonFile(listOfUrl["urlIps"])
 		c := make(chan string, len(listOfIp))
 		go func() {

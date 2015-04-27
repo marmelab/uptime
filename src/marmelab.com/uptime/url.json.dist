@@ -1,0 +1,6 @@
+{
+	"urlIps": "/usr/src/watcher/src/marmelab.com/uptime/poller/ips.json",
+	"urlApiIp": "http://api/ips",
+	"urlApiResults": "http://api/ips/results"
+}
+
