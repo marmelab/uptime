@@ -30,4 +30,3 @@ testingsite:
 
 bd:
     image: postgres
-
