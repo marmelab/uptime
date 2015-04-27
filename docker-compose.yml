@@ -6,10 +6,16 @@ watcher:
     volumes:
         - .:/usr/src/watcher
     command:  go run /usr/src/watcher/src/marmelab.com/uptime/main.go
-
+api:
+    build: go
+    volumes:
+        - .:/usr/src/api
+    command: go run //usr/src/watcher/src/marmelab.com/uptime/api/api.go
+    ports:
+        - "8000:80"
 testingsite:
     image: nginx
     ports:
-        - "8000:80"
+        - "8181:81"
     volumes:
         - ./nginxContainer/static-html-directory:/usr/share/nginx/html

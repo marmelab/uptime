@@ -5,69 +5,75 @@ import (
 	"fmt"
 	"net"
 	"time"
+	"golang.org/x/net/icmp"
+	"log"
+	"net/http"
+	"io/ioutil"
+	"encoding/json"
+	"./api/model"
 	"os"
 )
 
 func main() {
 	response := poller.Response{}
+	var listOfDestination []model.Ip
 	var ip *net.IPAddr
 	var url string
-	var err error
 	var duration int
+	packetConn, _ := icmp.ListenPacket("ip4:icmp", "")
 	for true {
-		listOfUrl := poller.RetrieveIpsFromJsonFile(os.Getenv("CONFIG_PATH"))
-		listOfIp := poller.RetrieveIpsFromJsonFile(listOfUrl["urlIps"])
-		c := make(chan string, len(listOfIp))
+		res, err := http.Get(poller.RetrieveIpsFromJsonFile(os.Getenv("CONFIG_PATH"))["urlApiIp"])
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			body, err := ioutil.ReadAll(res.Body)
+			res.Body.Close()
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = json.Unmarshal(body, &listOfDestination)
+			if err != nil {
+				log.Fatal(err)
+			}
+		c := make(chan string, len(listOfDestination))
 		go func() {
-			for _, value := range listOfIp {
-				c <- value
+			for _, value := range listOfDestination {
+				c <- value.Destination
 			}
 		}()
-		for range listOfIp {
+		for range listOfDestination {
 			url = <-c
 			ip, err = poller.FromDomainNameToIp(url)
 			response.Destination = url
 			if err == nil {
-				duration, err = poller.Ping(ip)
+				duration, err = poller.Ping(ip,packetConn)
 				response.Time = duration
 				response.Error = err
 				if (err != nil) || (duration <= 0) {
 					response.Status = "failed"
-					fmt.Println(response)
+				err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+					if err != nil {
+						log.Print(err)
+					}
 				} else {
 					response.Status = "good"
-					fmt.Println(response)
+				err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+					if err != nil {
+						log.Print(err)
+					}
 				}
 			} else {
 				response.Status = "failed"
 				response.Time = duration
 				response.Error = err
-				fmt.Println(response)
+				err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("url.json")["urlApiResults"])
+					if err != nil {
+						log.Print(err)
+					}
 			}
 		}
-		/*fr key, value := range listOfIp {
-			ip, err = poller.FromDomainNameToIp(value)
-			response.Destination = value
-			response.Key = key
-			if err == nil {
-				duration, err = poller.Ping(ip)
-				response.Time = duration
-				response.Error = err
-				if (err != nil) || (duration <= 0) {
-					response.Status = "failed"
-					fmt.Println(response)
-				} else {
-					response.Status = "good"
-					fmt.Println(response)
-				}
-			} else {
-				response.Status = "failed"
-				response.Time = duration
-				response.Error = err
-				fmt.Println(response)
-			}
-		}*/
 		time.Sleep(time.Second * 10)
 		fmt.Println("===============================")
 	}
+}
 }
