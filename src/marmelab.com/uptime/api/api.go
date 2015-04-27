@@ -7,11 +7,17 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	_"github.comlib/pq"
+	"database/sql"
 )
 
 func main() {
 	port := flag.String("port", "8000", "port for the api listen")
 	flag.Parse()
+	db,err := sql.Open("postgres","user=postgres dbname=uptime sslmode=verify-full")
+	if(err!=nil){
+		log.Fatal("error open db")
+	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
