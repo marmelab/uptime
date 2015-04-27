@@ -31,8 +31,8 @@ func main() {
 			newResultat := poller.Response{}
 			error := decoder.Decode(&newResultat)
 			if error != nil {
-				log.Fatal(error)
 				w.Header().Set("Statuscode","500")
+				log.Fatal(error)
 			}
 			log.Print(newResultat)
 		}
