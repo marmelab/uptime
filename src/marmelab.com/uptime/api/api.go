@@ -5,7 +5,7 @@ import (
 	"./model"
 	"encoding/json"
 	"log"
-	"net/http" 
+	"net/http"
 )
 
 func main() {
@@ -19,7 +19,8 @@ func main() {
 		}
 
 	})
-http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {		if r.Method == "POST" {
+	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
 			decoder := json.NewDecoder(r.Body)
 			newResultat := poller.Response{}
 			error := decoder.Decode(&newResultat)
