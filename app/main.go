@@ -9,6 +9,9 @@ import (
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	"golang.org/x/net/icmp"
 =======
 >>>>>>> add PingPoller_test.go
@@ -17,6 +20,7 @@ import (
 >>>>>>>  code and test fixed
 =======
 	"golang.org/x/net/icmp"
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 >>>>>>> add PingPoller_test.go
@@ -28,6 +32,9 @@ import (
 	"golang.org/x/net/icmp"
 >>>>>>>  code and test fixed
 >>>>>>>  code and test fixed
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -40,8 +47,13 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
+=======
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	var listOfDestination []model.Ip
 	var duration int
 	var url string
@@ -96,6 +108,7 @@ func main() {
 			err = json.Unmarshal(body, &listOfDestination)
 			if err != nil {
 				log.Fatal(err)
+<<<<<<< HEAD
 			}
 			for i := 0; i < len(listOfDestination); i++ {
 				c <- listOfDestination[i].Destination
@@ -161,18 +174,27 @@ func main() {
 			err = json.Unmarshal(body, &listOfDestination)
 			if err != nil {
 				log.Fatal(err)
+=======
+<<<<<<< HEAD
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 			}
 			for i := 0; i < len(listOfDestination); i++ {
 				c <- listOfDestination[i].Destination
 			}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 	listOfDestination := model.Ips{}
 =======
 	var listOfDestination []model.Ip
 >>>>>>>  code and test fixed
+<<<<<<< HEAD
 >>>>>>>  code and test fixed
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	var duration int
 	var url string
 	c := make(chan string, len(listOfDestination))
@@ -222,6 +244,7 @@ func main() {
 			res.Body.Close()
 			if err != nil {
 				log.Fatal(err)
+<<<<<<< HEAD
 			}
 			err = json.Unmarshal(body, &listOfDestination)
 			if err != nil {
@@ -232,6 +255,22 @@ func main() {
 			}
 >>>>>>> add PingPoller_test.go
 >>>>>>> add PingPoller_test.go
+=======
+			}
+			err = json.Unmarshal(body, &listOfDestination)
+			if err != nil {
+				log.Fatal(err)
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+			}
+			for i := 0; i < len(listOfDestination); i++ {
+				c <- listOfDestination[i].Destination
+			}
+<<<<<<< HEAD
+>>>>>>> add PingPoller_test.go
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 		}
 		time.Sleep(time.Second * 10)
 		fmt.Println("===============================")

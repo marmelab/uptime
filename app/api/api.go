@@ -2,10 +2,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>> test failed again
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 package main
 
 import (
@@ -20,18 +23,29 @@ import (
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> test failed again
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 package main
 
 import (
 >>>>>>> test failed again
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>> test failed again
+=======
+=======
+package main
+
+import (
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	"../poller"
 	"./model"
 	"encoding/json"
@@ -46,6 +60,7 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
@@ -54,6 +69,12 @@ func main() {
 =======
 >>>>>>>  code and test fixed
 >>>>>>>  code and test fixed
+=======
+=======
+>>>>>>>  code and test fixed
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 			var ips [2]model.Ip
 			ips[0].Destination = "google.fr"
 			ips[1].Destination = "failfailfail.fail"
@@ -61,10 +82,13 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 			listIp := model.Ips{
 				model.Ip{Destination: "google.fr"},
@@ -75,6 +99,7 @@ func main() {
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
@@ -83,6 +108,12 @@ func main() {
 =======
 >>>>>>>  code and test fixed
 >>>>>>>  code and test fixed
+=======
+=======
+>>>>>>>  code and test fixed
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 			json.NewEncoder(w).Encode(listIp)
 		}
 
@@ -92,16 +123,20 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 		if r.Method == "GET" {
 		}
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
@@ -110,6 +145,12 @@ func main() {
 =======
 >>>>>>>  code and test fixed
 >>>>>>>  code and test fixed
+=======
+=======
+>>>>>>>  code and test fixed
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 		if r.Method == "POST" {
 			decoder := json.NewDecoder(r.Body)
 			newResultat := poller.Response{}
@@ -126,12 +167,16 @@ func main() {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>> test failed again
 =======
+<<<<<<< HEAD
 =======
 
 >>>>>>> add PingPoller_test.go
@@ -143,3 +188,6 @@ func main() {
 =======
 >>>>>>> test failed again
 >>>>>>> test failed again
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df

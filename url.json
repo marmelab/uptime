@@ -4,26 +4,37 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	"urlApiIp": "http://localhost:8000/ips",
 =======
 	"urlApiIp": "http://localhost:8000/ips/",
 >>>>>>> add PingPoller_test.go
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 	"urlApiIp": "http://localhost:8000/ips",
 >>>>>>>  code and test fixed
 =======
+<<<<<<< HEAD
 >>>>>>> add PingPoller_test.go
 =======
 =======
 	"urlApiIp": "http://localhost:8000/ips",
 >>>>>>>  code and test fixed
 >>>>>>>  code and test fixed
+=======
+	"urlApiIp": "http://localhost:8000/ips",
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 	"urlApiResults": "http://localhost:8000/ips/results"
 }
 

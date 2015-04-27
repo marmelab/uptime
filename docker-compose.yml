@@ -8,6 +8,7 @@ watcher:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>>  code and test fixed
 =======
@@ -15,6 +16,9 @@ watcher:
 =======
 =======
 >>>>>>>  code and test fixed
+=======
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 >>>>>>>  code and test fixed
     links:
         - api:api
@@ -29,11 +33,15 @@ api:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
 =======
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>>  code and test fixed
 =======
+<<<<<<< HEAD
 >>>>>>>  code and test fixed
 =======
 =======
@@ -41,3 +49,6 @@ api:
 >>>>>>> add PingPoller_test.go
 =======
 >>>>>>>  code and test fixed
+=======
+>>>>>>> fe35ab3749b7451f789da23b18b4944146380c19
+>>>>>>> 5e669e907a348765a72d9c371814de2c87ae53df
