@@ -21,7 +21,6 @@ func main() {
 	var duration int
 	packetConn, _ := icmp.ListenPacket("ip4:icmp", "")
 	for true {
-		log.Print(poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiIp"])
 		res, err := http.Get(poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiIp"])
 		if err != nil {
 			log.Fatal(err)

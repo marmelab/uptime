@@ -19,9 +19,9 @@ api:
     ports:
         - "8000:80"
 
-testingsite:
-    image: nginx
-    ports:
-        - "8181:81"
-    volumes:
-        - ./nginxContainer/static-html-directory:/usr/share/nginx/html
+#testingsite:
+ #   image: nginx
+  #  ports:
+   #     - "8181:81"
+    #volumes:
+     #   - ./nginxContainer/static-html-directory:/usr/share/nginx/html
