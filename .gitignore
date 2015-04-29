@@ -1,4 +1,4 @@
 pkg/
 src/golang.org/*
 src/github.com/*
-src/marmelab.com/uptime/url.json
+src/marmelab.com/uptime/conf.json

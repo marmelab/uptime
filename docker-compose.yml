@@ -2,12 +2,13 @@ watcher:
     image: golang
     environment:
         GOPATH: /usr/src/watcher
-        CONFIG_PATH: /usr/src/watcher/src/marmelab.com/uptime/url.json
+        CONFIG_PATH: /usr/src/watcher/src/marmelab.com/uptime/conf.json
     volumes:
         - .:/usr/src/watcher
     command: go run /usr/src/watcher/src/marmelab.com/uptime/main.go
     links:
         - "api"
+        - "site"
 
 api:
     image: golang
@@ -18,3 +19,17 @@ api:
     command: go run /usr/src/api/src/marmelab.com/uptime/api/api.go
     ports:
         - "8000:80"
+    links:
+        - "db"
+
+site:
+    image: nginx
+    ports:
+        - "8181:81"
+    volumes:
+        - ./nginxContainer/static-html-directory:/usr/share/nginx/html
+
+db:
+    image: postgres
+    volumes:
+        - .:/usr/src/db
