@@ -2,12 +2,12 @@ package poller
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
 	"net"
 	"time"
-	"errors"
 	"log"
 )
 
@@ -36,28 +36,28 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
-func Ping(ip *net.IPAddr) (int, error) {
-	if ip == nil {
-		log.Print(&ip)
+func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
+	if ip == nil && &ip != nil {
 		error := errors.New("ip = nil ")
 		return 0, error
 	}
 	var duration int
 	var data []byte
-	packetConn, err := icmp.ListenPacket("ip4:icmp", "")
-	if err == nil {
-		timeNow := time.Now().Nanosecond()
-		errorCode, err := packetConn.WriteTo(data, ip)
-		duration = time.Now().Nanosecond() - timeNow
-		if errorCode == 0 {
-			return duration / 1000, err
-		}
+	var err error
+	timeNow := time.Now().Nanosecond()
+	if packetConn == nil {
+		packetConn, err = icmp.ListenPacket("ip4:icmp", "")
 		if err != nil {
-			return duration, err
+			log.Print("icmp ListenPacket error ")
 		}
-	} else {
+	}
+	errorCode, err := packetConn.WriteTo(data, ip)
+	duration = time.Now().Nanosecond() - timeNow
+	if errorCode == 0 {
+		return duration / 1000, nil
+	}
+	if err != nil {
 		return duration, err
 	}
-
 	return duration / 1000, err
 }
