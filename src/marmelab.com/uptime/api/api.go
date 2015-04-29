@@ -30,6 +30,7 @@ func main() {
 		for leng.Next() {
 		_:
 			leng.Scan(&length)
+		}
 		defer rows.Close()
 		ips := make([]model.Ip, length)
 		i := 0
@@ -39,7 +40,6 @@ func main() {
 			if error != nil {
 				log.Print(error)
 			}
-			log.Print(dest)
 			ips[i].Destination = dest
 			i++
 		}
