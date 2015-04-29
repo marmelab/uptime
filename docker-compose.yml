@@ -32,3 +32,5 @@ db:
     image: postgres
     ports:
         - "5432:5432"
+    volumes:
+        - .:/usr/src/db
