@@ -8,6 +8,7 @@ watcher:
     command: go run /usr/src/watcher/src/marmelab.com/uptime/main.go
     links:
         - "api"
+        - "site"
 
 api:
     image: golang
@@ -21,7 +22,7 @@ api:
     links:
         - "db"
 
-testingsite:
+site:
     image: nginx
     ports:
         - "8181:81"

@@ -18,7 +18,21 @@ type Response struct {
 	Key         string
 }
 
+
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
+	content, err := ioutil.ReadFile(fileName)
+	if err == nil {
+		error := json.Unmarshal(content, &data)
+		if error != nil {
+			fmt.Println("error Unmarshal json : ", error)
+		}
+	} else {
+		fmt.Println("error read file : ", err)
+	}
+	return data
+}
+
+func RetrieveConfDbFromJsonFile(fileName string) (data map[string]interface{}) {
 	content, err := ioutil.ReadFile(fileName)
 	if err == nil {
 		error := json.Unmarshal(content, &data)
