@@ -16,7 +16,6 @@ type Response struct {
 	Status      string
 	Time        int
 	Key         string
-	Error       error
 }
 
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {

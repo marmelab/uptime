@@ -2,7 +2,7 @@ watcher:
     image: golang
     environment:
         GOPATH: /usr/src/watcher
-        CONFIG_PATH: /usr/src/watcher/src/marmelab.com/uptime/url.json
+        CONFIG_PATH: /usr/src/watcher/src/marmelab.com/uptime/conf.json
     volumes:
         - .:/usr/src/watcher
     command: go run /usr/src/watcher/src/marmelab.com/uptime/main.go
@@ -30,7 +30,5 @@ testingsite:
 
 db:
     image: postgres
-    ports:
-        - "5432:5432"
     volumes:
         - .:/usr/src/db

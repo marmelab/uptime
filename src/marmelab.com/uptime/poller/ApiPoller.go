@@ -3,12 +3,12 @@ package poller
 import (
 	"bytes"
 	"net/http"
-	"strconv"
+	"encoding/json"
 )
 
 func DoPostOn(response *Response, url string) error {
-	var result = []byte(`{"Destination": "` + response.Destination + `","Time": ` + strconv.Itoa(response.Time) + `,"Status": "` + response.Status + `"}`)
-	req, error := http.NewRequest("POST", url, bytes.NewBuffer(result))
+	 data,_ := json.Marshal(response)
+	req, error := http.NewRequest("POST", url, bytes.NewBuffer(data))
 	if error != nil {
 		return error
 	}

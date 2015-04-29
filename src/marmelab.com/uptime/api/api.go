@@ -2,7 +2,7 @@ package main
 
 import (
 	"../poller"
-	"./model"
+	"./target"
 	"database/sql"
 	"encoding/json"
 	"flag"
@@ -14,9 +14,11 @@ import (
 func main() {
 	port := flag.String("port", "8000", "port for the api listen")
 	flag.Parse()
-	db, err := sql.Open("postgres", "host=db user=postgres dbname=postgres sslmode=disable")
+	conf := poller.RetrieveIpsFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
+	db, err := sql.Open("postgres", "host="+conf["hostdb"]+" user="+conf["userdb"]+" dbname="+conf["userdb"]+" sslmode="+conf["sslmode"]+"")
+	defer db.Close()
 	if err != nil {
-		log.Fatal("error open db")
+		log.Fatal(err)
 	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "GET" {
@@ -24,21 +26,23 @@ func main() {
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
 			return
 		}
-		rows, _ := db.Query("Select * from Destination")
-		leng, _ := db.Query("Select Count(*) from Destination")
+		rows, _ := db.Query("SELECT * FROM destination")
+		defer rows.Close()
+		leng, _ := db.Query("SELECT COUNT(*) FROM destination")
+		defer leng.Close()
 		var length int
 		for leng.Next() {
 		_:
 			leng.Scan(&length)
 		}
-		defer rows.Close()
-		ips := make([]model.Ip, length)
+		ips := make([]target.Ip, length)
 		i := 0
 		for rows.Next() {
 			var dest string
 			error := rows.Scan(&dest)
 			if error != nil {
 				log.Print(error)
+				return 
 			}
 			ips[i].Destination = dest
 			i++
@@ -58,7 +62,7 @@ func main() {
 			log.Print(error)
 			return
 		}
-		_,_=db.Exec("INSERT INTO Results (destination,status,time) VALUES($1,$2,$3)",newResult.Destination,newResult.Status,newResult.Time)
+		_,_=db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)",newResult.Destination,newResult.Status,newResult.Time)
 	})
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }

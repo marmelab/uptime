@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./api/model"
+	"./api/target"
 	"./poller"
 	"encoding/json"
 	"fmt"
@@ -15,13 +15,13 @@ import (
 
 func main() {
 	response := poller.Response{}
-	var listOfDestination []model.Ip
+	var listOfDestination []target.Ip
 	var ip *net.IPAddr
 	var url string
 	var duration int
 	packetConn, _ := icmp.ListenPacket("ip4:icmp", "")
 	for true {
-		res, err := http.Get(poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiIp"])
+		res, err := http.Get(poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")["urlApiIp"])
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -47,16 +47,15 @@ func main() {
 				if err == nil {
 					duration, err = poller.Ping(ip, packetConn)
 					response.Time = duration
-					response.Error = err
 					if (err != nil) || (duration <= 0) {
 						response.Status = "failed"
-						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiResults"])
+						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")["urlApiResults"])
 						if err != nil {
 							log.Print(err)
 						}
 					} else {
 						response.Status = "good"
-						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiResults"])
+						err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")["urlApiResults"])
 						if err != nil {
 							log.Print(err)
 						}
@@ -64,8 +63,7 @@ func main() {
 				} else {
 					response.Status = "failed"
 					response.Time = duration
-					response.Error = err
-					err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/url.json")["urlApiResults"])
+					err = poller.DoPostOn(&response, poller.RetrieveIpsFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")["urlApiResults"])
 					if err != nil {
 						log.Print(err)
 					}

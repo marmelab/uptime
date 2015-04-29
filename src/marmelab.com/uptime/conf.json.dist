@@ -2,5 +2,10 @@
 	"urlIps": "/usr/src/watcher/src/marmelab.com/uptime/poller/ips.json",
 	"urlApiIp": "http://api:8000/ips",
 	"urlApiResults": "http://api:8000/ips/results"
+	"hostdb": "db",
+	"userdb": "postgres",
+	"passworddb": "",
+	"dbname": "postgres",
+	"sslmode": "disable"
 }
 
