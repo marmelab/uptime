@@ -33,3 +33,10 @@ db:
     image: postgres
     volumes:
         - .:/usr/src/db
+
+client:
+    image: node
+    volumes:
+        - .:/usr/src/client
+    ports:
+        - "8888:88"
