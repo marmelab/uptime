@@ -30,7 +30,6 @@ func main() {
 		for leng.Next() {
 		_:
 			leng.Scan(&length)
-		}
 		defer rows.Close()
 		ips := make([]model.Ip, length)
 		i := 0
