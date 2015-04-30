@@ -39,6 +39,7 @@ webpack:
     image: node
     volumes:
         - .:/usr/src/client
+    command: sleep 1234567
     ports:
         - "8888:88"
 
