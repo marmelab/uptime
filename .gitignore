@@ -2,4 +2,4 @@ pkg/
 src/golang.org/*
 src/github.com/*
 src/marmelab.com/uptime/conf.json
-node_modules/
+client/node_modules

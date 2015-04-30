@@ -2,8 +2,8 @@ setup:
 	@cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json
 	@docker-compose run watcher go get golang.org/x/net/icmp 
 	@docker-compose run api go get github.com/lib/pq
-	@docker-compose run webpack npm webpack
-	@docker-compose run webpack npm webpack-dev-server
+	@docker-compose run webpack npm webpack -g
+	@docker-compose run webpack npm webpack-dev-server -g
 	@echo "Setup completed!"
 init_db:
 	@docker-compose up -d db
