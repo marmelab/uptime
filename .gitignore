@@ -3,3 +3,5 @@ src/golang.org/*
 src/github.com/*
 src/marmelab.com/uptime/conf.json
 client/node_modules
+client/bundle.js
+npm_debug.log

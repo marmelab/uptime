@@ -9,6 +9,7 @@
   "author": "sylver",
   "license": "ISC",
   "devDependencies": {
-    "jsx-loader": "^0.13.2"
+    "jsx-loader": "^0.13.2",
+    "webpack": "1.8.7"
   }
 }
