@@ -36,10 +36,10 @@ db:
         - .:/usr/src/db
 
 webpack:
-    image: node
+    image: iojs:1.6.3
     volumes:
-        - .:/usr/src/client
-    command: sleep 1234567
+        - .:/usr/src/webpack
+    command: /usr/src/webpack/client/node_modules/.bin/webpack
     ports:
         - "8888:88"
 
