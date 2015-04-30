@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	port := flag.String("port", "9000", "port for the api listen")
+	port := flag.String("port", "8000", "port for the api listen")
 	flag.Parse()
 	conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
 	configdb := conf["database"]

@@ -15,3 +15,6 @@ load_fixtures:
 	@echo "load_fixtures completed"
 run:
 	docker-compose up
+clear:
+	@docker-compose kill
+	@docker-compose rm
