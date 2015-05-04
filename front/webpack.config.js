@@ -7,7 +7,7 @@ module.exports = {
 		]
 	},
 	output: {
-		filename: "./app/bundle.js",
+		filename: "app/bundle.js",
 		publicPath: "http://localhost:8080/"
 	},
 	module:{
