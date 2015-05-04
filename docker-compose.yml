@@ -39,13 +39,14 @@ webpack:
     image: iojs:1.6.3
     volumes:
         - .:/usr/src/webpack
-    command: /usr/src/webpack/client/node_modules/.bin/webpack
+    command: sleep 1234567 #/usr/src/webpack/front/node_modules/.bin/webpack
     ports:
         - "8888:88"
+        - "8080:8080"
 
 client:
     image: nginx
     ports:
         - "8000:80"
     volumes:
-        - ./client/public:/usr/share/nginx/html
+        - ./front/app:/usr/share/nginx/html

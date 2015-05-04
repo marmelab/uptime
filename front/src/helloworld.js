@@ -1,8 +1,8 @@
 var HelloWorld = React.createClass({
-  displayName: 'HelloWorld',
+  displayName: 'Helloworld !',
   render: function() {
     return (
-      <h1>Helloworld!</h1>
+      <h1>It works!</h1>
     );
   }
 });
