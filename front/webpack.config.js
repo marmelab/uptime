@@ -12,10 +12,7 @@ module.exports = {
 	},
 	module:{
 		loaders: [
-			{ test: /\.js$/,loaders:[
-				"jsx-loader"
-				] 
-			}
+			{ test: /\.js$/, loaders:["jsx-loader"]}
 		]
 	}
 };
