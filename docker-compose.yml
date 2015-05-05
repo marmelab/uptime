@@ -39,10 +39,10 @@ webpack:
     image: iojs:1.6.3
     volumes:
         - .:/usr/src/webpack
-    command: sleep 1234567 #/usr/src/webpack/front/node_modules/.bin/webpack
+    command: /usr/src/webpack/front/node_modules/.bin/webpack-dev-server --progress --colors --host=0.0.0.0 --port=8181
     ports:
         - "8888:88"
-        - "8080:8080"
+        - "8181:8181"
 
 client:
     image: iojs:1.6.3

@@ -1,17 +1,18 @@
 var webpack = require('webpack');
-
+var path = require('path');
 module.exports = {
 	entry: {
 		App: [
-			'webpack-dev-server/client?http://localhost:8080',
+			'webpack-dev-server/client?http://localhost:8181',
 			'webpack/hot/only-dev-server',
 			'./src/main.js'
 		]
 	},
 
 	output: {
+		path: __dirname+"/src",
 		filename: "app/bundle.js",
-		publicPath: "http://localhost:8080/"
+		publicPath: "http://localhost:8181/"
 	},
 
 	plugins: [
@@ -21,16 +22,8 @@ module.exports = {
 
 	module:{
 		loaders: [
-
-			{ test: /\.js$/,loaders:[
-				"jsx-loader"
-				] 
-			},
-			{
-				test: /\.jsx?$/,loaders:[
-				'react-hot'
-				]
-			}
+			{ test: /\.js$/, loaders:['jsx-loader']},
+			{ test: /\.jsx?$/, loaders:['react-hot'], include: path.join(__dirname,'/src')}
 		]
 	}
 };
