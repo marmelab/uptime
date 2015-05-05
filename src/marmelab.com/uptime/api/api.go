@@ -52,7 +52,7 @@ func main() {
 		json.NewEncoder(w).Encode(ips)
 	})
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
+		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
@@ -71,15 +71,19 @@ func main() {
 			i := 0
 			for rows.Next() {
 				var dest string
-			error := rows.Scan(&dest)
-				if error != nil {
-				log.Print(error)
-				return
-				}
-				res[i] = dest
+				var sta string 
+				var tim int
+				error := rows.Scan(&dest,&sta,&tim)
+					if error != nil {
+					log.Print(error)
+					return
+					}
+				res[i].Destination = dest
+				res[i].Status = sta
+				res[i].Time = tim
 				i++
 			}
-			json.NewEncoder(w).Encode(ips)
+			json.NewEncoder(w).Encode(res)
 			}else{
 				decoder := json.NewDecoder(r.Body)
 				newResult := poller.Response{}

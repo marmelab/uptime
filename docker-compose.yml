@@ -37,6 +37,7 @@ db:
 
 webpack:
     image: iojs:1.6.3
+    working_dir: /usr/src/webpack/front
     volumes:
         - .:/usr/src/webpack
     working_dir: /usr/src/webpack/front
