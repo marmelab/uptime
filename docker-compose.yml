@@ -18,9 +18,10 @@ api:
         - .:/usr/src/api
     command: go run /usr/src/api/src/marmelab.com/uptime/api/api.go
     ports:
-        - "8000:80"
+        - "8080:8000"
     links:
         - "db"
+        - "client"
 
 site:
     image: nginx
@@ -33,3 +34,17 @@ db:
     image: postgres
     volumes:
         - .:/usr/src/db
+
+webpack:
+    image: node
+    volumes:
+        - .:/usr/src/client
+    ports:
+        - "8888:88"
+
+client:
+    image: nginx
+    ports:
+        - "8000:80"
+    volumes:
+        - ./client/public:/usr/share/nginx/html
