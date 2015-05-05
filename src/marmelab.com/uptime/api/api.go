@@ -57,14 +57,40 @@ func main() {
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
 		}
-		decoder := json.NewDecoder(r.Body)
-		newResult := poller.Response{}
-		error := decoder.Decode(&newResult)
-		if error != nil {
-			log.Print(error)
-			return
+		if(r.Method == "GET"){
+			rows, _ := db.Query("SELECT * FROM results")
+			defer rows.Close()
+			leng, _ := db.Query("SELECT COUNT(destination) FROM results")
+			defer leng.Close()
+			var length int
+			for leng.Next() {
+			_:
+				leng.Scan(&length)
+			}
+			res := make([]poller.Response, length)
+			i := 0
+			for rows.Next() {
+				var dest string
+			error := rows.Scan(&dest)
+				if error != nil {
+				log.Print(error)
+				return
+				}
+				res[i] = dest
+				i++
+			}
+			json.NewEncoder(w).Encode(ips)
+			}else{
+				decoder := json.NewDecoder(r.Body)
+				newResult := poller.Response{}
+				error := decoder.Decode(&newResult)
+				if error != nil {
+				log.Print(error)
+				return
+			}
+			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
 		}
-		_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
+
 	})
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }
