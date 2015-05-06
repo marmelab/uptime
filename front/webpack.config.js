@@ -10,7 +10,6 @@ module.exports = {
 	},
 
 	output: {
-		path: __dirname+"/src",
 		filename: "app/bundle.js",
 		publicPath: "http://localhost:8181/"
 	},

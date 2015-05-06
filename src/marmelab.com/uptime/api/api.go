@@ -23,6 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin","*")
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -52,6 +53,7 @@ func main() {
 		json.NewEncoder(w).Encode(ips)
 	})
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin","*")
 		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
