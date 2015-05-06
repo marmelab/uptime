@@ -15,6 +15,8 @@ load_fixtures:
 	@docker exec  uptime2_db_1 psql -f /usr/src/db/fixtures/fixtures.sql --username=postgres
 	@docker-compose kill db
 	@echo "load_fixtures completed"
+init_node_server:
+	@docker-compose run webpack export NODE_ENV=development
 run:
 	docker-compose up
 clear:

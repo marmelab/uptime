@@ -50,4 +50,5 @@ client:
         - "8000:8000"
     volumes:
         - ./front:/usr/src/client
-    command: node server.js 
+    working_dir: /usr/src/client
+    command: node /usr/src/client/server.js
