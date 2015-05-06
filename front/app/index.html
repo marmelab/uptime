@@ -8,17 +8,7 @@
   </head>
   <body>
     <div id="content"></div>
-    <script type="text/jsx">
-      var HelloWorld = React.createClass({
-        render: function() {
-          return (
-            <h1>Helloworld!</h1>
-          );
-        }
-      });
-      React.render(<Helloworld />,
-        document.getElementById('content')
-      );
-    </script>
+    <script src="{{ cdnBaseUrl }}/webpack-dev-server.js"></script>
+    <script src="{{ cdnBaseUrl }}/app/bundle.js"></script>
   </body>
 </html>

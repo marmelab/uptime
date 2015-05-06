@@ -2,3 +2,6 @@ pkg/
 src/golang.org/*
 src/github.com/*
 src/marmelab.com/uptime/conf.json
+front/node_modules
+front/app/bundle.js
+npm_debug.log
