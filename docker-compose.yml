@@ -45,8 +45,9 @@ webpack:
         - "8080:8080"
 
 client:
-    image: nginx
+    image: iojs:1.6.3
     ports:
-        - "8000:80"
+        - "8000:8000"
     volumes:
-        - ./front/app:/usr/share/nginx/html
+        - ./front:/usr/src/client
+    command: node server.js 

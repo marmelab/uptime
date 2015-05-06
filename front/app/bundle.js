@@ -138,11 +138,10 @@
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var HelloWorld = React.createClass({
-	  displayName: 'Helloworld !',
+	var HelloWorld = React.createClass({displayName: "HelloWorld",
 	  render: function() {
 	    return (
-	      React.createElement("h1", null, "It works!")
+	      React.createElement("h1", null, "It works yeah!")
 	    );
 	  }
 	});
@@ -2539,7 +2538,7 @@
 
 	  // Detect the `define` function exposed by asynchronous module loaders. The
 	  // strict `define` check is necessary for compatibility with `r.js`.
-	  var isLoader = "function" === "function" && __webpack_require__(30);
+	  var isLoader = "function" === "function" && __webpack_require__(29);
 
 	  // Detect native implementations.
 	  var nativeJSON = typeof JSON == "object" && JSON;
@@ -3400,7 +3399,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = __webpack_require__(29);
+	module.exports = __webpack_require__(30);
 
 	/**
 	 * Exports parser
@@ -3422,6 +3421,14 @@
 
 /***/ },
 /* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, {}))
+
+/***/ },
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -4131,14 +4138,6 @@
 	};
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 30 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
 /* 31 */
@@ -5275,7 +5274,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// browser shim for xmlhttprequest module
-	var hasCORS = __webpack_require__(52);
+	var hasCORS = __webpack_require__(51);
 
 	module.exports = function(opts) {
 	  var xdomain = opts.xdomain;
@@ -5323,7 +5322,7 @@
 	var XMLHttpRequest = __webpack_require__(39);
 	var Polling = __webpack_require__(50);
 	var Emitter = __webpack_require__(16);
-	var inherit = __webpack_require__(51);
+	var inherit = __webpack_require__(52);
 	var debug = __webpack_require__(37)('engine.io-client:polling-xhr');
 
 	/**
@@ -5713,7 +5712,7 @@
 	 */
 
 	var Polling = __webpack_require__(50);
-	var inherit = __webpack_require__(51);
+	var inherit = __webpack_require__(52);
 
 	/**
 	 * Module exports.
@@ -5954,7 +5953,7 @@
 	var Transport = __webpack_require__(32);
 	var parser = __webpack_require__(31);
 	var parseqs = __webpack_require__(36);
-	var inherit = __webpack_require__(51);
+	var inherit = __webpack_require__(52);
 	var debug = __webpack_require__(37)('engine.io-client:websocket');
 
 	/**
@@ -6900,7 +6899,7 @@
 	var Transport = __webpack_require__(32);
 	var parseqs = __webpack_require__(36);
 	var parser = __webpack_require__(31);
-	var inherit = __webpack_require__(51);
+	var inherit = __webpack_require__(52);
 	var debug = __webpack_require__(37)('engine.io-client:polling');
 
 	/**
@@ -7145,18 +7144,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	
-	module.exports = function(a, b){
-	  var fn = function(){};
-	  fn.prototype = b.prototype;
-	  a.prototype = new fn;
-	  a.prototype.constructor = a;
-	};
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
 	/**
 	 * Module dependencies.
 	 */
@@ -7180,6 +7167,18 @@
 	  module.exports = false;
 	}
 
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	module.exports = function(a, b){
+	  var fn = function(){};
+	  fn.prototype = b.prototype;
+	  a.prototype = new fn;
+	  a.prototype.constructor = a;
+	};
 
 /***/ },
 /* 53 */
