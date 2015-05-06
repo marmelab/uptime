@@ -17,5 +17,8 @@
     "react-hot-loader": "^1.2.6",
     "webpack": "1.8.7",
     "webpack-dev-server": "^1.8.2"
+  },
+  "devDependencies": {
+    "react": "^0.13.2"
   }
 }

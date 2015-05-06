@@ -10,7 +10,7 @@ module.exports = {
 	},
 
 	output: {
-		path: __dirname+"/src",
+		path: __dirname,
 		filename: "app/bundle.js",
 		publicPath: "http://localhost:8181/"
 	},
@@ -23,7 +23,7 @@ module.exports = {
 	module:{
 		loaders: [
 			{ test: /\.js$/, loaders:['jsx-loader']},
-			{ test: /\.jsx?$/, loaders:['react-hot'], include: path.join(__dirname,'/src')}
+			{ test: /\.jsx?$/, loaders:['react-hot'], exclude: /node_modules/}
 		]
 	}
 };

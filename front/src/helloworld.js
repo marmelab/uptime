@@ -1,7 +1,9 @@
+var React = require('react');
+
 var HelloWorld = React.createClass({
   render: function() {
     return (
-      <h1>It works yeahhh!</h1>
+      <h1>It works yeahhhhhhhhh!</h1>
     );
   }
 });
