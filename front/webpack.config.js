@@ -3,6 +3,7 @@ module.exports = {
 	entry: {
 		App: [
 			'webpack-dev-server/client?http://localhost:8080',
+			'webpack/hot/only-dev-server',
 			'./src/main.js'
 		]
 	},
@@ -12,7 +13,7 @@ module.exports = {
 	},
 	module:{
 		loaders: [
-			{ test: /\.js$/, loaders:["jsx-loader"]}
+			{ test: /\.js$/, loaders: ['react-hot', 'jsx-loader'], exclude: /node_modules/ }
 		]
 	}
 };
