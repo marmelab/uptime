@@ -1,5 +1,5 @@
 {
 	"host": "localhost",
 	"port": "8000",
-	"hostWebpack":"http://localhost:8080"
+	"hostWebpack":"http://localhost:8282"
 }

@@ -15,5 +15,5 @@ app.get('/index.html', function (req, res) {
 });
 
 var server = app.listen(config.get('port'), function () {
-  console.log(' server listening at http://' + {config.get('host') + ':' + {config.get('port')});
+  console.log(' server listening at http://' + config.get('host') + ':' + config.get('port'));
 });

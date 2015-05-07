@@ -38,11 +38,11 @@ db:
 webpack:
     image: iojs:1.6.3
     volumes:
-        - .:/usr/src/webpack
-    command: sleep 1234567 #/usr/src/webpack/front/node_modules/.bin/webpack
+        - .:/app
+    working_dir: /app/front
+    command: ./node_modules/.bin/webpack-dev-server --progress --colors --host=0.0.0.0 --port=8282
     ports:
-        - "8888:88"
-        - "8080:8080"
+        - "8282:8282"
 
 client:
     image: iojs:1.6.3
