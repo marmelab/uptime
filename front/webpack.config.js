@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
 	entry: {
 		App: [
-			'webpack-dev-server/client?http://localhost:8181',
+			'webpack-dev-server/client?http://localhost:8282',
 			'webpack/hot/only-dev-server',
 			'./src/main.js'
 		]
@@ -12,7 +12,7 @@ module.exports = {
 	output: {
 		path: __dirname,
 		filename: "app/bundle.js",
-		publicPath: "http://localhost:8181/"
+		publicPath: "http://localhost:8282/"
 	},
 
 	plugins: [
