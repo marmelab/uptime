@@ -4,7 +4,7 @@ var HelloWorld = require("./helloworld.js");
 React.render(
     <div>
         <input type="text" />
-        <HelloWorld name="Bob"/>
+        <HelloWorld />
     </div>,
     document.getElementById('content')
 );

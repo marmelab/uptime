@@ -1,8 +1,8 @@
 var React = require('react');
-var Griddle = require('griddle-react');
+
 
 var data =""; 
-$.get("http://api:8000/ips/results",function(d){
+$.get("http://api:8383/ips/results",function(d){
 	 data=d;
 	 console.log("je suis la");
 });
