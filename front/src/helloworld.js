@@ -18,10 +18,6 @@ var data = [
 	}
 ];
 
-$.get("http://api:8383/ips/results",function(d){
-	 data=d;
-	 console.log("je suis la");
-});
 
 var HelloWorld = React.createClass({
   render: function() {
