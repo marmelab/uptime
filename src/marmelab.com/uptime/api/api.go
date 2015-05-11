@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	port := flag.String("port", "8000", "port for the api listen")
+	port := flag.String("port", "8383", "port for the api listen")
 	flag.Parse()
 	conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
 	configdb := conf["database"]
@@ -23,6 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin","*")
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -52,19 +53,52 @@ func main() {
 		json.NewEncoder(w).Encode(ips)
 	})
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != "POST" {
+		w.Header().Set("Access-Control-Allow-Origin","*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
 		}
-		decoder := json.NewDecoder(r.Body)
-		newResult := poller.Response{}
-		error := decoder.Decode(&newResult)
-		if error != nil {
-			log.Print(error)
-			return
+		if(r.Method == "GET"){
+			rows, _ := db.Query("SELECT * FROM results")
+			defer rows.Close()
+			leng, _ := db.Query("SELECT COUNT(destination) FROM results")
+			defer leng.Close()
+			var length int
+			for leng.Next() {
+			_:
+				leng.Scan(&length)
+			}
+			res := make([]poller.Response, length)
+			i := 0
+			for rows.Next() {
+				var dest string
+				var sta string 
+				var tim int
+				error := rows.Scan(&dest,&sta,&tim)
+					if error != nil {
+					log.Print(error)
+					return
+					}
+				res[i].Destination = dest
+				res[i].Status = sta
+				res[i].Time = tim
+				i++
+			}
+			json.NewEncoder(w).Encode(res)
+			}else{
+				decoder := json.NewDecoder(r.Body)
+				newResult := poller.Response{}
+				error := decoder.Decode(&newResult)
+				if error != nil {
+				log.Print(error)
+				return
+			}
+			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
 		}
-		_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
+
 	})
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }

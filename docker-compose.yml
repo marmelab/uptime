@@ -18,7 +18,7 @@ api:
         - .:/usr/src/api
     command: go run /usr/src/api/src/marmelab.com/uptime/api/api.go
     ports:
-        - "8080:8000"
+        - "8383:8383"
     links:
         - "db"
         - "client"
@@ -26,7 +26,7 @@ api:
 site:
     image: nginx
     ports:
-        - "8181:81"
+        - "8282:82"
     volumes:
         - ./nginxContainer/static-html-directory:/usr/share/nginx/html
 
@@ -37,12 +37,12 @@ db:
 
 webpack:
     image: iojs:1.6.3
+    working_dir: /usr/src/webpack/front
     volumes:
         - .:/usr/src/webpack
     working_dir: /usr/src/webpack/front
     command: ./node_modules/.bin/webpack-dev-server --progress --hot --host=0.0.0.0
     ports:
-        - "8888:88"
         - "8080:8080"
 
 client:

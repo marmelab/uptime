@@ -1,10 +1,4 @@
 var React = require('react');
-var HelloWorld = require("./helloworld.js");
+var MyGriddle = require("./griddle.js");
 
-React.render(
-    <div>
-        <input type="text" />
-        <HelloWorld name="Bob"/>
-    </div>,
-    document.getElementById('content')
-);
+React.render(<MyGriddle />,document.getElementById('content'));
