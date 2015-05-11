@@ -1,5 +1,5 @@
-var React = require('react');
-var Griddle = require('griddle-react');
+import React from "react";
+import Griddle from "griddle-react";
 
 var data = [
 	{

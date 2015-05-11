@@ -1,5 +1,5 @@
-var React = require('react');
-var HelloWorld = require("./helloworld.js");
+import React from "react";
+import HelloWorld from "./helloworld.js";
 
 React.render(
     <div>
