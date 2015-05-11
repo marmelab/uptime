@@ -1,5 +1,5 @@
-import React from "react";
-import Griddle from "griddle-react";
+var React = require('react');
+var Griddle = require('griddle-react');
 
 var data = [
 	{
@@ -19,7 +19,7 @@ var data = [
 ];
 
 
-var HelloWorld = React.createClass({
+var MyGriddle = React.createClass({
   render: function() {
     return (
         <Griddle results={data} />
@@ -27,5 +27,5 @@ var HelloWorld = React.createClass({
   }
 });
 
-module.exports = HelloWorld;
+module.exports = MyGriddle;
  

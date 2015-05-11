@@ -1,10 +1,4 @@
-import React from "react";
-import HelloWorld from "./helloworld.js";
+var React = require('react');
+var MyGriddle = require("./griddle.js");
 
-React.render(
-    <div>
-        <input type="text" />
-        <HelloWorld />
-    </div>,
-    document.getElementById('content')
-);
+React.render(<MyGriddle />,document.getElementById('content'));
