@@ -23,7 +23,7 @@ func main() {
 		log.Fatal(err)
 	}
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin","*")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -61,7 +61,8 @@ func main() {
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
 		}
-		if(r.Method == "GET"){
+
+		if r.Method == "GET" {
 			rows, _ := db.Query("SELECT * FROM results")
 			defer rows.Close()
 			leng, _ := db.Query("SELECT COUNT(destination) FROM results")
@@ -75,30 +76,30 @@ func main() {
 			i := 0
 			for rows.Next() {
 				var dest string
-				var sta string 
+				var sta string
 				var tim int
-				error := rows.Scan(&dest,&sta,&tim)
-					if error != nil {
+				error := rows.Scan(&dest, &sta, &tim)
+				if error != nil {
 					log.Print(error)
 					return
-					}
+				}
 				res[i].Destination = dest
 				res[i].Status = sta
 				res[i].Time = tim
 				i++
 			}
 			json.NewEncoder(w).Encode(res)
-			}else{
-				decoder := json.NewDecoder(r.Body)
-				newResult := poller.Response{}
-				error := decoder.Decode(&newResult)
-				if error != nil {
+		} else {
+			decoder := json.NewDecoder(r.Body)
+			newResult := poller.Response{}
+			error := decoder.Decode(&newResult)
+			if error != nil {
 				log.Print(error)
 				return
 			}
 			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
 		}
-
 	})
+
 	log.Fatal(http.ListenAndServe(":"+*port, nil))
 }
