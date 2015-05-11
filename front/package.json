@@ -19,7 +19,8 @@
     "swig": "^1.4.2",
     "underscore": "^1.8.3",
     "webpack": "1.8.7",
-    "webpack-dev-server": "^1.8.2"
+    "webpack-dev-server": "^1.8.2",
+    "alt": "~0.16.4"
   },
   "devDependencies": {
     "react": "^0.13.2",
