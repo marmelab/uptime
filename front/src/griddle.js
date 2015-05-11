@@ -19,7 +19,7 @@ var data = [
 ];
 
 
-var MyGriddle = React.createClass({
+var TargetGrid = React.createClass({
   render: function() {
     return (
         <Griddle results={data} />
@@ -27,5 +27,5 @@ var MyGriddle = React.createClass({
   }
 });
 
-module.exports = MyGriddle;
+module.exports = TargetGrid;
  
