@@ -1,5 +1,5 @@
 import React from 'react';
-import TargetDatagrid from '../component/TargetDatagrid.js';
+import TargetDatagrid from '../component/targetDatagrid.js';
 
 var data = [
 	{
@@ -18,5 +18,4 @@ var data = [
 	}
 ];
 
-module.exports = TargetDatagrid;
- 
+module.exports = data;

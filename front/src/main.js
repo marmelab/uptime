@@ -1,4 +1,4 @@
-var React = require('react');
-var MyGriddle = require("./griddle.js");
+import React from 'react';
+import targetDatagrid from "./component/targetDatagrid.js";
 
-React.render(<MyGriddle />,document.getElementById('content'));
+React.render(React.createElement(targetDatagrid), document.getElementById('content'));

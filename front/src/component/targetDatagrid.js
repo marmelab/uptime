@@ -7,3 +7,5 @@ class TargetDatagrid extends React.Component {
     return <Griddle results={data} />
   }
 }
+
+module.exports = TargetDatagrid;
