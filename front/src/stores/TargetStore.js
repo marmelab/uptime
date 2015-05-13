@@ -1,6 +1,7 @@
 import alt from '../alt';
 import TargetActions from '../actions/TargetActions';
 
+<<<<<<< HEAD
 class TargetStore	{
 	constructor()	{
 		this.targets = [];
