@@ -35,6 +35,11 @@ class AddAndRemoveTargetActions {
 	  	});
 	  }
   	removeTarget(target) {
+   		var newTarget = {
+  			Destination:target
+  		};
+  		newTarget = JSON.stringify(newTarget);
+  		console.log(newTarget);
   		this.dispatch("REMOVE_TARGET");
 	  	this.actions.setLoading(true);
 	  	this.actions.setError(false);
@@ -42,7 +47,7 @@ class AddAndRemoveTargetActions {
 		  	$.ajax({
 	  		url: "http://localhost:8383/ips",
 	  		type: "DELETE",
-	  		data: target,
+	  		data: newTarget,
 	  		success: function(data){
 	  			that.actions.setTargetList(target);
 	  			that.actions.setLoading(false);

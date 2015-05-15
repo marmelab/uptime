@@ -9,6 +9,7 @@ var Main = React.createClass({
 			<div>
 				<h1> Ping Results </h1>
 				<AddTarget />
+				<RemoveTarget />
 				<TargetDatagrid />
 			</div>
 		);

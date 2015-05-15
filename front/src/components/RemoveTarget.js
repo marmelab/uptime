@@ -1,6 +1,6 @@
 import React from 'react';
 import RemoveStore from '../stores/TargetListStore';
-import AddTarget from '../actions/AddAndRemoveTargetActions.js';
+import RemoveTargets from '../actions/AddAndRemoveTargetActions';
 import Target from 'griddle-react';
 
 var RemoveTarget = React.createClass({
@@ -10,7 +10,6 @@ var RemoveTarget = React.createClass({
   },
 
   componentDidMount() {
-    AddTarget.addTarget();
     RemoveStore.listen(this.onChange);
   },
 
@@ -22,16 +21,20 @@ var RemoveTarget = React.createClass({
     this.setState(this.getInitialState());
   },
 
+  onClickRemoveTarget(){
+    RemoveTargets.removeTarget(document.getElementById('targetNameForRemove').value);
+  },
+
   render(){
-    if(this.state.results_loading){
-      return  <img src="loading51.gif" alt="loading" />
-    }
-    if(!this.state.results_error){
-      return <Target results={this.state.results} />
-    }
-    if(this.state.results_errors){
-      return <h1>Error can not get results </h1>
-    }
+    return (
+      <div>
+          <input id="targetNameForRemove" type="text" />
+          <button type="submit" onClick={this.onClickRemoveTarget}>
+            Remove a target to ping
+          </button>
+      </div>
+
+    )
   }
 });
 

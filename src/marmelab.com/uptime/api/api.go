@@ -28,7 +28,7 @@ func main() {
 		w.Header().Set("Access-Control-Allow-Origin","*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		if (r.Method != "POST") && (r.Method != "GET") {
+		if (r.Method != "POST") && (r.Method != "GET") && (r.Method != "DELETE") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
@@ -37,14 +37,13 @@ func main() {
 			decoder := json.NewDecoder(r.Body)
 			newTarget := target.Ip{}
 			error := decoder.Decode(&newTarget)
-			log.Print(newTarget)
 			if error != nil {
 				log.Print(error)
 				return
 			}
 			_, _ = db.Exec("INSERT INTO Destination (id, destination) VALUES($1, $2)", id, newTarget.Destination)
 			id = id + 1
-		} else {
+		} else if (r.Method == "GET"){
 			rows, _ := db.Query("SELECT destination FROM destination")
 			defer rows.Close()
 			leng, _ := db.Query("SELECT COUNT(*) FROM destination")
@@ -67,6 +66,16 @@ func main() {
 				i++
 			}
 			json.NewEncoder(w).Encode(ips)
+		} else {
+			decoder := json.NewDecoder(r.Body)
+			newTarget := target.Ip{}
+			error := decoder.Decode(&newTarget)
+			if error != nil {
+				log.Print(error)
+				return
+			}
+			_, _ = db.Exec("DELETE FROM Destination USING destination WHERE destination.destination = $1 ", newTarget.Destination)
+			id = id - 1			
 		}
 	})
 
