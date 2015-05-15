@@ -23,11 +23,11 @@ var TargetGriddle = React.createClass({
   },
 
   render(){
+    if(this.state.results_loading){
+      return  <img src="loading51.gif" alt="loading" />
+    }
     if(!this.state.results_error){
       return <Target results={this.state.results} />
-    }
-    if(this.state.results_loading){
-      return  <h1>loading bizzzzz wow amazing loadind gif such wow</h1>
     }
     if(this.state.results_errors){
       return <h1>Error can not get results </h1>

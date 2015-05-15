@@ -14,7 +14,7 @@ class TargetActions {
 	  	this.actions.setLoading(true);
 	  	this.actions.setError(false);
 	  	var that=this;
-	  	$.ajax({
+		  	$.ajax({
 	  		url: "http://localhost:8383/ips/results",
 	  		success: function(data){
 	  			that.actions.setResults(data);
