@@ -1,21 +1,21 @@
 import React from 'react';
-import TargetStore from '../stores/TargetStore';
-import TargetAction from '../actions/TargetActions';
+import RemoveStore from '../stores/TargetListStore';
+import AddTarget from '../actions/AddAndRemoveTargetActions.js';
 import Target from 'griddle-react';
 
-var TargetGriddle = React.createClass({
+var RemoveTarget = React.createClass({
 
   getInitialState() {
-    return TargetStore.getState();
+    return RemoveStore.getState();
   },
 
   componentDidMount() {
-    TargetAction.showResults();
-    TargetStore.listen(this.onChange);
+    AddTarget.addTarget();
+    RemoveStore.listen(this.onChange);
   },
 
   componentWillUnmount() {
-    TargetStore.unlisten(this.onChange);
+    RemoveStore.unlisten(this.onChange);
   },
 
   onChange() {
@@ -35,4 +35,4 @@ var TargetGriddle = React.createClass({
   }
 });
 
-module.exports = TargetGriddle;
+module.exports = RemoveTarget;

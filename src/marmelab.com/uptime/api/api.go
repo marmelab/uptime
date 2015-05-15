@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	var id = 3
 	port := flag.String("port", "8383", "port for the api listen")
 	flag.Parse()
 	conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
@@ -24,49 +25,49 @@ func main() {
 	}
 
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		if r.Method != "GET" {
-			w.WriteHeader(http.StatusNotFound)
-			w.Write([]byte(http.StatusText(http.StatusNotFound)))
+		w.Header().Set("Access-Control-Allow-Origin","*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		if (r.Method != "POST") && (r.Method != "GET") {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
 		}
-
-		rows, _ := db.Query(`
-			WITH last_results AS (
-				SELECT *, ROW_NUMBER() OVER(
-					PARTITION BY destination
-					ORDER BY created_at DESC
-				) AS rank
-				FROM results
-			)
-			SELECT D.id, D.destination, LR.status = 'good'
-			FROM destination D
-			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
-		`);
-
-		defer rows.Close()
-		leng, _ := db.Query("SELECT COUNT(*) FROM destination")
-		defer leng.Close()
-		var length int
-		for leng.Next() {
-			_  = leng.Scan(&length)
-		}
-		ips := make([]target.Target_data, length)
-		i := 0
-		for rows.Next() {
-			var id int
-			var dest string
-			var status bool
-			error := rows.Scan(&id, &dest, &status)
+		if(r.Method == "POST"){
+			decoder := json.NewDecoder(r.Body)
+			newTarget := target.Ip{}
+			error := decoder.Decode(&newTarget)
+			log.Print(newTarget)
 			if error != nil {
 				log.Print(error)
 				return
 			}
-
-			ips[i] = target.Target_data{ Id: id, Destination: dest, Status: status }
-			i++
+			_, _ = db.Exec("INSERT INTO Destination (id, destination) VALUES($1, $2)", id, newTarget.Destination)
+			id = id + 1
+		} else {
+			rows, _ := db.Query("SELECT destination FROM destination")
+			defer rows.Close()
+			leng, _ := db.Query("SELECT COUNT(*) FROM destination")
+			defer leng.Close()
+			var length int
+			for leng.Next() {
+			_:
+				leng.Scan(&length)
+			}
+			ips := make([]target.Ip, length)
+			i := 0
+			for rows.Next() {
+				var dest string
+				error := rows.Scan(&dest)
+				if error != nil {
+					log.Print(error)
+					return
+				}
+				ips[i].Destination = dest
+				i++
+			}
+			json.NewEncoder(w).Encode(ips)
 		}
-		json.NewEncoder(w).Encode(ips)
 	})
 
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
@@ -78,7 +79,6 @@ func main() {
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
 			return
 		}
-
 		if r.Method == "GET" {
 			rows, _ := db.Query("SELECT * FROM results")
 			defer rows.Close()

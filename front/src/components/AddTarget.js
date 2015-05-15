@@ -1,38 +1,41 @@
 import React from 'react';
-import TargetStore from '../stores/TargetStore';
-import TargetAction from '../actions/TargetActions';
+import AddStore from '../stores/TargetListStore';
+import AddTargetAction from '../actions/AddAndRemoveTargetActions';
 import Target from 'griddle-react';
 
-var TargetGriddle = React.createClass({
+var AddTarget = React.createClass({
 
   getInitialState() {
-    return TargetStore.getState();
+    return AddStore.getState();
   },
 
   componentDidMount() {
-    TargetAction.showResults();
-    TargetStore.listen(this.onChange);
+    AddStore.listen(this.onChange);
   },
 
   componentWillUnmount() {
-    TargetStore.unlisten(this.onChange);
+    AddStore.unlisten(this.onChange);
   },
 
   onChange() {
     this.setState(this.getInitialState());
   },
 
+  onClickAddTarget(){
+    AddTargetAction.addTarget(document.getElementById('targetName').value);
+  },
+
   render(){
-    if(this.state.results_loading){
-      return  <img src="loading51.gif" alt="loading" />
-    }
-    if(!this.state.results_error){
-      return <Target results={this.state.results} />
-    }
-    if(this.state.results_errors){
-      return <h1>Error can not get results </h1>
-    }
+    return (
+      <div>
+          <input id="targetName" type="text" />
+          <button type="submit" onClick={this.onClickAddTarget}>
+            Add a target to ping
+          </button>
+      </div>
+
+    )
   }
 });
 
-module.exports = TargetGriddle;
+module.exports = AddTarget;

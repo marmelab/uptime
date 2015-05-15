@@ -1,4 +1,18 @@
 import React from 'react';
-import TargetListPage from "./components/TargetListPage.js";
+import TargetDatagrid from "./components/TargetDatagrid.js";
+import AddTarget from "./components/AddTarget.js";
+import RemoveTarget from "./components/RemoveTarget.js";
 
-React.render(<TargetListPage />, document.getElementById('content'));
+var Main = React.createClass({
+	render: function(){
+		return(
+			<div>
+				<h1> Ping Results </h1>
+				<AddTarget />
+				<TargetDatagrid />
+			</div>
+		);
+	}
+});
+
+React.render(<Main/>, document.getElementById('content'));
