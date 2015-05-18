@@ -6,11 +6,10 @@ import Target from 'griddle-react';
 class TargetDatagrid extends React.Component {
   constructor(props){
     super(props);
-    this.state =  { targets: TargetStore.getState() };
+    this.state =  { data: TargetStore.getState() };
   }
 
   componentDidMount() {
-    TargetAction.getGriddle(this.state.targets);
     TargetStore.listen(this.onChange);
   }
 
@@ -23,7 +22,7 @@ class TargetDatagrid extends React.Component {
   }
 
   render(){
-    return <Target results={this.state.targets.targets} />
+    return <Target results={this.state.data.targets} />
   }
 }
 
