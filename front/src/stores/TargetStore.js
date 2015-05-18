@@ -3,28 +3,24 @@ import TargetActions from '../actions/TargetActions';
 
 class TargetStore {
   constructor() {
-  	this.results = [
-  		{
-        "Destination": "google.fr",
-        "Status": "good",
-        "Time": 214,
-  		}
-  	];
-  	this.results_error = false;
-  	this.results_loading = true;
+  	this.targets = [];
+  	this.targets_error = false;
+  	this.targets_loading = false;
+
     this.bindActions(alt.getActions("TargetActions"));
   }
-  setResults(data) {
-    var response = JSON.parse(data);
-    this.results = response;
+
+  setResults(targets) {
+    var response = JSON.parse(targets);
+    this.setState({ targets: response });
   }
   
   setLoading(loading) {
-  	this.results_loading = loading;
+  	this.targets_loading = loading;
   }
 
   setError(error) {
-  	this.results_error = error;
+  	this.targets_error = error;
   }
 }
 

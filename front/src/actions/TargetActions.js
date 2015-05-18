@@ -3,30 +3,32 @@ import alt from'../alt';
 class TargetActions {
 	constructor(){
 		this.generateActions(
-		'setLoading',
-		'setError',
-		'setResults'
+			'setLoading',
+			'setError',
+			'setResults'
 		);		
 	}
 
   	showResults() {
   		this.dispatch("SHOW_RESULTS");
+
 	  	this.actions.setLoading(true);
 	  	this.actions.setError(false);
-	  	var that=this;
-		  	$.ajax({
+
+	  	$.ajax({
 	  		url: "http://localhost:8383/ips/results",
+	  		complete: function() {
+	  			this.actions.setLoading(false);
+	  		}.bind(this),
 	  		success: function(data){
-	  			that.actions.setResults(data);
-	  			that.actions.setLoading(false);
-	  			that.actions.setError(false);
-	  		},
+	  			this.actions.setResults(data);
+	  			this.actions.setError(false);
+	  		}.bind(this),
 	  		error: function(error){
-	  			that.actions.setLoading(false);
-	  			that.actions.setError(true);
-	  		}
+	  			this.actions.setError(true);
+	  		}.bind(this)
 	  	});
-	  }
+	}
 }
 
 module.exports = alt.createActions(TargetActions);

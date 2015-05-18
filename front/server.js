@@ -14,8 +14,8 @@ app.get('/index.html', function (req, res) {
 	});
 });
 
-app.get('/loading51.gif', function(req, res){
-	res.render('/usr/src/client/app/loading51.gif', {
+app.get('/loading.gif', function(req, res){
+	res.render('/usr/src/client/app/loading.gif', {
 		cdnBaseUrl : config.get('hostWebpack')		
 	});
 });
