@@ -1,7 +1,7 @@
 import alt from'../alt';
 
 class TargetActions {
-  getGriddle(griddle) {
+  getGriddle(targets) {
     this.dispatch("GET_GRIDDLE");
   }
 }

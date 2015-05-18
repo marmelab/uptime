@@ -3,27 +3,28 @@ import TargetStore from '../stores/TargetStore';
 import TargetAction from '../actions/TargetActions';
 import Target from 'griddle-react';
 
-var TargetGriddle = React.createClass({
-  getInitialState() {
-    return TargetStore.getState();
-  },
+class TargetDatagrid extends React.Component {
+  constructor(props){
+    super(props);
+    this.state =  { targets: TargetStore.getState() };
+  }
 
   componentDidMount() {
-    TargetAction.getGriddle(this.getInitialState());
+    TargetAction.getGriddle(this.state.targets);
     TargetStore.listen(this.onChange);
-  },
+  }
 
   componentWillUnmount() {
     TargetStore.unlisten(this.onChange);
-  },
+  }
 
-  onChange(griddle) {
-    this.setState(this.getInitialState());
-  },
+  onChange(targets) {
+    this.setState(this.state.targets);
+  }
 
   render(){
-    return <Target results={this.state.griddle} />
+    return <Target results={this.state.targets.targets} />
   }
-});
+}
 
-module.exports = TargetGriddle;
+module.exports = TargetDatagrid

@@ -3,7 +3,7 @@ import TargetActions from '../actions/TargetActions';
 
 class TargetStore {
   constructor() {
-    this.griddle = [
+    this.targets = [
 	{
 		"id":"1",
 		"destination":'google.fr',
@@ -25,8 +25,8 @@ class TargetStore {
     });
   }
 
-  handleGetGriddle(griddle) {
-    this.griddle = griddle;
+  handleGetGriddle(targets) {
+    this.targets = targets;
   }
 }
 
