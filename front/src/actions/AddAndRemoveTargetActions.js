@@ -45,7 +45,7 @@ class AddAndRemoveTargetActions {
 	  	this.actions.setError(false);
 	  	var that=this;
 		  	$.ajax({
-	  		url: "http://localhost:8383/ips",
+	  		url: "http://localhost:8383/ips/",
 	  		type: "DELETE",
 	  		data: newTarget,
 	  		success: function(data){
