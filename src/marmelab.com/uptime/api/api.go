@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		if r.Method != "GET" {
@@ -29,7 +30,20 @@ func main() {
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
 			return
 		}
-		rows, _ := db.Query("SELECT destination FROM destination")
+
+		rows, _ := db.Query(`
+			WITH last_results AS (
+				SELECT *, ROW_NUMBER() OVER(
+					PARTITION BY destination
+					ORDER BY time DESC
+				) AS rank
+				FROM results
+			)
+			SELECT D.id, D.destination, LR.status = 'good'
+			FROM destination D
+			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
+		`);
+
 		defer rows.Close()
 		leng, _ := db.Query("SELECT COUNT(*) FROM destination")
 		defer leng.Close()
@@ -41,17 +55,21 @@ func main() {
 		ips := make([]target.Ip, length)
 		i := 0
 		for rows.Next() {
+			var id int
 			var dest string
-			error := rows.Scan(&dest)
+			var status bool
+			error := rows.Scan(&id, &dest, &status)
 			if error != nil {
 				log.Print(error)
 				return
 			}
-			ips[i].Destination = dest
+
+			ips[i] = target.Ip{ Id: id, Destination: dest, Status: status }
 			i++
 		}
 		json.NewEncoder(w).Encode(ips)
 	})
+
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin","*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
