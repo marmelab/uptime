@@ -16,7 +16,7 @@ class TargetActions {
 	  	this.actions.setError(false);
 
 	  	$.ajax({
-	  		url: API_IPS_URL,
+	  		url: API_BASE_URL + "/ips/results",
 	  		complete: function() {
 	  			this.actions.setLoading(false);
 	  		}.bind(this),
