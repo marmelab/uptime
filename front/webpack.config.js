@@ -17,6 +17,9 @@ module.exports = {
 			$: "jquery",
 			jQuery: "jquery",
 			"window.jQuery": "jquery"
+		}),
+		new webpack.DefinePlugin({
+			"API_IPS_URL": "new String('http://localhost:8383/ips/results')"
 		})
 	],
 	

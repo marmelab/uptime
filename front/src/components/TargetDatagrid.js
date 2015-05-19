@@ -24,7 +24,7 @@ class TargetDatagrid extends React.Component{
 
   render(){
     if(this.state.targets_loading){
-      return  <img src="loading.gif" alt="loading" />
+      return  <img src="../loading.gif" alt="loading" />
     }
 
     if(this.state.targets_errors){

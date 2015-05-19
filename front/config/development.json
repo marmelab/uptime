@@ -1,6 +1,5 @@
 {
 	"host": "localhost",
 	"port": "8000",
-	"hostWebpack":"http://localhost:8080",
-	"apiForAjax": "http://localhost:8383/ips/results"
+	"hostWebpack":"http://localhost:8080"
 }
