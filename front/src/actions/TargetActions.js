@@ -6,28 +6,28 @@ class TargetActions {
 			'setLoading',
 			'setError',
 			'setResults'
-		);		
+			);		
 	}
 
-  	showResults() {
-  		this.dispatch("SHOW_RESULTS");
+	showResults() {
+		this.dispatch("SHOW_RESULTS");
 
-	  	this.actions.setLoading(true);
-	  	this.actions.setError(false);
+		this.actions.setLoading(true);
+		this.actions.setError(false);
 
-	  	$.ajax({
-	  		url: API_BASE_URL + "/ips/results",
-	  		complete: function() {
-	  			this.actions.setLoading(false);
-	  		}.bind(this),
-	  		success: function(data){
-	  			this.actions.setResults(data);
-	  			this.actions.setError(false);
-	  		}.bind(this),
-	  		error: function(error){
-	  			this.actions.setError(true);
-	  		}.bind(this)
-	  	});
+		$.ajax({
+			url: API_BASE_URL + "/ips/results",
+			complete: function() {
+				this.actions.setLoading(false);
+			}.bind(this),
+			success: function(data){
+				this.actions.setResults(data);
+				this.actions.setError(false);
+			}.bind(this),
+			error: function(error){
+				this.actions.setError(true);
+			}.bind(this)
+		});
 	}
 }
 
