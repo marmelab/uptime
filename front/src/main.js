@@ -1,5 +1,6 @@
 import React from 'react';
 import TargetDatagrid from "./components/TargetDatagrid.js";
+import TargetListgrid from "./components/TargetListgrid.js";
 import AddTarget from "./components/AddTarget.js";
 import RemoveTarget from "./components/RemoveTarget.js";
 
@@ -11,6 +12,7 @@ var Main = React.createClass({
 				<AddTarget />
 				<RemoveTarget />
 				<TargetDatagrid />
+				<TargetListgrid />
 			</div>
 		);
 	}
