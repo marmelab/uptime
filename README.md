@@ -26,8 +26,4 @@ Then you can run the app with:
 make run 
 ```
 
-
-
-
-
 Note: you need [docker-compose](https://docs.docker.com/compose/#installation-and-set-up) to get the full architecture working.
