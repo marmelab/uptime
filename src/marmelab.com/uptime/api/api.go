@@ -49,10 +49,9 @@ func main() {
 		defer leng.Close()
 		var length int
 		for leng.Next() {
-		_:
-			leng.Scan(&length)
+			_  = leng.Scan(&length)
 		}
-		ips := make([]target.Ip, length)
+		ips := make([]target.Target_data, length)
 		i := 0
 		for rows.Next() {
 			var id int
@@ -64,7 +63,7 @@ func main() {
 				return
 			}
 
-			ips[i] = target.Ip{ Id: id, Destination: dest, Status: status }
+			ips[i] = target.Target_data{ Id: id, Destination: dest, Status: status }
 			i++
 		}
 		json.NewEncoder(w).Encode(ips)

@@ -1,6 +1,6 @@
 package target
 
-type Ip struct {
+type Target_data struct {
 	Id int `json:"id"`
 	Destination string `json:"destination"`
 	Status bool `json:"status"`

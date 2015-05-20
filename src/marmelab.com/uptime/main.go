@@ -15,7 +15,7 @@ import (
 
 func main() {
 	response := poller.Response{}
-	var listOfDestination []target.Ip
+	var listOfDestination []target.Target_data
 	var ip *net.IPAddr
 	var url string
 	var duration int
@@ -50,6 +50,7 @@ func main() {
 					response.Time = duration
 					if (err != nil) || (duration <= 0) {
 						response.Status = "failed"
+						log.Print("je passe ici")
 						if err != nil {
 							log.Print(err)
 						}
