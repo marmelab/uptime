@@ -21,7 +21,6 @@ api:
         - "8383:8383"
     links:
         - "db"
-        - "client"
 
 website:
     image: nginx
@@ -53,3 +52,5 @@ client:
         - ./front:/usr/src/client
     working_dir: /usr/src/client
     command: node /usr/src/client/server.js
+    links: 
+        - "api"
