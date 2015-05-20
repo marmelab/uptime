@@ -1,8 +1,8 @@
-INSERT INTO destination 
-VALUES
-(1, 'website'),
-(2, 'google.fr');
-INSERT INTO results
+INSERT INTO destination (destination)
+VALUES 
+('website'),
+('google.fr');
+INSERT INTO results (destination, status, time)
 VALUES
 ('google.fr', 'good',211),
 ('website', 'failed',-1);

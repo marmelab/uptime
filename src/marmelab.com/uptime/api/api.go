@@ -35,7 +35,7 @@ func main() {
 			WITH last_results AS (
 				SELECT *, ROW_NUMBER() OVER(
 					PARTITION BY destination
-					ORDER BY time DESC
+					ORDER BY created_at DESC
 				) AS rank
 				FROM results
 			)

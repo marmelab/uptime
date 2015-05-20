@@ -4,8 +4,10 @@ CREATE TABLE destination(
 );
 
 CREATE TABLE results(
+	id SERIAL PRIMARY KEY,
 	destination VARCHAR(255),
 	status VARCHAR(30),
-	time smallint
+	time smallint,
+	created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
