@@ -1,4 +1,4 @@
 import React from 'react';
-import TargetDatagrid from "./components/TargetDatagrid.js";
+import TargetListPage from "./components/TargetListPage.js";
 
-React.render(<TargetDatagrid />, document.getElementById('content'));
+React.render(<TargetListPage />, document.getElementById('content'));

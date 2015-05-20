@@ -8,7 +8,7 @@ watcher:
     command: go run /usr/src/watcher/src/marmelab.com/uptime/main.go
     links:
         - "api"
-        - "site"
+        - "website"
 
 api:
     image: golang
@@ -21,9 +21,8 @@ api:
         - "8383:8383"
     links:
         - "db"
-        - "client"
 
-site:
+website:
     image: nginx
     ports:
         - "8282:82"
@@ -53,3 +52,5 @@ client:
         - ./front:/usr/src/client
     working_dir: /usr/src/client
     command: node /usr/src/client/server.js
+    links: 
+        - "api"
