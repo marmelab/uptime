@@ -9,7 +9,6 @@ class StatusLed extends React.Component {
             height: 50,
             backgroundColor: 'red'
         };
-        console.log(this.props.data);
         if (this.props.data) {
             styles.backgroundColor = 'green';
         }
