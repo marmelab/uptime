@@ -9,17 +9,31 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+	"errors"
 )
 
-func allowCORS(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin","*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	(*w).Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+func setAllowCORS(w *http.ResponseWriter) (error) {
+	if w != nil {
+		(*w).Header().Set("Access-Control-Allow-Origin","*")
+		(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		(*w).Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		return nil
+	} else {
+		error := errors.New("http.ResponseWriter = nil ")
+		return error
+	}
 }
 
-func return500(w *http.ResponseWriter) {
-	(*w).WriteHeader(http.StatusInternalServerError)
-	(*w).Write([]byte(http.StatusText(http.StatusInternalServerError)))
+func return500(w *http.ResponseWriter) (error) {
+	if w != nil {
+		(*w).WriteHeader(http.StatusInternalServerError)
+		(*w).Write([]byte(http.StatusText(http.StatusInternalServerError)))
+		return nil	
+	} else {
+		error := errors.New("http.ResponseWriter = nil ")
+		return error
+	}
+
 }
 
 func main() {
@@ -35,7 +49,7 @@ func main() {
 	}
 
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		allowCORS(&w)
+		setAllowCORS(&w)
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -81,7 +95,7 @@ func main() {
 	})
 
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		allowCORS(&w)
+		setAllowCORS(&w)
 		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
