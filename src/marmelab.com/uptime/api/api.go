@@ -11,8 +11,15 @@ import (
 	"net/http"
 )
 
-func allowCORS(w http.ResponseWriter){
-	
+func allowCORS(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin","*")
+	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	(*w).Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}
+
+func return500(w *http.ResponseWriter) {
+	(*w).WriteHeader(http.StatusInternalServerError)
+	(*w).Write([]byte(http.StatusText(http.StatusInternalServerError)))
 }
 
 func main() {
@@ -28,7 +35,7 @@ func main() {
 	}
 
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		allowCORS(&w)
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -63,7 +70,7 @@ func main() {
 			var status bool
 			error := rows.Scan(&id, &dest, &status)
 			if error != nil {
-				log.Print(error)
+				return500(&w)
 				return
 			}
 
@@ -74,9 +81,7 @@ func main() {
 	})
 
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin","*")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		allowCORS(&w)
 		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
@@ -101,7 +106,7 @@ func main() {
 				var tim int
 				error := rows.Scan(&dest, &sta, &tim)
 				if error != nil {
-					log.Print(error)
+					return500(&w)
 					return
 				}
 				res[i].Destination = dest
@@ -115,7 +120,7 @@ func main() {
 			newResult := poller.Response{}
 			error := decoder.Decode(&newResult)
 			if error != nil {
-				log.Print(error)
+				return500(&w)
 				return
 			}
 			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
