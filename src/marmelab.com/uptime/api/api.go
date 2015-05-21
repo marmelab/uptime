@@ -11,6 +11,10 @@ import (
 	"net/http"
 )
 
+func allowCORS(w http.ResponseWriter){
+	
+}
+
 func main() {
 	port := flag.String("port", "8383", "port for the api listen")
 	flag.Parse()
