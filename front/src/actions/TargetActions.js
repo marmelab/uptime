@@ -24,7 +24,6 @@ class TargetActions {
 			}
 		})
 		.then(function(data) {
-			console.log("request successful with :", data)
 			this.actions.setLoading(false);
 			this.actions.setResults(data);
 			this.actions.setError(false);
