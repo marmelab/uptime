@@ -10,8 +10,7 @@ class TargetStore	{
 		this.bindActions(alt.getActions("TargetActions"));
 	}
 
-	setResults(targets)	{
-		var response = JSON.parse(targets);
+	setResults(response)	{
 		this.setState({ targets: response });
 	}
   

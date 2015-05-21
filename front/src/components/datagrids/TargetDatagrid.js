@@ -9,11 +9,9 @@ class TargetDatagrid extends React.Component {
             { columnName: 'destination', order: 1, displayName: 'Destination' },
             { columnName: 'status', order: 2, displayName: 'Status', customComponent: StatusLed }
         ];
-        return <Griddle
-            results={this.props.targets}
-            showFilter={true}
-            columnMetadata={metadata}
-        />
+var s = this.props.targets;
+console.log(s);
+        return <Griddle results={s} columnMetadata={metadata}></Griddle>
     }
 }
 
