@@ -5,7 +5,8 @@ class TargetActions {
 		this.generateActions(
 			'setLoading',
 			'setError',
-			'setResults'
+			'setResults',
+			'setTargetsList'
 			);		
 	}
 
@@ -21,6 +22,28 @@ class TargetActions {
 				this.actions.setLoading(false);
 			}.bind(this),
 			success: function(data){
+				this.actions.setResults(data);
+				this.actions.setError(false);
+			}.bind(this),
+			error: function(error){
+				this.actions.setError(true);
+			}.bind(this)
+		});
+	}
+
+	showTargetsList() {
+		this.dispatch("SHOW_TARGETS_LIST");
+
+		this.actions.setLoading(true);
+		this.actions.setError(false);
+
+		$.ajax({
+			url: API_BASE_URL + "/ips/",
+			complete: function() {
+				this.actions.setLoading(false);
+			}.bind(this),
+			success: function(data){
+				console.log(data);
 				this.actions.setResults(data);
 				this.actions.setError(false);
 			}.bind(this),

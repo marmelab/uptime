@@ -5,3 +5,4 @@ type Target_data struct {
 	Destination string `json:"destination"`
 	Status bool `json:"status"`
 }
+
