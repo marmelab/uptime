@@ -18,9 +18,9 @@ class TargetActions {
 		fetch(url, {
 			method: 'get'
 		})
-		.then(function(response) {
-			if(response.status == 200) {
-				return response.json()
+		.then(function(targets) {
+			if(targets.status == 200) {
+				return targets.json()
 			}
 		})
 		.then(function(data) {
