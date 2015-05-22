@@ -1,14 +1,9 @@
-class TargetActions {
-	constructor(){
-		this.generateActions(
-			'setLoading',
-			'setError',
-			'setResults'
-			);		
-	}
+import Dispatcher from '../dispatcher/Dispatcher'
+
+export default = {
 
 	showResults() {
-		this.dispatch("SHOW_RESULTS");
+		Dispatcher.dispatch("SHOW_RESULTS");
 		var url = API_BASE_URL + "/ips/"
 		this.actions.setLoading(true);
 		this.actions.setError(false);
@@ -30,7 +25,6 @@ class TargetActions {
 			this.actions.setError(true);
 		})
 	}
-}
+};
 
-module.exports = alt.createActions(TargetActions);
 
