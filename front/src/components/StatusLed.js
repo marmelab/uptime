@@ -5,11 +5,11 @@ class StatusLed extends React.Component {
         // @TODO: refactor this VERY UGLY code
         var styles = {
             borderRadius: 50,
-            width: 50,
-            height: 50,
+            width: 20,
+            height: 20,
             backgroundColor: 'red'
         };
-        if (this.props.data) {
+        if (this.props.status) {
             styles.backgroundColor = 'green';
         }
 
