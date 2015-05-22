@@ -13,7 +13,7 @@ class TargetDataRow extends React.Component {
         		</tr>
         }
         else{
-        	return <div>Loadingsdf</div>
+        	return <div>Loading</div>
         }
     }
 }
