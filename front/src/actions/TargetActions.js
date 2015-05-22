@@ -29,24 +29,8 @@ class TargetActions {
 			this.actions.setError(false);
 		}.bind(this))
 		.catch(function(error) {
-			console.log("error request failed ", error);
+			this.actions.setError(true);
 		})
-
-
-		/*$.ajax({
-			url: API_BASE_URL + "/ips/results",
->>>>>>>  using fecth instead of ajax in TargetActions
-			complete: function() {
-				this.actions.setLoading(false);
-			}.bind(this),
-			success: function(data){
-				this.actions.setResults(data);
-				this.actions.setError(false);
-			}.bind(this),
-			error: function(error){
-				this.actions.setError(true);
-			}.bind(this)
-		});*/
 	}
 }
 
