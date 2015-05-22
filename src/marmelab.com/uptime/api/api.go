@@ -9,18 +9,12 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
-	"errors"
 )
 
 func SetCors(w *http.Header) {
 	w.Set("Access-Control-Allow-Origin", "*")
 	w.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
 	w.Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-}
-
-func Return500(w *http.ResponseWriter) {
-	(*w).WriteHeader(http.StatusInternalServerError)
-	(*w).Write([]byte(http.StatusText(http.StatusInternalServerError))
 }
 
 func main() {
@@ -72,7 +66,7 @@ func main() {
 			var status bool
 			error := rows.Scan(&id, &dest, &status)
 			if error != nil {
-				Return500(&w)
+				http.Error(w, http.StatusText(500), 500)
 				return
 			}
 
@@ -109,7 +103,7 @@ func main() {
 				var tim int
 				error := rows.Scan(&dest, &sta, &tim)
 				if error != nil {
-					Return500(&w)
+					http.Error(w, http.StatusText(500), 500)
 					return
 				}
 				res[i].Destination = dest
@@ -123,7 +117,7 @@ func main() {
 			newResult := poller.Response{}
 			error := decoder.Decode(&newResult)
 			if error != nil {
-				Return500(&w)
+				http.Error(w, http.StatusText(500), 500)
 				return
 			}
 			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
