@@ -6,5 +6,5 @@ install:
 
 script:
     - go test
-    - cd src/marmelab.com/uptime/api/test
+    - cd ../api/test
     - go test
