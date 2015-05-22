@@ -23,4 +23,4 @@ class TargetStore	{
 	}
 }
 
-module.exports = alt.createStore(TargetStore, 'TargetStore');
+module.exports TargetStore;

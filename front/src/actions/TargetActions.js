@@ -1,5 +1,3 @@
-import alt from'../alt';
-
 class TargetActions {
 	constructor(){
 		this.generateActions(

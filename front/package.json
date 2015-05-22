@@ -9,7 +9,6 @@
   "author": "sylver",
   "license": "ISC",
   "dependencies": {
-    "alt": "~0.16.4",
     "babel-loader": "^5.0.0",
     "config": "^1.13.0",
     "express": "^4.12.3",
