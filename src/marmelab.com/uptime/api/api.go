@@ -12,7 +12,7 @@ import (
 	"errors"
 )
 
-func setAllowCORS(w *http.ResponseWriter) (error) {
+func SetAllowCORS(w *http.ResponseWriter) (error) {
 	if w != nil {
 		(*w).Header().Set("Access-Control-Allow-Origin","*")
 		(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -24,7 +24,7 @@ func setAllowCORS(w *http.ResponseWriter) (error) {
 	}
 }
 
-func return500(w *http.ResponseWriter) (error) {
+func Return500(w *http.ResponseWriter) (error) {
 	if w != nil {
 		(*w).WriteHeader(http.StatusInternalServerError)
 		(*w).Write([]byte(http.StatusText(http.StatusInternalServerError)))
@@ -49,7 +49,7 @@ func main() {
 	}
 
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		setAllowCORS(&w)
+		SetAllowCORS(&w)
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -84,7 +84,7 @@ func main() {
 			var status bool
 			error := rows.Scan(&id, &dest, &status)
 			if error != nil {
-				return500(&w)
+				Return500(&w)
 				return
 			}
 
@@ -95,7 +95,7 @@ func main() {
 	})
 
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		setAllowCORS(&w)
+		SetAllowCORS(&w)
 		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
@@ -120,7 +120,7 @@ func main() {
 				var tim int
 				error := rows.Scan(&dest, &sta, &tim)
 				if error != nil {
-					return500(&w)
+					Return500(&w)
 					return
 				}
 				res[i].Destination = dest
@@ -134,7 +134,7 @@ func main() {
 			newResult := poller.Response{}
 			error := decoder.Decode(&newResult)
 			if error != nil {
-				return500(&w)
+				Return500(&w)
 				return
 			}
 			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
