@@ -1,4 +1,3 @@
-import alt from '../alt';
 import TargetActions from '../actions/TargetActions';
 
 class TargetStore	{
@@ -7,7 +6,6 @@ class TargetStore	{
 		this.targets_error = false;
 		this.targets_loading = false;
 
-		this.bindActions(alt.getActions("TargetActions"));
 	}
 
 	setResults(response)	{
