@@ -16,7 +16,7 @@ api:
         GOPATH: /usr/src/api
     volumes:
         - .:/usr/src/api
-    command: sleep 123466 #go run /usr/src/api/src/marmelab.com/uptime/api/api.go
+    command: go run /usr/src/api/src/marmelab.com/uptime/api/api.go
     ports:
         - "8383:8383"
     links:
