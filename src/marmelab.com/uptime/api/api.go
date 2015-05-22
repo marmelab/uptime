@@ -14,7 +14,7 @@ import (
 func SetCors(w *http.Header) {
 	w.Set("Access-Control-Allow-Origin", "*")
 	w.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	w.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
 func main() {
@@ -49,14 +49,14 @@ func main() {
 			SELECT D.id, D.destination, LR.status = 'good'
 			FROM destination D
 			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
-		`);
+		`)
 
 		defer rows.Close()
 		leng, _ := db.Query("SELECT COUNT(*) FROM destination")
 		defer leng.Close()
 		var length int
 		for leng.Next() {
-			_  = leng.Scan(&length)
+			_ = leng.Scan(&length)
 		}
 		ips := make([]target.Target_data, length)
 		i := 0
@@ -70,7 +70,7 @@ func main() {
 				return
 			}
 
-			ips[i] = target.Target_data{ Id: id, Destination: dest, Status: status }
+			ips[i] = target.Target_data{Id: id, Destination: dest, Status: status}
 			i++
 		}
 		json.NewEncoder(w).Encode(ips)
