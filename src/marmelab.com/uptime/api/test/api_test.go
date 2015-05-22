@@ -2,61 +2,35 @@ package test
 
 import (
 	"testing"
+	"net/http"
 	"../../api"
+	"reflect"
 )
 
-// w *http.ResponseWriter, ne pas passer cet objet mais une interface ?
+func TestSetCorsShouldNotTriggerError(t *testing.T) {
+	exepectedH := &http.Header{}
+	exepectedH.Set("Access-Control-Allow-Origin", "*")
+	exepectedH.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	exepectedH.Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
-type Header map[string][]string
+	actualH := &http.Header{}
+	main.SetAllowCors(actualH)
 
-type ResponseWriter interface {
-	Header() Header
-	Write([]byte) (int,error)
-	WriteHeader(int)
-}
-
-func TestSetAllowCORSwithValidResponseWriterShouldNotTriggerError(t *testing.T) {
-	w :=  *ResponseWriter{}
-	err := main.SetAllowCORS(&w)
-	if err != nil {
-		t.Error("allow CORS on a valid ResponseWriter should not raise a error, got ", err)
+	if(!reflect.DeepEqual(exepectedH,actualH)) {
+		t.Error("Error SetCors don't allow Cors")
 	}
 }
 
-func TestSetAllowCORSwithInvalidResponseWriterShouldTriggerError(t *testing.T) {
-	err := main.SetAllowCORS(nil)
-	if err == nil {
-		t.Error("allow CORS on a invalid ResponseWriter should raise a error, got ", err)
+func TestSetInternalErrorShouldNotTriggerError(t *testing.T) {
+	exepectedH := &http.Header{}
+	exepectedH.Set("Access-Control-Allow-Origin", "*")
+	exepectedH.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	exepectedH.Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+	actualH := &http.Header{}
+	main.SetAllowCors(actualH)
+
+	if(!reflect.DeepEqual(exepectedH,actualH)) {
+		t.Error("Error Access-Control")
 	}
 }
-
-/*func TestSetAllowCORSwithValidResponseWriterShouldHaveCORSAllowed(t *testing.T) {
-	err := 
-	if err != nil {
-		t.Error("ResponseWriter should have CORS allowed on his header, got ", err)
-	}
-}*/
-
-func TestReturn500WithValidResponseWriterShouldNotTriggerError(t *testing.T) {
-	w := ResponseWriter{}
-	err := main.Return500(&w)
-	if err != nil {
-		t.Error("using return500 with a valid ResponseWriter should not raise a error, got ", err)
-	}
-}
-
-func TestReturn500WithInValidResponseWriterShouldTriggerError(t *testing.T) {
-	err := main.Return500(nil)
-	if err == nil {
-		t.Error("using return500 with a valid ResponseWriter should raise a error, got ", err)
-	}
-}
-
-/*func TestReturn500WithValidResponseWriterShouldReturn500(t *testing.T) {
-	_, err := 
-	if err != nil {
-		t.Error("ResponseWriter should have 500 as status code , got ", err)
-	}
-}*/
-
-

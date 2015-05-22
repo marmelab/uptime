@@ -12,28 +12,15 @@ import (
 	"errors"
 )
 
-func SetAllowCORS(w *http.ResponseWriter) (error) {
-	if w != nil {
-		(*w).Header().Set("Access-Control-Allow-Origin","*")
-		(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		(*w).Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-		return nil
-	} else {
-		error := errors.New("http.ResponseWriter = nil ")
-		return error
-	}
+func SetCors(w *http.Header) {
+	w.Set("Access-Control-Allow-Origin", "*")
+	w.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
-func Return500(w *http.ResponseWriter) (error) {
-	if w != nil {
-		(*w).WriteHeader(http.StatusInternalServerError)
-		(*w).Write([]byte(http.StatusText(http.StatusInternalServerError)))
-		return nil	
-	} else {
-		error := errors.New("http.ResponseWriter = nil ")
-		return error
-	}
-
+func Return500(w *http.ResponseWriter) {
+	(*w).WriteHeader(http.StatusInternalServerError)
+	(*w).Write([]byte(http.StatusText(http.StatusInternalServerError))
 }
 
 func main() {
@@ -49,7 +36,8 @@ func main() {
 	}
 
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		SetAllowCORS(&w)
+		header := w.Header()
+		SetCors(&header)
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -95,7 +83,8 @@ func main() {
 	})
 
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		SetAllowCORS(&w)
+		header := w.Header()
+		SetCors(&header)
 		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
