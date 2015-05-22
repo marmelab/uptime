@@ -11,6 +11,12 @@ import (
 	"net/http"
 )
 
+func SetCors(w *http.Header) {
+	w.Set("Access-Control-Allow-Origin", "*")
+	w.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}
+
 func main() {
 	port := flag.String("port", "8383", "port for the api listen")
 	flag.Parse()
@@ -24,7 +30,8 @@ func main() {
 	}
 
 	http.HandleFunc("/ips/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
+		header := w.Header()
+		SetCors(&header)
 		if r.Method != "GET" {
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte(http.StatusText(http.StatusNotFound)))
@@ -42,14 +49,14 @@ func main() {
 			SELECT D.id, D.destination, LR.status = 'good'
 			FROM destination D
 			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
-		`);
+		`)
 
 		defer rows.Close()
 		leng, _ := db.Query("SELECT COUNT(*) FROM destination")
 		defer leng.Close()
 		var length int
 		for leng.Next() {
-			_  = leng.Scan(&length)
+			_ = leng.Scan(&length)
 		}
 		ips := make([]target.Target_data, length)
 		i := 0
@@ -59,20 +66,19 @@ func main() {
 			var status bool
 			error := rows.Scan(&id, &dest, &status)
 			if error != nil {
-				log.Print(error)
+				http.Error(w, http.StatusText(500), 500)
 				return
 			}
 
-			ips[i] = target.Target_data{ Id: id, Destination: dest, Status: status }
+			ips[i] = target.Target_data{Id: id, Destination: dest, Status: status}
 			i++
 		}
 		json.NewEncoder(w).Encode(ips)
 	})
 
 	http.HandleFunc("/ips/results", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin","*")
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-		w.Header().Set("Access-Control-Allow-Headers","Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		header := w.Header()
+		SetCors(&header)
 		if (r.Method != "POST") && (r.Method != "GET") {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte(http.StatusText(http.StatusInternalServerError)))
@@ -97,7 +103,7 @@ func main() {
 				var tim int
 				error := rows.Scan(&dest, &sta, &tim)
 				if error != nil {
-					log.Print(error)
+					http.Error(w, http.StatusText(500), 500)
 					return
 				}
 				res[i].Destination = dest
@@ -111,7 +117,7 @@ func main() {
 			newResult := poller.Response{}
 			error := decoder.Decode(&newResult)
 			if error != nil {
-				log.Print(error)
+				http.Error(w, http.StatusText(500), 500)
 				return
 			}
 			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
