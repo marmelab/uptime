@@ -48,6 +48,9 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
+func HttpPing() (int,error) {
+	
+}
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	if ip == nil && &ip != nil {
 		error := errors.New("ip = nil ")
