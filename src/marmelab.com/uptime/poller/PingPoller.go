@@ -50,6 +50,10 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 }
 
 func HttpPing(url string) (int, error) {
+	if(url == "") {
+		error := errors.New("url is null ")
+		return 0, error
+	}
 	var duration int
 	timeNow := time.Now().Nanosecond()
 	_ , err := http.Get("http://"+url)
