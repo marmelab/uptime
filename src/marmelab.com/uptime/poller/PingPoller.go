@@ -9,6 +9,7 @@ import (
 	"net"
 	"time"
 	"log"
+	"net/http"
 )
 
 type Response struct {
@@ -48,9 +49,17 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
-func HttpPing() (int,error) {
-	
+func HttpPing(url string) (int, error) {
+	var duration int
+	timeNow := time.Now().Nanosecond()
+	_ , err := http.Get("http://"+url)
+	duration = time.Now().Nanosecond() - timeNow
+	if err != nil {
+		return duration, err
+	}
+	return duration / 1000, err
 }
+
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {
 	if ip == nil && &ip != nil {
 		error := errors.New("ip = nil ")
