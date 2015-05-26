@@ -29,3 +29,9 @@ init_webpack:
 	@docker exec uptime_webpack_1 npm install
 	@docker-compose kill webpack
 	@echo "init_webpack completed"
+
+test:
+	@docker-compose up -d api
+	docker exec -ti uptime2_api_1 cd /usr/src/api/marmelab.com/uptime/api/test || go test
+	@docker-compose kill 
+
