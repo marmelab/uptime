@@ -2,6 +2,7 @@ language: go
 
 install:
     - go get golang.org/x/net/icmp
+    - go get github.com/lib/pq
     - cd src/marmelab.com/uptime/poller
 
 script:

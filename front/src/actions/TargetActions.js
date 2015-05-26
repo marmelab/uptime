@@ -1,13 +1,12 @@
-import Dispatcher from '../dispatcher/Dispatcher'
+import {Dispatcher} from 'flux';
 
-export default = {
+module.exports = {
 
-	showResults() {
-		Dispatcher.dispatch("SHOW_RESULTS");
+	showTargetData : function() {
+		Dispatcher.dispatch({
+			type: ActionTypes.TARGET_DATA_LOADING
+		});
 		var url = API_BASE_URL + "/ips/"
-		this.actions.setLoading(true);
-		this.actions.setError(false);
-
 		fetch(url, {
 			method: 'get'
 		})
@@ -17,12 +16,15 @@ export default = {
 			}
 		})
 		.then(function(data) {
-			this.actions.setLoading(false);
-			this.actions.setResults(data);
-			this.actions.setError(false);
+			Dispatcher.dispatch({
+				type: ActionTypes.TARGET_DATA_LOADED,
+				content: data
+			});
 		}.bind(this))
 		.catch(function(error) {
-			this.actions.setError(true);
+			Dispatcher.dispatch({
+				type: ActionTypes.TARGET_DATA_ERROR
+			});
 		})
 	}
 };

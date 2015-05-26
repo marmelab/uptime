@@ -11,11 +11,11 @@ class TargetListPage extends React.Component{
 
 	componentDidMount() {
 		TargetAction.showResults();
-		TargetStore.listen(this.onChange.bind(this));
+		TargetStore.addChangeListener();
 	}
 
 	componentWillUnmount() {
-		TargetStore.unlisten(this.onChange.bind(this));
+		TargetStore.removeCHangeListener();
 	}
 
 	onChange() {
@@ -23,15 +23,15 @@ class TargetListPage extends React.Component{
 	}
 
 	render() {
-		if(this.state.targets_loading){
+		if(this.state.getTargetsLoading){
 			return	<img src="../loading.gif" alt="loading" />
 		}
 
-		if(this.state.targets_errors){
+		if(this.state.getTargetsError){
 			return <h1>Error: no target found.</h1>
 		}
 
-		return <TargetDatagrid targets={this.state.targets} />;
+		return <TargetDatagrid targets={this.state.getTargets} />;
 	}
 }
 
