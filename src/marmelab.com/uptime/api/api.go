@@ -52,13 +52,7 @@ func main() {
 		`)
 
 		defer rows.Close()
-		leng, _ := db.Query("SELECT COUNT(*) FROM destination")
-		defer leng.Close()
-		var length int
-		for leng.Next() {
-			_ = leng.Scan(&length)
-		}
-		ips := make([]target.Target_data, length)
+		ips := make([]target.Target_data, 0)
 		i := 0
 		for rows.Next() {
 			var id int
@@ -69,8 +63,7 @@ func main() {
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}
-
-			ips[i] = target.Target_data{Id: id, Destination: dest, Status: status}
+			ips = append(ips, target.Target_data{Id: id, Destination: dest, Status: status})
 			i++
 		}
 		json.NewEncoder(w).Encode(ips)
