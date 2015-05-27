@@ -1,20 +1,12 @@
-import alt from'../alt';
+import Dispatcher from '../dispatcher/Dispatcher';
 
-class TargetActions {
-	constructor(){
-		this.generateActions(
-			'setLoading',
-			'setError',
-			'setResults'
-			);		
-	}
+module.exports = {
 
-	showResults() {
-		this.dispatch("SHOW_RESULTS");
-		var url = API_BASE_URL + "/ips/"
-		this.actions.setLoading(true);
-		this.actions.setError(false);
-
+	fetchTargets : function() {
+		Dispatcher.dispatch({
+			actionType: "TARGET:FETCH:LOADING"
+		});
+		var url = API_BASE_URL + "/ips/";
 		fetch(url, {
 			method: 'get'
 		})
@@ -24,15 +16,17 @@ class TargetActions {
 			}
 		})
 		.then(function(data) {
-			this.actions.setLoading(false);
-			this.actions.setResults(data);
-			this.actions.setError(false);
+			Dispatcher.dispatch({
+				actionType: "TARGET:FETCH:SUCCESS",
+				content: data
+			});
 		}.bind(this))
 		.catch(function(error) {
-			this.actions.setError(true);
+			Dispatcher.dispatch({
+				actionType: "TARGET:FETCH:ERROR"
+			});
 		})
 	}
-}
+};
 
-module.exports = alt.createActions(TargetActions);
 

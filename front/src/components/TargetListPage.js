@@ -6,28 +6,27 @@ import TargetDatagrid from './datagrids/TargetDatagrid';
 class TargetListPage extends React.Component{
 	constructor(props){
 		super(props);
-		this.state = TargetStore.getState();
+		this.state = TargetStore.getAll();
 	}
-
 	componentDidMount() {
-		TargetAction.showResults();
-		TargetStore.listen(this.onChange.bind(this));
+		TargetAction.fetchTargets();
+		TargetStore.addChangeListener(this.onChange.bind(this));
 	}
 
 	componentWillUnmount() {
-		TargetStore.unlisten(this.onChange.bind(this));
+		TargetStore.removeChangeListener(this.onChange.bind(this));
 	}
 
 	onChange() {
-		this.setState(TargetStore.getState());
+		this.setState(TargetStore.getAll());
 	}
 
 	render() {
-		if(this.state.targets_loading){
+		if (this.state.targets_loading) {
 			return	<img src="../loading.gif" alt="loading" />
 		}
 
-		if(this.state.targets_errors){
+		if (this.state.targets_error){
 			return <h1>Error: no target found.</h1>
 		}
 

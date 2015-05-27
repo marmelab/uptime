@@ -9,13 +9,13 @@
   "author": "sylver",
   "license": "ISC",
   "dependencies": {
-    "alt": "~0.16.4",
     "babel-loader": "^5.0.0",
     "config": "^1.13.0",
     "express": "^4.12.3",
     "flux": "~2.0.3",
     "jquery": "^2.1.4",
     "jsx-loader": "^0.13.2",
+    "object-assign": "^2.0.0",
     "swig": "^1.4.2",
     "underscore": "^1.8.3",
     "whatwg-fetch": "^0.8.2"

@@ -1,26 +1,60 @@
-import alt from '../alt';
+import assign from 'object-assign';
+import {EventEmitter} from 'events';
+import Dispatcher from '../dispatcher/Dispatcher';
 import TargetActions from '../actions/TargetActions';
 
-class TargetStore	{
-	constructor()	{
-		this.targets = [];
-		this.targets_error = false;
-		this.targets_loading = false;
+var CHANGE_EVENT = 'change';
+var targets = [];
+var targets_error = false;
+var targets_loading = true; 
 
-		this.bindActions(alt.getActions("TargetActions"));
+var TargetStore = assign({}, EventEmitter.prototype, {
+	getAll: function() {
+		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error}
+		return data;
+	},
+	getTargets: function() {
+		return targets;
+	},
+	getTargetsError: function() {
+		return targets_error;
+	},
+	getTargetsLoading: function() {
+		return targets_loading;
+	},
+	emitChange: function() {
+		this.emit(CHANGE_EVENT);
+	},
+	addChangeListener: function(callback) {
+		this.on(CHANGE_EVENT,callback);
+	},
+	removeChangeListener: function(callback) {
+		this.removeListener(CHANGE_EVENT,callback);		
 	}
+});
 
-	setResults(response)	{
-		this.setState({ targets: response });
-	}
-  
-	setLoading(loading)	{
-		this.targets_loading = loading;
-	}
+Dispatcher.register(function(action) {
+	switch(action.actionType) {
+		case "TARGET:FETCH:LOADING":
+			targets_loading = true;
+			TargetStore.emitChange();
+			break;
 
-	setError(error)	{
-		this.targets_error = error;
-	}
-}
+		case "TARGET:FETCH:SUCCESS":
+			targets = action.content;
+			targets_error = false;
+			targets_loading = false;
+			TargetStore.emitChange();
+			break;
 
-module.exports = alt.createStore(TargetStore, 'TargetStore');
+		case "TARGET:FETCH:ERROR":
+			targets_error = true;
+			TargetStore.emitChange();
+			break;
+
+	}
+});
+
+module.exports = TargetStore;
+
+

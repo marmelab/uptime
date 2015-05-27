@@ -29,3 +29,4 @@ init_webpack:
 	@docker exec uptime_webpack_1 npm install
 	@docker-compose kill webpack
 	@echo "init_webpack completed"
+

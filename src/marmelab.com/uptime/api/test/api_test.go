@@ -14,7 +14,7 @@ func TestSetCorsShouldNotTriggerError(t *testing.T) {
 	exepectedH.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	actualH := &http.Header{}
-	main.SetAllowCors(actualH)
+	main.SetCors(actualH)
 
 	if !reflect.DeepEqual(exepectedH, actualH) {
 		t.Error("Error SetCors don't allow Cors")
