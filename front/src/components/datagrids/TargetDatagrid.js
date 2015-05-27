@@ -7,7 +7,7 @@ class TargetDatagrid extends React.Component {
         var rows = [];
         if (targetsLength != 0) {
             for (var i = 0; i < targetsLength; i++) {
-                 rows.push(<TargetDataRow target = { this.props.targets[i]}/>);
+                 rows.push(<TargetDataRow target={ this.props.targets[i]}/>);
             }
 
             return rows;           

@@ -9,7 +9,7 @@ class TargetListPage extends React.Component{
 		this.state = TargetStore.getAll();
 	}
 	componentDidMount() {
-		TargetAction.showTargetsData();
+		TargetAction.fetchTargets();
 		TargetStore.addChangeListener(this.onChange.bind(this));
 	}
 

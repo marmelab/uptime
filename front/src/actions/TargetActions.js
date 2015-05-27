@@ -1,12 +1,12 @@
-import Dispatcher from '../dispatcher/TargetDispatcher';
+import Dispatcher from '../dispatcher/Dispatcher';
 
 module.exports = {
 
-	showTargetsData : function() {
+	fetchTargets : function() {
 		Dispatcher.dispatch({
-			actionType: "TARGET_DATA_LOADING"
+			actionType: "FETCH:TARGET:LOADING"
 		});
-		var url = API_BASE_URL + "/ips/"
+		var url = API_BASE_URL + "/ips/";
 		fetch(url, {
 			method: 'get'
 		})
@@ -17,13 +17,13 @@ module.exports = {
 		})
 		.then(function(data) {
 			Dispatcher.dispatch({
-				actionType: "TARGET_DATA_LOADED",
+				actionType: "FETCH:TARGET:SUCCESS",
 				content: data
 			});
 		}.bind(this))
 		.catch(function(error) {
 			Dispatcher.dispatch({
-				actionType: "TARGET_DATA_ERROR"
+				actionType: "FETCH:TARGET:ERROR"
 			});
 		})
 	}

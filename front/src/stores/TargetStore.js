@@ -1,29 +1,16 @@
 import assign from 'object-assign';
 import {EventEmitter} from 'events';
-import Dispatcher from '../dispatcher/TargetDispatcher';
+import Dispatcher from '../dispatcher/Dispatcher';
 import TargetActions from '../actions/TargetActions';
 
-var CHANGE_EVENT = 'change';
-
-var targets = [];
-var targets_error = false;
-var targets_loading = true;
-
-function setTargets(data) {
-	targets = data;
-}
-
-function setTargetsError(error) {
-	targets_error = error;
-}
-
-function setTargetsLoading(loading) {
-	targets_loading = loading; 
-}
+	var CHANGE_EVENT = 'change';
+	var targets = [];
+	var targets_error = false;
+	var targets_loading = true; 
 
 var TargetStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
-		var data = {targets,targets_loading,targets_error}
+		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error}
 		return data;
 	},
 	getTargets: function() {
@@ -48,20 +35,20 @@ var TargetStore = assign({}, EventEmitter.prototype, {
 
 Dispatcher.register(function(action) {
 	switch(action.actionType) {
-		case "TARGET_DATA_LOADING":
-			setTargetsLoading(true);
+		case "FETCH:TARGET:LOADING":
+			targets_loading = true;
 			TargetStore.emitChange();
 			break;
 
-		case "TARGET_DATA_LOADED":
-			setTargets(action.content);
-			setTargetsError(false);
-			setTargetsLoading(false);
+		case "FETCH:TARGET:SUCCESS":
+			targets = action.content;
+			targets_error = false;
+			targets_loading = false;
 			TargetStore.emitChange();
 			break;
 
-		case "TARGET_DATA_ERROR":
-			setTargetsError(true);
+		case "FETCH:TARGET:ERROR":
+			targets_error = true;
 			TargetStore.emitChange();
 			break;
 
