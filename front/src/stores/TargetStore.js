@@ -3,10 +3,10 @@ import {EventEmitter} from 'events';
 import Dispatcher from '../dispatcher/Dispatcher';
 import TargetActions from '../actions/TargetActions';
 
-	var CHANGE_EVENT = 'change';
-	var targets = [];
-	var targets_error = false;
-	var targets_loading = true; 
+var CHANGE_EVENT = 'change';
+var targets = [];
+var targets_error = false;
+var targets_loading = true; 
 
 var TargetStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
@@ -35,19 +35,19 @@ var TargetStore = assign({}, EventEmitter.prototype, {
 
 Dispatcher.register(function(action) {
 	switch(action.actionType) {
-		case "FETCH:TARGET:LOADING":
+		case "TARGET:FETCH:LOADING":
 			targets_loading = true;
 			TargetStore.emitChange();
 			break;
 
-		case "FETCH:TARGET:SUCCESS":
+		case "TARGET:FETCH:SUCCESS":
 			targets = action.content;
 			targets_error = false;
 			targets_loading = false;
 			TargetStore.emitChange();
 			break;
 
-		case "FETCH:TARGET:ERROR":
+		case "TARGET:FETCH:ERROR":
 			targets_error = true;
 			TargetStore.emitChange();
 			break;

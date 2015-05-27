@@ -4,7 +4,7 @@ module.exports = {
 
 	fetchTargets : function() {
 		Dispatcher.dispatch({
-			actionType: "FETCH:TARGET:LOADING"
+			actionType: "TARGET:FETCH:LOADING"
 		});
 		var url = API_BASE_URL + "/ips/";
 		fetch(url, {
@@ -17,13 +17,13 @@ module.exports = {
 		})
 		.then(function(data) {
 			Dispatcher.dispatch({
-				actionType: "FETCH:TARGET:SUCCESS",
+				actionType: "TARGET:FETCH:SUCCESS",
 				content: data
 			});
 		}.bind(this))
 		.catch(function(error) {
 			Dispatcher.dispatch({
-				actionType: "FETCH:TARGET:ERROR"
+				actionType: "TARGET:FETCH:ERROR"
 			});
 		})
 	}
