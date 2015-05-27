@@ -53,7 +53,6 @@ func main() {
 
 		defer rows.Close()
 		ips := make([]target.Target_data, 0)
-		i := 0
 		for rows.Next() {
 			var id int
 			var dest string
@@ -64,7 +63,6 @@ func main() {
 				return
 			}
 			ips = append(ips, target.Target_data{Id: id, Destination: dest, Status: status})
-			i++
 		}
 		json.NewEncoder(w).Encode(ips)
 	})
@@ -79,17 +77,9 @@ func main() {
 		}
 
 		if r.Method == "GET" {
-			rows, _ := db.Query("SELECT * FROM results")
+			rows, _ := db.Query("SELECT destination, status, duration FROM results")
 			defer rows.Close()
-			leng, _ := db.Query("SELECT COUNT(destination) FROM results")
-			defer leng.Close()
-			var length int
-			for leng.Next() {
-			_:
-				leng.Scan(&length)
-			}
-			res := make([]poller.Response, length)
-			i := 0
+			res := make([]poller.Response, 0)
 			for rows.Next() {
 				var dest string
 				var sta string
@@ -99,10 +89,7 @@ func main() {
 					http.Error(w, http.StatusText(500), 500)
 					return
 				}
-				res[i].Destination = dest
-				res[i].Status = sta
-				res[i].Time = tim
-				i++
+				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim})
 			}
 			json.NewEncoder(w).Encode(res)
 		} else {
@@ -113,7 +100,7 @@ func main() {
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}
-			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
+			_, _ = db.Exec("INSERT INTO Results (destination, status, duration) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
 		}
 	})
 

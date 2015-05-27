@@ -9,6 +9,7 @@ import (
 	"net"
 	"time"
 	"log"
+	"net/http"
 )
 
 type Response struct {
@@ -46,6 +47,21 @@ func RetrieveConfDbFromJsonFile(fileName string) (data map[string]interface{}) {
 
 func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
+}
+
+func HttpPing(url string, protocol string) (int, error) {
+	if(url == "") {
+		error := errors.New("url is null")
+		return -1, error
+	}
+	var duration int
+	timeNow := time.Now().Nanosecond()
+		_ , err := http.Get(protocol+"://"+url)
+		duration = time.Now().Nanosecond() - timeNow
+		if err != nil {
+			return duration, err
+		}
+		return duration / 1000, err
 }
 
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {

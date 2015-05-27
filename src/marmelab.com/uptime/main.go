@@ -5,10 +5,8 @@ import (
 	"./poller"
 	"encoding/json"
 	"fmt"
-	"golang.org/x/net/icmp"
 	"io/ioutil"
 	"log"
-	"net"
 	"net/http"
 	"time"
 )
@@ -16,10 +14,8 @@ import (
 func main() {
 	response := poller.Response{}
 	var listOfDestination []target.Target_data
-	var ip *net.IPAddr
 	var url string
-	var duration int
-	packetConn, _ := icmp.ListenPacket("ip4:icmp", "")
+	var duration int	
 	for true {
 		conf := poller.RetrieveConfDbFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")
 		res, err := http.Get(conf["urlApiIp"].(string))
@@ -43,14 +39,11 @@ func main() {
 			}()
 			for range listOfDestination {
 				url = <-c
-				ip, err = poller.FromDomainNameToIp(url)
 				response.Destination = url
-				if err == nil {
-					duration, err = poller.Ping(ip, packetConn)
+					duration, err = poller.HttpPing(url,"http")
 					response.Time = duration
 					if (err != nil) || (duration <= 0) {
 						response.Status = "failed"
-						log.Print("je passe ici")
 						if err != nil {
 							log.Print(err)
 						}
@@ -60,13 +53,6 @@ func main() {
 							log.Print(err)
 						}
 					}
-				} else {
-					response.Status = "failed"
-					response.Time = duration
-					if err != nil {
-						log.Print(err)
-					}
-				}
 				err = poller.DoPostOn(&response, conf["urlApiResults"].(string))
 			}
 			time.Sleep(time.Second * 10)

@@ -43,12 +43,12 @@ func TestPingWithValidIpShouldNotTriggerError(t *testing.T) {
 	}
 }
 
-func TestPingWithNoIpShouldNotTriggerError(t *testing.T) {
+func TestPingWithNoIpShouldTriggerError(t *testing.T) {
 	myIcmp := Packet{}
 	myPacket := myIcmp.ListenPacket("ip4:icmp", "")
 	_, err := Ping(nil, myPacket)
 	if err == nil {
-		t.Error("Pinging a nil IP raise an error, got ", err)
+		t.Error("Pinging a nil IP should raise an error, got ", err)
 	}
 }
 func TestPingingWithNoIPConnShouldNotTriggerError(t *testing.T) {
@@ -58,4 +58,18 @@ func TestPingingWithNoIPConnShouldNotTriggerError(t *testing.T) {
 	if err != nil {
 		t.Error("Pinging a nil PacketConn should not raise an error got", err)
 	}
+}
+
+func TestHttpPingWithValidUrlShouldNotTriggerError(t *testing.T) {
+	_, err := HttpPing("google.fr","http")
+	if(err != nil) {
+		t.Error("Pinging a valid url with http method should not raise an error, got ", err)
+	}	
+}
+
+func TestHttpsPingWithValidUrlShouldNotTriggerError(t *testing.T) {
+	_, err := HttpPing("google.fr","https")
+	if(err != nil) {
+		t.Error("Pinging a valid url with http method should not raise an error, got ", err)
+	}	
 }
