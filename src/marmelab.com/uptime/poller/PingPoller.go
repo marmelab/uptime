@@ -49,19 +49,28 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 	return net.ResolveIPAddr("ip", domainName)
 }
 
-func HttpPing(url string) (int, error) {
+func HttpPing(url string,https bool) (int, error) {
 	if(url == "") {
-		error := errors.New("url is null ")
-		return 0, error
+		error := errors.New("url is null")
+		return -1, error
 	}
 	var duration int
 	timeNow := time.Now().Nanosecond()
-	_ , err := http.Get("http://"+url)
-	duration = time.Now().Nanosecond() - timeNow
-	if err != nil {
-		return duration, err
+	if(https == true) {
+		_ , err := http.Get("https://"+url)
+		duration = time.Now().Nanosecond() - timeNow
+		if err != nil {
+			return duration, err
+		}
+		return duration / 1000, err
+	} else {
+		_ , err := http.Get("http://"+url)
+		duration = time.Now().Nanosecond() - timeNow
+		if err != nil {
+			return duration, err
+		}
+		return duration / 1000, err
 	}
-	return duration / 1000, err
 }
 
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {

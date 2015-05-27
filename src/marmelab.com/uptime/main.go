@@ -40,7 +40,7 @@ func main() {
 			for range listOfDestination {
 				url = <-c
 				response.Destination = url
-					duration, err = poller.HttpPing(url)
+					duration, err = poller.HttpPing(url,false)
 					response.Time = duration
 					if (err != nil) || (duration <= 0) {
 						response.Status = "failed"

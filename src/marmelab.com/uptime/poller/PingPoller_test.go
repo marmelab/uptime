@@ -61,7 +61,7 @@ func TestPingingWithNoIPConnShouldNotTriggerError(t *testing.T) {
 }
 
 func TestHttpPingWithValidUrlShouldNotTriggerError(t *testing.T) {
-	_, err := HttpPing("google.fr")
+	_, err := HttpPing("google.fr",false)
 	if(err != nil) {
 		t.Error("Pinging a valid url with http method should not raise an error, got ", err)
 	}	
