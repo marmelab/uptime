@@ -7,13 +7,13 @@ setup:
 
 init_db:
 	@docker-compose up -d db
-	@docker exec uptime2_db_1 psql -f /usr/src/db/migration/createTable.sql --username=postgres
+	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createTable.sql --username=postgres
 	@docker-compose kill db
 	@echo "init_db completed"
 
 load_fixtures:
 	@docker-compose up -d db
-	@docker exec uptime2_db_1 psql -f /usr/src/db/fixtures/fixtures.sql --username=postgres
+	@docker exec uptime_db_1 psql -f /usr/src/db/fixtures/fixtures.sql --username=postgres
 	@docker-compose kill db
 	@echo "load_fixtures completed"
 
@@ -26,7 +26,7 @@ clear:
 
 init_webpack:
 	@docker-compose up -d webpack
-	@docker exec uptime2_webpack_1 npm install
+	@docker exec uptime_webpack_1 npm install
 	@docker-compose kill webpack
 	@echo "init_webpack completed"
 

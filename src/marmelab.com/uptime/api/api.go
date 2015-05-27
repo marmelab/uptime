@@ -77,7 +77,7 @@ func main() {
 		}
 
 		if r.Method == "GET" {
-			rows, _ := db.Query("SELECT destination, status, time FROM results")
+			rows, _ := db.Query("SELECT destination, status, duration FROM results")
 			defer rows.Close()
 			res := make([]poller.Response, 0)
 			for rows.Next() {
@@ -100,7 +100,7 @@ func main() {
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}
-			_, _ = db.Exec("INSERT INTO Results (destination, status, time) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
+			_, _ = db.Exec("INSERT INTO Results (destination, status, duration) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
 		}
 	})
 

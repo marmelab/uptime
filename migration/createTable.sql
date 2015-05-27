@@ -8,7 +8,7 @@ CREATE TABLE results(
 	target_id smallint REFERENCES destination (id),
 	destination VARCHAR(255),
 	status VARCHAR(30),
-	time integer,
+	duration integer,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
