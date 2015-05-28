@@ -5,3 +5,4 @@ src/marmelab.com/uptime/conf.json
 front/node_modules
 front/app/bundle.js
 npm-debug.log
+node_modules
