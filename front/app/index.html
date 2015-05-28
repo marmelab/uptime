@@ -1,9 +1,22 @@
 <!-- index.html -->
 <html>
   <head>
-    <title>Hello React</title>
+    <title>Uptime2</title>
   </head>
   <body>
+  	<nav>
+  		<ul class="firstUl">
+  			<li><a class="navbar-brand" href="">Uptime</a></li>
+  			<li><a href="">Events</a></li>
+  			<li><a href="">Checks</a></li>
+        <div class="right-checks">
+          <li class="right-checks-up"><a class="active" href="">Up</a></li>
+          <li><div id="right-count-up"></div></li>
+          <li class="right-checks-down"><a class="active" href="">Down</a></li>
+          <li><div id="right-count-down"></div></li>
+        </div>
+  		</ul>
+    <h1 class="title">Global view of targets status :</h1>
     <div id="content"></div>
     <script src="{{ cdnBaseUrl }}/app/bundle.js"></script>
   </body>

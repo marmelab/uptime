@@ -6,13 +6,22 @@ import TargetActions from '../actions/TargetActions';
 var CHANGE_EVENT = 'change';
 var targets = [];
 var targets_error = false;
-var targets_loading = true; 
+var targets_loading = true;
+var number_targets_up = 0;
+var number_targets_down = 0;
 
 var TargetStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
 		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error}
 		return data;
 	},
+	getNumberTargetsUp: function() {
+		return {number_targets_up: number_targets_up};
+	},
+	getNumberTargetsDown: function() {
+		return {number_targets_down: number_targets_down};
+	},
+
 	getTargets: function() {
 		return targets;
 	},
@@ -52,6 +61,27 @@ Dispatcher.register(function(action) {
 			TargetStore.emitChange();
 			break;
 
+		case "TARGET:GET:NUMBER_TARGETS_UP":
+			var up =0;
+			for (var i = targets.length - 1; i >= 0; i--) {
+				if(targets[i].status == true) {
+					up += 1; 
+				}
+			};
+			number_targets_up = up;
+			TargetStore.emitChange();
+			break;
+
+		case "TARGET:GET:NUMBER_TARGETS_DOWN":
+			var down =0;
+			for (var i = targets.length - 1; i >= 0; i--) {
+				if(targets[i].status == false) {
+					down += 1; 
+				}
+			};
+			number_targets_down = down;
+			TargetStore.emitChange();
+			break;
 	}
 });
 
