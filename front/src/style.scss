@@ -18,5 +18,5 @@ a{
 }
 
 #content{
-	.center-block();
+	@extend center-block;
 }
