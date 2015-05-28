@@ -8,59 +8,15 @@ body{
 }
 
 table{
-	@extend .table-responsiv;
 	@extend .table;	
 	@extend .table-hover;
 	margin: 10%;
-}
-
-.title{
-	margin-top: 10%;
-	margin-left: 2%;
 }
 
 a{
 	color:white;
 }
 
-.firstUl{
-	background-color: black;
-	@extend .nav;
-	@extend .nav-tabs;
-	@extend .navbar-fixed-top;
-	margin-bottom: 5%;
-}
-
-.right-checks{
-	font-size: 150%;
-	@extend .nav;
-	@extend .nav-tabs;
-	@extend .navbar-right;
-	.right-checks-up{
-		background-color: green;
-	}
-	.right-checks-down{
-		background-color: red;
-	}
-}
-
-
-li{
-	.a{
-		color:white;
-	}
-}
-
-#right-count-up{
-	font-size: 150%;
-	margin-right: 30%;
-	margin-left: 30%;
-	color:green;
-}
-
-#right-count-down{
-	font-size: 150%;
-	margin-right: 40%;
-	margin-left: 30%;
-	color:red;
+#content{
+	.center-block();
 }
