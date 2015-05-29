@@ -7,8 +7,8 @@ app.engine('html', swig.renderFile);
 app.set('views engine', 'html');
 app.set('views', __dirname + '/views');
 
-app.get('/index.html', function (req, res) {
-	res.render('/usr/src/client/app/index.html', {
+app.get('/', function (req, res) {
+	res.render('layout.html', {
 		cdnBaseUrl : config.get('hostWebpack')
 	});
 });
