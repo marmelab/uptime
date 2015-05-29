@@ -15,12 +15,10 @@ d3Chart.create = function(el, props, state) {
 };
 
 d3Chart.update = function(el, state) {
-  // Re-compute the scales, and render the data points
-  var scales = this._scales(el, state.domain);
-  this._drawPoints(el, scales, state.data);
+  // initialiser/mettre a jour les données du chart ?
 };
 
 d3Chart.destroy = function(el) {
-  // Any clean-up would go here
-  // in this example there is nothing to do
+  // vider le chart ?
 };
+
