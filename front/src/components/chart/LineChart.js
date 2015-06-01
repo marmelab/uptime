@@ -6,21 +6,26 @@ class LineChart extends React.Component {
     super(props);
   }
   componentDidMount() {
-    var el = this.getDOMNode();
+    console.log("ssssssssssssssssssss");
+    var el = React.findDOMNode();
     ResultsChart.create(el, {
       width: '400px',
       height: '300px'
     }, this.getChartState());
   }
   componentDidUpdate() {
-    var el = this.getDOMNode();
+        ResultsChart.create(el, {
+      width: '400px',
+      height: '300px'
+    }, this.getChartState());
+    var el = React.findDOMNode(this);
     ResultsChart.update(el, this.getChartState());
   }
   getChartState() {
-    return this.state.data;
+    return this.state;
   }
   componentWillUnmount() {
-    var el = this.getDOMNode();
+    var el = React.findDOMNode();
     ResultsChart.destroy(el);
   }
   render() {

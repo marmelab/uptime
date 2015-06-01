@@ -9,12 +9,15 @@ class ResultDurationChart extends LineChart {
   }
 
   componentDidMount() {
-    TargetAction.fetchAllResults();
+    super.componentDidMount();
+    TargetAction.fetchResults();
     TargetStore.addChangeListener(this.onChange.bind(this));
   }
-
   componentWillUnmount() {
     TargetStore.removeChangeListener(this.onChange.bind(this));
+  }
+  onChange() {
+    this.setState(TargetStore.getResults());
   }
 }
 

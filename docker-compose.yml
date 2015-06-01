@@ -5,7 +5,7 @@ watcher:
         CONFIG_PATH: /usr/src/watcher/src/marmelab.com/uptime/conf.json
     volumes:
         - .:/usr/src/watcher
-    command: go run /usr/src/watcher/src/marmelab.com/uptime/main.go
+    command: sleep 123456 #go run /usr/src/watcher/src/marmelab.com/uptime/main.go
     links:
         - "api"
         - "website"

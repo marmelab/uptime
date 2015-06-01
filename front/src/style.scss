@@ -19,7 +19,6 @@ a{
 #content{
 	@extend center-block;
 }
-
 .navbar-counters {
 	.counter {
 		@extend .badge;
@@ -34,4 +33,12 @@ a{
 			background: $brand-danger;
 		}
 	}
+.axis path {
+    fill: none;
+    stroke: #777;
+    shape-rendering: crispEdges;
+}
+.axis text {
+    font-family: Lato;
+    font-size: 13px;
 }
