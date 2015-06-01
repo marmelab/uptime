@@ -1,0 +1,37 @@
+$icon-font-path: "../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
+
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+
+body{
+	background-color: white;
+}
+
+table{
+	@extend .table;	
+	@extend .table-hover;
+}
+
+a{
+	color:white;
+}
+
+#content{
+	@extend center-block;
+}
+
+.navbar-counters {
+	.counter {
+		@extend .badge;
+		margin: 15px 10px 10px 0;
+		&:last-child {
+			margin-right: 0;
+		}
+		&.up {
+			background: $brand-success;
+		}
+		&.down {
+			background: $brand-danger;
+		}
+	}
+}

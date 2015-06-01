@@ -58,6 +58,7 @@ func main() {
 			var dest string
 			var status bool
 			error := rows.Scan(&id, &dest, &status)
+			log.Print(error)
 			if error != nil {
 				http.Error(w, http.StatusText(500), 500)
 				return

@@ -2,7 +2,7 @@ import Dispatcher from '../dispatcher/Dispatcher';
 
 module.exports = {
 
-	fetchTargets : function() {
+	fetchTargets: function() {
 		Dispatcher.dispatch({
 			actionType: "TARGET:FETCH:LOADING"
 		});
@@ -26,7 +26,7 @@ module.exports = {
 				actionType: "TARGET:FETCH:ERROR"
 			});
 		})
-	}
+	},
 };
 
 

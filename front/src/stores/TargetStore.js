@@ -6,7 +6,7 @@ import TargetActions from '../actions/TargetActions';
 var CHANGE_EVENT = 'change';
 var targets = [];
 var targets_error = false;
-var targets_loading = true; 
+var targets_loading = true;
 
 var TargetStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
@@ -14,7 +14,7 @@ var TargetStore = assign({}, EventEmitter.prototype, {
 		return data;
 	},
 	getTargets: function() {
-		return targets;
+		return {targets: targets};
 	},
 	getTargetsError: function() {
 		return targets_error;
@@ -51,7 +51,6 @@ Dispatcher.register(function(action) {
 			targets_error = true;
 			TargetStore.emitChange();
 			break;
-
 	}
 });
 
