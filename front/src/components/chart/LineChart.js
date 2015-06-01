@@ -6,7 +6,6 @@ class LineChart extends React.Component {
     super(props);
   }
   componentDidMount() {
-    console.log("ssssssssssssssssssss");
     var el = React.findDOMNode();
     ResultsChart.create(el, {
       width: '400px',
@@ -14,10 +13,6 @@ class LineChart extends React.Component {
     }, this.getChartState());
   }
   componentDidUpdate() {
-        ResultsChart.create(el, {
-      width: '400px',
-      height: '300px'
-    }, this.getChartState());
     var el = React.findDOMNode(this);
     ResultsChart.update(el, this.getChartState());
   }
