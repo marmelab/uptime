@@ -19,3 +19,19 @@ a{
 #content{
 	@extend center-block;
 }
+
+.navbar-counters {
+	.counter {
+		@extend .badge;
+		margin: 15px 10px 10px 0;
+		&:last-child {
+			margin-right: 0;
+		}
+		&.up {
+			background: $brand-success;
+		}
+		&.down {
+			background: $brand-danger;
+		}
+	}
+}

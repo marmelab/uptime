@@ -20,8 +20,6 @@ module.exports = {
 				actionType: "TARGET:FETCH:SUCCESS",
 				content: data
 			});
-			this.getNumberTargetsUp();
-			this.getNumberTargetsDown();
 		}.bind(this))
 		.catch(function(error) {
 			Dispatcher.dispatch({
@@ -29,16 +27,6 @@ module.exports = {
 			});
 		})
 	},
-	getNumberTargetsUp: function() {
-		Dispatcher.dispatch({
-			actionType: "TARGET:GET:NUMBER_TARGETS_UP"
-		});
-	},
-	getNumberTargetsDown: function() {
-		Dispatcher.dispatch({
-			actionType: "TARGET:GET:NUMBER_TARGETS_DOWN"
-		});
-	}
 };
 
 
