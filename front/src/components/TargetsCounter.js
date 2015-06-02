@@ -51,4 +51,4 @@ class TargetsCounter extends React.Component {
     }
 }
 
-module.exports = TargetsCounter;
+export default TargetsCounter;

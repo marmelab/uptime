@@ -76,6 +76,6 @@ Dispatcher.register(function(action) {
 	}
 });
 
-module.exports = TargetStore;
+export default TargetStore;
 
 

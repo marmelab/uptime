@@ -1,33 +1,29 @@
-import ResultsChart from './ResultsChart';
 import React from 'react';
 
 class LineChart extends React.Component {
-  constructor(props){
-    super(props);
-  }
-  componentDidMount() {
-    var el = React.findDOMNode();
-    ResultsChart.create(el, {
-      width: '400px',
-      height: '300px'
-    }, this.getChartState());
-  }
-  componentDidUpdate() {
-    var el = React.findDOMNode(this);
-    ResultsChart.update(el, this.getChartState());
-  }
-  getChartState() {
-    return this.state;
-  }
-  componentWillUnmount() {
-    var el = React.findDOMNode();
-    ResultsChart.destroy(el);
-  }
-  render() {
-    return (
-      <div className="LineChart"></div>
-    );
-  }
+	constructor(props) {
+		super(props);
+		this.chart = this.initChart();
+	}
+
+	/** @TODO: move state.results into props.results */
+	componentDidUpdate() {
+		if (!this.state.results) {
+			return;
+		}
+	}
+
+	render() {
+		return (
+			<svg width="400" height="300"></svg>
+		);
+	}
+
+	initChart() {
+		var xScale = d3.time.scale.utc()
+			.domain(d3.extent(this.state.results, function(d) { return d.created_at; }));
+			console.log('ok');
+	}
 }
 
 export default LineChart;

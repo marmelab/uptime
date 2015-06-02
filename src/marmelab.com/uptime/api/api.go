@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+	"time"
 )
 
 func SetCors(w *http.Header) {
@@ -78,19 +79,20 @@ func main() {
 		}
 
 		if r.Method == "GET" {
-			rows, _ := db.Query("SELECT destination, status, duration FROM results")
+			rows, _ := db.Query("SELECT destination, status, duration,  created_at FROM results")
 			defer rows.Close()
 			res := make([]poller.Response, 0)
 			for rows.Next() {
 				var dest string
 				var sta string
 				var tim int
-				error := rows.Scan(&dest, &sta, &tim)
+				var created_at time.Time
+				error := rows.Scan(&dest, &sta, &tim, &created_at)
 				if error != nil {
 					http.Error(w, http.StatusText(500), 500)
 					return
 				}
-				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim})
+				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim, Created_at: created_at})
 			}
 			json.NewEncoder(w).Encode(res)
 		} else {

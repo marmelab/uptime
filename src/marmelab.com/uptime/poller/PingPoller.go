@@ -16,6 +16,7 @@ type Response struct {
 	Destination string
 	Status      string
 	Time        int
+	Created_at time.Time
 }
 
 

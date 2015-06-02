@@ -13,9 +13,11 @@ class ResultDurationChart extends LineChart {
     TargetAction.fetchResults();
     TargetStore.addChangeListener(this.onChange.bind(this));
   }
+
   componentWillUnmount() {
     TargetStore.removeChangeListener(this.onChange.bind(this));
   }
+  
   onChange() {
     this.setState(TargetStore.getResults());
   }

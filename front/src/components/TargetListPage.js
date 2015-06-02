@@ -34,4 +34,4 @@ class TargetListPage extends React.Component{
 	}
 }
 
-module.exports = TargetListPage;
+export default TargetListPage;
