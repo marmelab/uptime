@@ -8,7 +8,7 @@ class LineChart extends React.Component {
 		/** @TODO: use constants */
 		this.margins = {
 			top: 10,
-			left: 40,
+			left: 50,
 			right: 20,
 			bottom: 30
 		};
@@ -48,7 +48,7 @@ class LineChart extends React.Component {
 		var line = d3.svg.line()
 			.x((d, i) => xScale(i))
 			.y(d => yScale(d.Time));
-
+		console.log(this.state.results);
 		d3.select(svg)
 			.append('path')
 			.attr('d', line(this.state.results))
@@ -64,7 +64,7 @@ class LineChart extends React.Component {
 
 	_yScale() {
 		return d3.scale.linear()
-			.domain([1000, 0])
+			.domain([10000, 0])
 			.range([this.margins.top, this.height - this.margins.top - this.margins.bottom]);
 	}
 

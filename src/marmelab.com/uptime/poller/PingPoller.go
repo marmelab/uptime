@@ -17,6 +17,7 @@ type Response struct {
 	Status      string
 	Time        int
 	Created_at time.Time
+	Target_id int
 }
 
 

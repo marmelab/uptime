@@ -79,7 +79,7 @@ func main() {
 		}
 
 		if r.Method == "GET" {
-			rows, _ := db.Query("SELECT destination, status, duration,  created_at FROM results")
+			rows, _ := db.Query("SELECT destination, status, duration,  created_at, target_id FROM results WHERE target_id=1")
 			defer rows.Close()
 			res := make([]poller.Response, 0)
 			for rows.Next() {
@@ -87,12 +87,14 @@ func main() {
 				var sta string
 				var tim int
 				var created_at time.Time
-				error := rows.Scan(&dest, &sta, &tim, &created_at)
+				var target_id int
+				error := rows.Scan(&dest, &sta, &tim, &created_at, &target_id)
 				if error != nil {
+					log.Print(error)
 					http.Error(w, http.StatusText(500), 500)
 					return
 				}
-				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim, Created_at: created_at})
+				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim, Created_at: created_at, Target_id: target_id})
 			}
 			json.NewEncoder(w).Encode(res)
 		} else {
