@@ -18,7 +18,10 @@ load_fixtures:
 	@echo "load_fixtures completed"
 
 run:
-	docker-compose up
+	docker-compose up -d watcher
+	docker-compose up -d webpack
+	docker-compose up -d --no-deps client
+	docker-compose up -d --no-deps website
 
 clear:
 	@docker-compose kill

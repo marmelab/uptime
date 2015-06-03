@@ -29,7 +29,7 @@ class TargetListPage extends React.Component{
 		if (this.state.targets_error){
 			return <h1>Error: no target found.</h1>
 		}
-
+		console.log(this.state.targets);
 		return <TargetDatagrid targets={this.state.targets} />;
 	}
 }

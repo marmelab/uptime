@@ -8,6 +8,7 @@ watcher:
     command: go run /usr/src/watcher/src/marmelab.com/uptime/main.go
     links:
         - "api"
+        - "website"
 api:
     image: golang
     environment:
