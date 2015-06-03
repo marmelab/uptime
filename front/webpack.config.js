@@ -15,22 +15,24 @@ module.exports = {
 	},
 
 	plugins: [
-	new webpack.ProvidePlugin({
-		$: "jquery",
-		jQuery: "jquery",
-		"window.jQuery": "jquery"
-	}),
-	new webpack.DefinePlugin({
-		"API_BASE_URL": "new String('http://localhost:8383')"
-	}),
-	new ExtractTextPlugin("styles.css")
+		new webpack.ProvidePlugin({
+			$: "jquery",
+			jQuery: "jquery",
+			"window.jQuery": "jquery"
+		}),
+		new webpack.DefinePlugin({
+			"API_BASE_URL": "'http://localhost:8383'"
+		}),
+		new ExtractTextPlugin('styles.css', {
+			allChunks: true
+		})
 	],
 	
 	module:{
 		loaders: [
-		{ test: /\.js$/, loaders: ['react-hot', 'jsx-loader', 'babel-loader'], exclude: /node_modules/ },
-		{ test: /\.scss$/, loaders: ['style', 'css', 'sass']},
-		{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'file' }
+			{ test: /\.js$/, loaders: ['react-hot', 'jsx-loader', 'babel-loader'], exclude: /node_modules/ },
+			{ test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
+			{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'file' }
 		]
 	}
 };
