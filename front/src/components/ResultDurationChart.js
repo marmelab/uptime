@@ -47,7 +47,6 @@ class ResultDurationChart extends LineChart {
       {"Destination":"google.fr","Status":"good","Time":3599,"Created_at":"2015-06-03T07:21:26.614191Z","Target_id":1},
       {"Destination":"google.fr","Status":"good","Time":5555,"Created_at":"2015-06-03T07:21:26.614191Z","Target_id":1},
       {"Destination":"google.fr","Status":"good","Time":2144,"Created_at":"2015-06-03T07:21:26.614191Z","Target_id":1}];
-      console.log(TargetStore.getResults());
     this.setState({ results: data });
   }
 }

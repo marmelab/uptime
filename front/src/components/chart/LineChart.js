@@ -55,6 +55,7 @@ class LineChart extends React.Component {
 			.attr('fill', 'none');
 	}
 
+
 	_xScale() {
 		return d3.scale.linear()
 			.domain([0, 14])
