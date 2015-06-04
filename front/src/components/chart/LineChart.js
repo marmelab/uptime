@@ -8,12 +8,12 @@ class LineChart extends React.Component {
 		/** @TODO: use constants */
 		this.margins = {
 			top: 10,
-			left: 50,
+			left: 100,
 			right: 20,
 			bottom: 30
 		};
-		this.width = 400;
-		this.height = 300.
+		this.width = 550;
+		this.height = 350.
 	}
 
 	/** @TODO: move state.results into props.results */
@@ -48,11 +48,20 @@ class LineChart extends React.Component {
 		var line = d3.svg.line()
 			.x((d, i) => xScale(i))
 			.y(d => yScale(d.Time));
-		d3.select(svg)
-			.append('path')
-			.attr('d', line(this.state.results))
-			.attr('stroke', (d, i) => colors(i))
-			.attr('fill', 'none');
+		var targets_id = this._getTargetId(this.state.results);
+		for (var j = 0; j < targets_id.length; j++) {
+			var data = [];
+			for (var i = 0; i < this.state.results.length; i++) {
+				if((this.state.results[i].Target_id == targets_id[j]) && (this.state.results[i].Status == "good") && (this.state.results[i].Time != -1)) {
+					data.push(this.state.results[i]);
+				}
+			};
+			d3.select(svg)
+				.append('path')
+				.attr('d', line(data))
+				.attr('stroke', (d, i) => colors(i))
+				.attr('fill', 'none');
+		};
 	}
 
 
@@ -64,7 +73,7 @@ class LineChart extends React.Component {
 
 	_yScale() {
 		return d3.scale.linear()
-			.domain([10000, 0])
+			.domain([1000000, 0])
 			.range([this.margins.top, this.height - this.margins.top - this.margins.bottom]);
 	}
 
@@ -80,6 +89,16 @@ class LineChart extends React.Component {
 			.attr('class', 'y axis')
 			.attr('transform', `translate(${this.margins.left},${this.margins.top})`)
 			.call(axes[1]);
+	}
+
+	_getTargetId(data) {
+		var target_id = [];
+		for (var i = 0; i < data.length; i++) {
+			if(-1 == $.inArray(data[i].Target_id,target_id)) {
+				target_id.push(data[i].Target_id);
+			}
+		};
+		return target_id;
 	}
 }
 
