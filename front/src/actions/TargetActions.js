@@ -25,7 +25,7 @@ module.exports = {
 			Dispatcher.dispatch({
 				actionType: "TARGET:FETCH:ERROR"
 			});
-		})
+		});
 	},
 	fetchResults: function() {
 		Dispatcher.dispatch({

@@ -56,14 +56,22 @@ func HttpPing(url string, protocol string) (int, error) {
 		error := errors.New("url is null")
 		return -1, error
 	}
+
+	log.Printf("Pinging %v", url)
+
 	var duration int
 	timeNow := time.Now().Nanosecond()
 		_ , err := http.Get(protocol+"://"+url)
 		duration = time.Now().Nanosecond() - timeNow
+		duration = duration / 1000
 		if err != nil {
+			log.Printf("Error %v", err)
 			return duration, err
 		}
-		return duration / 1000, err
+
+		log.Printf("Duration: %vms", duration)
+
+		return duration, err
 }
 
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {

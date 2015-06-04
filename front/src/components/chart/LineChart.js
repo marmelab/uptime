@@ -44,11 +44,10 @@ class LineChart extends React.Component {
 
 		var svg = React.findDOMNode(this);
 		this._drawAxes(svg, [xAxis, yAxis]);
-
+		console.log(this.state.results);
 		var line = d3.svg.line()
 			.x((d, i) => xScale(i))
 			.y(d => yScale(d.Time));
-		console.log(this.state.results);
 		d3.select(svg)
 			.append('path')
 			.attr('d', line(this.state.results))

@@ -4,7 +4,6 @@ import (
 	"./api/target"
 	"./poller"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -56,7 +55,6 @@ func main() {
 				err = poller.DoPostOn(&response, conf["urlApiResults"].(string))
 			}
 			time.Sleep(time.Second * 10)
-			fmt.Println("===============================")
 		}
 	}
 }

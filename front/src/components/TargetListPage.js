@@ -25,11 +25,9 @@ class TargetListPage extends React.Component{
 		if (this.state.targets_loading) {
 			return	<img src="../loading.gif" alt="loading" />
 		}
-
 		if (this.state.targets_error){
 			return <h1>Error: no target found.</h1>
 		}
-		console.log(this.state.targets);
 		return <TargetDatagrid targets={this.state.targets} />;
 	}
 }

@@ -61,6 +61,7 @@ func main() {
 			error := rows.Scan(&id, &dest, &status)
 			log.Print(error)
 			if error != nil {
+				log.Print(error)
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}

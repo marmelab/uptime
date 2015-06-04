@@ -7,21 +7,22 @@ setup:
 
 init_db:
 	@docker-compose up -d db
-	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createTable.sql --username=postgres
+	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createDatabase.sql --username=postgres
+	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createTable.sql --username=postgres uptime
 	@docker-compose kill db
 	@echo "init_db completed"
 
 load_fixtures:
 	@docker-compose up -d db
-	@docker exec uptime_db_1 psql -f /usr/src/db/fixtures/fixtures.sql --username=postgres
+	@docker exec uptime_db_1 psql -c '\connect uptime' -f /usr/src/db/fixtures/fixtures.sql --username=postgres uptime
 	@docker-compose kill db
 	@echo "load_fixtures completed"
 
 run:
-	docker-compose up -d watcher
 	docker-compose up -d webpack
+	docker-compose up -d watcher
 	docker-compose up -d --no-deps client
-	docker-compose up -d --no-deps website
+	
 
 clear:
 	@docker-compose kill
