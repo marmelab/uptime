@@ -59,7 +59,7 @@ class LineChart extends React.Component {
 			d3.select(svg)
 				.append('path')
 				.attr('d', line(data))
-				.attr('stroke', (d, i) => colors(i))
+				.attr('stroke', (d, i) => colors(targets_id[j]))
 				.attr('fill', 'none');
 		};
 	}
