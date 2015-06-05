@@ -51,7 +51,7 @@ func main() {
 			FROM destination D
 			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
 		`)
-		if(errr != nil) {
+		if errr != nil {
 			log.Print("request error ", errr)
 		}
 		defer rows.Close()
@@ -97,7 +97,7 @@ func main() {
 					http.Error(w, http.StatusText(500), 500)
 					return
 				}
-				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim, Created_at: created_at, Target_id: target_id})
+				res = append(res, poller.Response{Destination: dest, Status: sta, Time: tim, Created_at: created_at, Target_id: target_id})
 			}
 			json.NewEncoder(w).Encode(res)
 		} else {
@@ -108,7 +108,6 @@ func main() {
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}
-			log.Print(newResult.Target_id)
 			_, _ = db.Exec("INSERT INTO Results (destination, status, duration, target_id) VALUES($1, $2, $3, $4)", newResult.Destination, newResult.Status, newResult.Time, newResult.Target_id)
 		}
 	})

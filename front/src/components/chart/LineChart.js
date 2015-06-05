@@ -1,5 +1,8 @@
 import React from 'react';
 
+var d3 = require('d3');
+d3.legend = require('d3-legend');
+
 class LineChart extends React.Component {
 	constructor(props) {
 		super(props);
@@ -12,8 +15,9 @@ class LineChart extends React.Component {
 			right: 20,
 			bottom: 30
 		};
-		this.width = 550;
-		this.height = 350.
+
+		this.width = 600;
+		this.height = 400;
 	}
 
 	/** @TODO: move state.results into props.results */
@@ -21,10 +25,14 @@ class LineChart extends React.Component {
 		if (!this.state.results) {
 			return;
 		}
+		this.drawChart();
+		return this;
+	}
 
-        this.drawChart();
-
-        return this;
+	componentWillUnmount() {
+		var svg = React.findDOMNode(this);
+		d3.select(svg).remove();
+		return this;
 	}
 
 	render() {
@@ -44,10 +52,10 @@ class LineChart extends React.Component {
 
 		var svg = React.findDOMNode(this);
 		this._drawAxes(svg, [xAxis, yAxis]);
-		console.log(this.state.results);
 		var line = d3.svg.line()
 			.x((d, i) => xScale(i))
 			.y(d => yScale(d.Time));
+
 		var targets_id = this._getTargetId(this.state.results);
 		for (var j = 0; j < targets_id.length; j++) {
 			var data = [];
@@ -67,7 +75,7 @@ class LineChart extends React.Component {
 
 	_xScale() {
 		return d3.scale.linear()
-			.domain([0, 14])
+			.domain([0, 100])
 			.range([this.margins.left, this.width - this.margins.right]);
 	}
 
@@ -83,12 +91,14 @@ class LineChart extends React.Component {
 			.attr('class', 'x axis')
 			.attr('transform', `translate(0,${this.height - this.margins.bottom})`)
 			.call(axes[0]);
-
 		d3.select(svg)
 			.append('g')
 			.attr('class', 'y axis')
 			.attr('transform', `translate(${this.margins.left},${this.margins.top})`)
-			.call(axes[1]);
+			.call(axes[1])
+			.append("text")
+			.attr("transform", "rotate(0)")
+			.text("Time (µsec)");
 	}
 
 	_getTargetId(data) {

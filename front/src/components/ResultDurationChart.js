@@ -5,7 +5,6 @@ import TargetAction from '../actions/TargetActions';
 class ResultDurationChart extends LineChart {
   constructor(props) {
     super(props);
-    this.state = TargetStore.getResults();
   }
 
   componentDidMount() {
@@ -14,6 +13,7 @@ class ResultDurationChart extends LineChart {
   }
 
   componentWillUnmount() {
+    super.componentWillUnmount();
     TargetStore.removeChangeListener(this.onChange.bind(this));
   }
   onChange() {
