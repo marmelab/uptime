@@ -39,17 +39,6 @@ func main() {
 			return
 		}
 
-		if r.Method == "POST" {
-
-		}
-		if r.Method == "PUT" {
-
-		}
-		if r.Method == "DELETE" {
-
-		}
-
-
 		rows, QueryError := db.Query(`
 			WITH last_results AS (
 				SELECT *, ROW_NUMBER() OVER(
