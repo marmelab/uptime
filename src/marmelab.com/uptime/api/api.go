@@ -39,7 +39,7 @@ func main() {
 			return
 		}
 
-		rows, errr := db.Query(`
+		rows, QueryError := db.Query(`
 			WITH last_results AS (
 				SELECT *, ROW_NUMBER() OVER(
 					PARTITION BY destination
@@ -51,8 +51,8 @@ func main() {
 			FROM destination D
 			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
 		`)
-		if errr != nil {
-			log.Print("request error ", errr)
+		if QueryError != nil {
+			log.Print("request error ", QueryError)
 		}
 		defer rows.Close()
 		ips := make([]target.Target_data, 0)

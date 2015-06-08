@@ -41,6 +41,11 @@ a{
 	shape-rendering: crispEdges;
 }
 .axis text {
-    font-family: Lato;
     font-size: 13px;
+}
+
+.navbar-counters {
+	position: absolute;
+	top: 0px;
+	right: 10px;
 }

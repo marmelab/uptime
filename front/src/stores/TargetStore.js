@@ -12,7 +12,7 @@ var results = [];
 
 var TargetStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
-		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error}
+		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error, results: results}
 		return data;
 	},
 	getResults: function(){

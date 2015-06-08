@@ -7,7 +7,7 @@ setup:
 
 init_db:
 	@docker-compose up -d db
-	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createDatabase.sql --username=postgres
+	@docker exec uptime_db_1 createdb --username=postgres uptime 
 	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createTable.sql --username=postgres uptime
 	@docker-compose kill db
 	@echo "init_db completed"

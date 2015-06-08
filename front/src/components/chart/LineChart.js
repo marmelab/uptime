@@ -1,28 +1,14 @@
 import React from 'react';
-
-var d3 = require('d3');
-d3.legend = require('d3-legend');
+import d3 from 'd3';
 
 class LineChart extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { results: [] };
-
-		/** @TODO: use constants */
-		this.margins = {
-			top: 10,
-			left: 100,
-			right: 20,
-			bottom: 30
-		};
-
-		this.width = 600;
-		this.height = 400;
+		this.props = { results: [] };
 	}
 
-	/** @TODO: move state.results into props.results */
 	componentDidUpdate() {
-		if (!this.state.results) {
+		if (!this.props.results) {
 			return;
 		}
 		this.drawChart();
@@ -37,7 +23,7 @@ class LineChart extends React.Component {
 
 	render() {
 		return (
-			<svg width={this.width} height={this.height}></svg>
+			<svg width={this.props.margins['width']} height={this.props.margins['height']}></svg>
 		);
 	}
 
@@ -56,18 +42,18 @@ class LineChart extends React.Component {
 			.x((d, i) => xScale(i))
 			.y(d => yScale(d.Time));
 
-		var targets_id = this._getTargetId(this.state.results);
-		for (var j = 0; j < targets_id.length; j++) {
+		var targets_id = this._getTargetsId(this.props.results);
+		for (var currentTargetIndex = 0; currentTargetIndex < targets_id.length; currentTargetIndex++) {
 			var data = [];
-			for (var i = 0; i < this.state.results.length; i++) {
-				if((this.state.results[i].Target_id == targets_id[j]) && (this.state.results[i].Status == "good") && (this.state.results[i].Time != -1)) {
-					data.push(this.state.results[i]);
+			for (var i = 0; i < this.props.results.length; i++) {
+				if((this.props.results[i].Target_id == targets_id[currentTargetIndex]) && (this.props.results[i].Status == "good") && (this.props.results[i].Time != -1)) {
+					data.push(this.props.results[i]);
 				}
 			};
 			d3.select(svg)
 				.append('path')
 				.attr('d', line(data))
-				.attr('stroke', (d, i) => colors(targets_id[j]))
+				.attr('stroke', (d, i) => colors(targets_id[currentTargetIndex]))
 				.attr('fill', 'none');
 		};
 	}
@@ -76,39 +62,39 @@ class LineChart extends React.Component {
 	_xScale() {
 		return d3.scale.linear()
 			.domain([0, 100])
-			.range([this.margins.left, this.width - this.margins.right]);
+			.range([this.props.margins['left'], this.props.margins['width'] - this.props.margins['right']]);
 	}
 
 	_yScale() {
 		return d3.scale.linear()
 			.domain([1000000, 0])
-			.range([this.margins.top, this.height - this.margins.top - this.margins.bottom]);
+			.range([this.props.margins['top'], this.props.margins['height'] - this.props.margins['top'] - this.props.margins['bottom']]);
 	}
 
 	_drawAxes(svg, axes) {
 		d3.select(svg)
 			.append('g')
 			.attr('class', 'x axis')
-			.attr('transform', `translate(0,${this.height - this.margins.bottom})`)
+			.attr('transform', `translate(0,${this.props.margins['height'] - this.props.margins['bottom']})`)
 			.call(axes[0]);
 		d3.select(svg)
 			.append('g')
 			.attr('class', 'y axis')
-			.attr('transform', `translate(${this.margins.left},${this.margins.top})`)
+			.attr('transform', `translate(${this.props.margins['left']},${this.props.margins['top']})`)
 			.call(axes[1])
 			.append("text")
 			.attr("transform", "rotate(0)")
 			.text("Time (µsec)");
 	}
 
-	_getTargetId(data) {
-		var target_id = [];
+	_getTargetsId(data) {
+		var targets_id = [];
 		for (var i = 0; i < data.length; i++) {
-			if(-1 == $.inArray(data[i].Target_id,target_id)) {
-				target_id.push(data[i].Target_id);
+			if(-1 == $.inArray(data[i].Target_id,targets_id)) {
+				targets_id.push(data[i].Target_id);
 			}
 		};
-		return target_id;
+		return targets_id;
 	}
 }
 
