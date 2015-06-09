@@ -10,3 +10,4 @@ VALUES
 (2, 'website', 'good',-1),
 (3, 'youtube.fr', 'failed', 300),
 (4, 'requestb.in/11li5eg1', 'good', 200);
+
