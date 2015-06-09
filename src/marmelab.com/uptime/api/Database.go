@@ -5,42 +5,56 @@ import (
 	_ "github.com/lib/pq"
 	"../poller"
 	"./target"
+	"errors"
+	"log"
 )
 
 var Db *sql.DB
 
-func getDb(){
-	if Db ==nil{
+func getDb() (*sql.DB, error) {
+	if Db == nil{
 		conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
 		configdb := conf["database"]
 		database := configdb.(map[string]interface{})
-		db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+		Db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
 	}
-	return Db
+	return Db, err
 }
 
-func AddTarget(db *sql.DB){
-	decoder := json.NewDecoder(r.Body)
-	var newTarget string
-	error := decoder.Decode(&newTarget)
-	if error != nil {
-		http.Error(w, http.StatusText(500), 500)
-		return
+func AddTarget(db *sql.DB, newTarget string) (error){
+	if(db == nil) {
+		error := errors.New("db = nil ")
+		return error		
 	}
-	_, _ = db.Exec("INSERT INTO Destination (destination) VALUES($1)", newTarget)
-
+	if(newTarget == nil) {
+		error := errors.New("newTarget = nil ")
+		return error		
+	}
+	_, err := db.Exec("INSERT INTO Destination (destination) VALUES($1)", newTarget)
+	return err;
 }
 
-func GetTarget(db *sql.DB, id int){
-	row, err := db.Exec("SELECT * from destination WHERE id = $1", id)
-	if QueryError != nil {
-		log.Print("request error ", QueryError)
+func GetTarget(db *sql.DB, id int) (sql.Result, error) {
+	if(db == nil) {
+		error := errors.New("db = nil ")
+		return nil, error		
 	}
-	defer rows.Close()
-	return rows	
+	if(id == nil) {
+		error := errors.New("id = nil ")
+		return nil, error		
+	}
+	row, err := db.Query("SELECT * from destination WHERE id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+	return row, nil
 }
 
-func GetTargets(db *sql.DB) {
+func GetTargets(db *sql.DB) (sql.Result, error) {
+	if(db == nil) {
+		error := errors.New("db = nil ")
+		return nil, error		
+	}
 	rows, QueryError := db.Query(`
 		WITH last_results AS (
 			SELECT *, ROW_NUMBER() OVER(
@@ -55,34 +69,35 @@ func GetTargets(db *sql.DB) {
 	`)
 	if QueryError != nil {
 		log.Print("request error ", QueryError)
+		return nil, QueryError
 	}
-	defer rows.Close()
-	return rows	
+	return rows, nil	
 }
 
-func UpdateTarget() {
-			if r.Method == "PUT" {
-			decoder := json.NewDecoder(r.Body)
-			var newTarget string
-			var oldTarget string
-			error := decoder.Decode(&newTarget, &oldTarget)
-			if error != nil {
-				http.Error(w, http.StatusText(500), 500)
-				return
-			}
-			_, _ = db.Exec("UPDATE Destination SET destination = $1 WHERE destination = $2",newTarget, oldTarget)
-		}
+func UpdateTarget(db *sql.DB, newTarget string, oldTarget string) (error){
+	db := getDb()
+	if(db == nil) {
+		error := errors.New("db = nil ")
+		return error		
+	}
+	if(newTarget == nil || oldTarget == nil) {
+		error := errors.New("string = nil ")
+		return error		
+	}	
+	_, err := db.Exec("UPDATE Destination SET destination = $1 WHERE destination = $2",newTarget, oldTarget)
+	return err
 }
 
-func DeleteTarget() {
-			if r.Method == "DELETE" {
-			decoder := json.NewDecoder(r.Body)
-			var target string
-			error := decoder.Decode(&target)
-			if error != nil {
-				http.Error(w, http.StatusText(500), 500)
-				return
-			}
-			_, _ = db.Exec("DELETE FROM Destination WHERE destination = $1",target)
-		}
+func DeleteTarget(db *sql.DB, target string) {
+	db := getDb()
+	if(db == nil) {
+		error := errors.New("db = nil ")
+		return error		
+	}
+	if(target == nil) {
+		error := errors.New("target = nil ")
+		return error		
+	}		
+	_, err := db.Exec("DELETE FROM Destination WHERE destination = $1",target)
+	return err
 }

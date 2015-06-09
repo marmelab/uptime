@@ -15,19 +15,19 @@ var routes = Routes{
 	Route{
 		"RetrieveTargets",
 		"GET",
-		"/ips",
+		"/targets",
 		RetrieveTargets,
 	},
 	Route{
 		"CreateTarget",
 		"POST",
-		"/ips",
+		"/targets",
 		CreateTarget,
 	},
 	Route{
 		"ShowTarget",
 		"GET",
-		"/ips/{id}",
+		"/targets/{id}",
 		ShowTarget,
 	},
 	Route{
