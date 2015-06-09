@@ -3,17 +3,23 @@ package main
 import (
 	"database/sql"
 	_ "github.com/lib/pq"
+	"../poller"
+	"./target"
 )
 
-func initDb(){
-	conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
-	configdb := conf["database"]
-	database := configdb.(map[string]interface{})
-	db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
-	return db
+var Db *sql.DB
+
+func getDb(){
+	if Db ==nil{
+		conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
+		configdb := conf["database"]
+		database := configdb.(map[string]interface{})
+		db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+	}
+	return Db
 }
 
-func AddTarget(db *DB){
+func AddTarget(db *sql.DB){
 	decoder := json.NewDecoder(r.Body)
 	var newTarget string
 	error := decoder.Decode(&newTarget)
@@ -25,8 +31,13 @@ func AddTarget(db *DB){
 
 }
 
-func GetTarget(){
-
+func GetTarget(db *sql.DB, id int){
+	row, err := db.Exec("SELECT * from destination WHERE id = $1", id)
+	if QueryError != nil {
+		log.Print("request error ", QueryError)
+	}
+	defer rows.Close()
+	return rows	
 }
 
 func GetTargets(db *sql.DB) {
