@@ -9,7 +9,6 @@ import (
 	"../target"
 )
 
-// se connecter a une autre db ? uptimetest mais identique a uptime ? avec les mm tables ?
 func TestGetDbShouldNotTriggerError(t *testing.T) {
 	db, err := Database.getDb()
 	if err != nil {
@@ -21,7 +20,7 @@ func TestGetDbShouldNotTriggerError(t *testing.T) {
 }
 
 func TestAddValidTargetShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
+	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
 	var expectedTarget target.Target_data{Destination="youtube.fr"}
 	errorAddTarget := Database.AddTarget(db, expectedTarget.Destination)
 	if(errorAddTarget != nil) {
@@ -44,7 +43,7 @@ func TestAddValidTargetShouldNotTriggerError(t *testing.T) {
 }
 
 func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
+	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
 	var expectedTarget target.Target_data{Destination=nil}
 	errorAddTarget := Database.AddTarget(db, expectedTarget.Destination)
 	if(errorAddTarget == nil) {
@@ -66,9 +65,7 @@ func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
 }
 
 func TestGetValidTargetShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	_,_ = db.Exec("INSERT testDestination (destination) VALUES($1)", expectedTarget.Destination)
+	db := target.AddTarget("youtube.com")
 	actualTarget, error := Database.getTarget(db, 2)
 	if error != nil {
 		t.Error("Error get a valid target should not raise a error", error)
@@ -80,9 +77,7 @@ func TestGetValidTargetShouldNotTriggerError(t *testing.T) {
 }
 
 func TestGetInvalidTargetShouldTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	_,_ = db.Exec("INSERT testDestination (destination) VALUES($1)", expectedTarget.Destination)
+	db := target.AddTarget("youtube.com")
 	actualTarget, error := Database.getTarget(db, 4)
 	if error == nil {
 		t.Error("Error get a inexistante target should raise a error", error)
@@ -94,10 +89,8 @@ func TestGetInvalidTargetShouldTriggerError(t *testing.T) {
 }
 
 func TestGetTargetsShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	 var expectedTarget2 target.Target_data{Destination="facebook.com"}
-	_,_ = db.Exec("INSERT testDestination (destination) VALUES ($1), ($2)", expectedTarget.Destination, expectedTarget2.Destination)
+	db := target.AddTarget("youtube.com")
+	_ = target.AddTarget("facebook.com")
 	actualTargets, error := Database.getTargets(db)
 	if error != nil {
 		t.Error("Error get targets should not raise a error", error)
@@ -111,11 +104,9 @@ func TestGetTargetsShouldNotTriggerError(t *testing.T) {
 }
 
 func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	_, _ = db.Exec("INSERT testDestination (destination) VALUES ($1)", expectedTarget.Destination)
+	db := target.AddTarget("youtube.com")
 	var expectedTarget2 target.Target_data{Destination="facebook.com"}
-	error := UpdateTarget(db,expectedTarget2.Destination, expectedTarget.Destination)
+	error := Database.UpdateTarget(db,expectedTarget2.Destination, expectedTarget.Destination)
 	if error != nil {
 		t.Error("replace a valid target with a valid target should not raise a error")
 	}
@@ -127,11 +118,9 @@ func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 }
 
 func TestUpdateInvalideTargetShouldTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	_, _ = db.Exec("INSERT testDestination (destination) VALUES ($1)", expectedTarget.Destination)
+	db := target.AddTarget("youtube.com")
 	var expectedTarget2 target.Target_data{Destination="facebook.com"}
-	error := UpdateTarget(db,expectedTarget2.Destination, nil)
+	error := Database.UpdateTarget(db,expectedTarget2.Destination, nil)
 	if error == nil {
 		t.Error("replace a invalid target should raise a error")
 	}
@@ -143,10 +132,8 @@ func TestUpdateInvalideTargetShouldTriggerError(t *testing.T) {
 }
 
 func TestDeleteValidTargetShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	_, _ = db.Exec("INSERT testDestination (destination) VALUES ($1)", expectedTarget.Destination)
-	error := DeleteTarget(db, expectedTarget.Destination)
+	db := target.AddTarget("youtube.com")
+	error := Database.DeleteTarget(db, expectedTarget.Destination)
 	if error != nil {
 		t.Error("delete a valid target should not raise a error")
 	}
@@ -157,10 +144,8 @@ func TestDeleteValidTargetShouldNotTriggerError(t *testing.T) {
 }
 
 func TestDeleteInvalidTargetShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptime sslmode=disable")
-	var expectedTarget target.Target_data{Destination="youtube.fr"}
-	_, _ = db.Exec("INSERT testDestination (destination) VALUES ($1)", expectedTarget.Destination)
-	error := DeleteTarget(db, nil)
+	db := target.AddTarget("youtube.com")
+	error := Database.DeleteTarget(db, nil)
 	if error == nil {
 		t.Error("delete a invalid target should raise a error")
 	}
