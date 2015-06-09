@@ -9,7 +9,6 @@ watcher:
     links:
         - "api"
         - "website"
-
 api:
     image: golang
     environment:

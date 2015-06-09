@@ -4,7 +4,6 @@ import (
 	"./api/target"
 	"./poller"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -15,7 +14,8 @@ func main() {
 	response := poller.Response{}
 	var listOfDestination []target.Target_data
 	var url string
-	var duration int	
+	var duration int
+	var id int
 	for true {
 		conf := poller.RetrieveConfDbFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")
 		res, err := http.Get(conf["urlApiIp"].(string))
@@ -31,16 +31,17 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			c := make(chan string, len(listOfDestination))
+			c := make(chan *(target.Target_data))
+
 			go func() {
-				for _, value := range listOfDestination {
-					c <- value.Destination
-				}
-			}()
-			for range listOfDestination {
-				url = <-c
-				response.Destination = url
-					duration, err = poller.HttpPing(url,"http")
+				for true {
+					t := <-c
+					url = t.Destination
+					id = t.Id
+					log.Printf("consummed %v", url)
+					response.Destination = url
+					response.Target_id = id
+					duration, err = poller.HttpPing(url, "http")
 					response.Time = duration
 					if (err != nil) || (duration <= 0) {
 						response.Status = "failed"
@@ -53,10 +54,14 @@ func main() {
 							log.Print(err)
 						}
 					}
-				err = poller.DoPostOn(&response, conf["urlApiResults"].(string))
+					err = poller.DoPostOn(&response, conf["urlApiResults"].(string))
+				}
+			}()
+			for _, value := range listOfDestination {
+				c <- &value
+				log.Printf("sending %v", &value)
 			}
 			time.Sleep(time.Second * 10)
-			fmt.Println("===============================")
 		}
 	}
 }

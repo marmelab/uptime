@@ -7,11 +7,16 @@ var CHANGE_EVENT = 'change';
 var targets = [];
 var targets_error = false;
 var targets_loading = true;
+var results = [];
+
 
 var TargetStore = assign({}, EventEmitter.prototype, {
 	getAll: function() {
-		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error}
+		var data = {targets: targets, targets_loading: targets_loading, targets_error: targets_error, results: results}
 		return data;
+	},
+	getResults: function(){
+		return {results: results};
 	},
 	getTargets: function() {
 		return {targets: targets};
@@ -51,9 +56,26 @@ Dispatcher.register(function(action) {
 			targets_error = true;
 			TargetStore.emitChange();
 			break;
+			
+		case "RESULTS:FETCH:LOADING":
+			targets_loading = true;
+			TargetStore.emitChange();
+			break;
+
+		case "RESULTS:FETCH:SUCCESS":
+			results = action.content;
+			targets_error = false;
+			targets_loading = false;
+			TargetStore.emitChange();
+			break;
+
+		case "RESULTS:FETCH:ERROR":
+			targets_error = true;
+			TargetStore.emitChange();
+			break;
 	}
 });
 
-module.exports = TargetStore;
+export default TargetStore;
 
 

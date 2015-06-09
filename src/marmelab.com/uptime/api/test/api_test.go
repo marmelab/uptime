@@ -7,16 +7,16 @@ import (
 	"testing"
 )
 
-func TestSetCorsShouldNotTriggerError(t *testing.T) {
-	exepectedH := &http.Header{}
-	exepectedH.Set("Access-Control-Allow-Origin", "*")
-	exepectedH.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	exepectedH.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+func TestSetCorsShouldEffectivelySetCORSHeaders(t *testing.T) {
+	expectedH := &http.Header{}
+	expectedH.Set("Access-Control-Allow-Origin", "*")
+	expectedH.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	expectedH.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	actualH := &http.Header{}
 	main.SetCors(actualH)
 
-	if !reflect.DeepEqual(exepectedH, actualH) {
-		t.Error("Error SetCors don't allow Cors")
+	if !reflect.DeepEqual(expectedH, actualH) {
+		t.Error("Error SetCors doesn't allow CORS")
 	}
 }

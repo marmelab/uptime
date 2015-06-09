@@ -6,18 +6,19 @@ import (
 	"fmt"
 	"golang.org/x/net/icmp"
 	"io/ioutil"
-	"net"
-	"time"
 	"log"
+	"net"
 	"net/http"
+	"time"
 )
 
 type Response struct {
 	Destination string
 	Status      string
 	Time        int
+	Created_at  time.Time
+	Target_id   int
 }
-
 
 func RetrieveIpsFromJsonFile(fileName string) (data map[string]string) {
 	content, err := ioutil.ReadFile(fileName)
@@ -50,18 +51,26 @@ func FromDomainNameToIp(domainName string) (ip *net.IPAddr, err error) {
 }
 
 func HttpPing(url string, protocol string) (int, error) {
-	if(url == "") {
+	if url == "" {
 		error := errors.New("url is null")
 		return -1, error
 	}
+
+	log.Printf("Pinging %v", url)
+
 	var duration int
 	timeNow := time.Now().Nanosecond()
-		_ , err := http.Get(protocol+"://"+url)
-		duration = time.Now().Nanosecond() - timeNow
-		if err != nil {
-			return duration, err
-		}
-		return duration / 1000, err
+	_, err := http.Get(protocol + "://" + url)
+	duration = time.Now().Nanosecond() - timeNow
+	duration = duration / 1000
+	if err != nil {
+		log.Printf("Error %v", err)
+		return duration, err
+	}
+
+	log.Printf("Duration: %vms", duration)
+
+	return duration, err
 }
 
 func Ping(ip *net.IPAddr, packetConn *icmp.PacketConn) (int, error) {

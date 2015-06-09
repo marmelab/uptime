@@ -20,7 +20,7 @@ class TargetDatagrid extends React.Component {
                 <tr>
                     <th>Id</th>
                     <th>Destination</th>
-                    <th>Satus</th>
+                    <th>Status</th>
                 </tr>
                 {this.buildRow(this.props.targets.length)}
             </table>

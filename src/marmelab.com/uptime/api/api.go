@@ -9,6 +9,7 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"net/http"
+	"time"
 )
 
 func SetCors(w *http.Header) {
@@ -38,7 +39,7 @@ func main() {
 			return
 		}
 
-		rows, _ := db.Query(`
+		rows, QueryError := db.Query(`
 			WITH last_results AS (
 				SELECT *, ROW_NUMBER() OVER(
 					PARTITION BY destination
@@ -50,7 +51,9 @@ func main() {
 			FROM destination D
 			LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
 		`)
-
+		if QueryError != nil {
+			log.Print("request error ", QueryError)
+		}
 		defer rows.Close()
 		ips := make([]target.Target_data, 0)
 		for rows.Next() {
@@ -60,6 +63,7 @@ func main() {
 			error := rows.Scan(&id, &dest, &status)
 			log.Print(error)
 			if error != nil {
+				log.Print(error)
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}
@@ -78,19 +82,22 @@ func main() {
 		}
 
 		if r.Method == "GET" {
-			rows, _ := db.Query("SELECT destination, status, duration FROM results")
+			rows, _ := db.Query("SELECT destination, status, duration,  created_at, target_id FROM results")
 			defer rows.Close()
 			res := make([]poller.Response, 0)
 			for rows.Next() {
 				var dest string
 				var sta string
 				var tim int
-				error := rows.Scan(&dest, &sta, &tim)
+				var created_at time.Time
+				var target_id int
+				error := rows.Scan(&dest, &sta, &tim, &created_at, &target_id)
 				if error != nil {
+					log.Print(error)
 					http.Error(w, http.StatusText(500), 500)
 					return
 				}
-				res = append(res,poller.Response{Destination: dest, Status: sta, Time: tim})
+				res = append(res, poller.Response{Destination: dest, Status: sta, Time: tim, Created_at: created_at, Target_id: target_id})
 			}
 			json.NewEncoder(w).Encode(res)
 		} else {
@@ -101,7 +108,7 @@ func main() {
 				http.Error(w, http.StatusText(500), 500)
 				return
 			}
-			_, _ = db.Exec("INSERT INTO Results (destination, status, duration) VALUES($1, $2, $3)", newResult.Destination, newResult.Status, newResult.Time)
+			_, _ = db.Exec("INSERT INTO Results (destination, status, duration, target_id) VALUES($1, $2, $3, $4)", newResult.Destination, newResult.Status, newResult.Time, newResult.Target_id)
 		}
 	})
 

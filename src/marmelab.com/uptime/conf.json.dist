@@ -6,7 +6,7 @@
 		"host": "db",
 		"user": "postgres",
 		"password": "",
-		"dbname": "postgres",
+		"dbname": "uptime",
 		"sslmode": "disable"
 	}
 }
