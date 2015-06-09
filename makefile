@@ -18,12 +18,13 @@ load_fixtures:
 	@docker-compose kill db
 	@echo "load_fixtures completed"
 
+init_test:
+
 run:
 	docker-compose up -d webpack
 	docker-compose up -d watcher
 	docker-compose up -d --no-deps client
 	
-
 clear:
 	@docker-compose kill
 	@docker-compose rm

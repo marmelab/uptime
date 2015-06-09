@@ -9,6 +9,7 @@ import (
 	"../target"
 )
 
+// se connecter a une autre db ? uptimetest mais identique a uptime ? avec les mm tables ?
 func TestGetDbShouldNotTriggerError(t *testing.T) {
 	db, err := Database.getDb()
 	if err != nil {
