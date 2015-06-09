@@ -10,9 +10,9 @@ const margins = {
 		left: 100,
 		right: 20,
 		bottom: 30,
-		width: 600,
-		height: 400
-	};
+};
+const width = 600;
+const height = 400;
 
 class TargetListPage extends React.Component{
 	constructor(props){
@@ -42,10 +42,10 @@ class TargetListPage extends React.Component{
 		}
 		return(	
 			<div>
-					<h1>Global view of targets status :</h1>
-					<TargetDatagrid id="content" targets={this.state.targets} />
-					<TargetsCounter id="targets_counter" className="nav navbar-nav navbar-right"targets={this.state.targets} />
-					<LineChart id="results_chart" results={this.state.results} margins={margins}/>
+				<h1>Global view of targets status :</h1>
+				<TargetDatagrid id="content" targets={this.state.targets} />
+				<TargetsCounter id="targets_counter" className="nav navbar-nav navbar-right"targets={this.state.targets} />
+				<LineChart id="results_chart" results={this.state.results} margins={margins} width={width} height={height}/>
 			</div>
 		);
 	}

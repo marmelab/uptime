@@ -23,7 +23,7 @@ class LineChart extends React.Component {
 
 	render() {
 		return (
-			<svg width={this.props.margins['width']} height={this.props.margins['height']}></svg>
+			<svg width={this.props.width} height={this.props.height}></svg>
 		);
 	}
 
@@ -62,20 +62,20 @@ class LineChart extends React.Component {
 	_xScale() {
 		return d3.scale.linear()
 			.domain([0, 100])
-			.range([this.props.margins['left'], this.props.margins['width'] - this.props.margins['right']]);
+			.range([this.props.margins['left'], this.props.width - this.props.right]);
 	}
 
 	_yScale() {
 		return d3.scale.linear()
 			.domain([1000000, 0])
-			.range([this.props.margins['top'], this.props.margins['height'] - this.props.margins['top'] - this.props.margins['bottom']]);
+			.range([this.props.margins['top'], this.props.height - this.props.margins['top'] - this.props.margins['bottom']]);
 	}
 
 	_drawAxes(svg, axes) {
 		d3.select(svg)
 			.append('g')
 			.attr('class', 'x axis')
-			.attr('transform', `translate(0,${this.props.margins['height'] - this.props.margins['bottom']})`)
+			.attr('transform', `translate(0,${this.props.height - this.props.margins['bottom']})`)
 			.call(axes[0]);
 		d3.select(svg)
 			.append('g')
