@@ -13,7 +13,7 @@ var Db *sql.DB
 
 func GetDb() (Db *sql.DB, err error) {
 	if Db == nil {
-		conf := poller.RetrieveConfDbFromJsonFile("/usr/src/api/src/marmelab.com/uptime/conf.json")
+		conf := poller.RetrieveConfDbFromJsonFile("../../conf.json")
 		configdb := conf["database"]
 		database := configdb.(map[string]interface{})
 		Db, err = sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
