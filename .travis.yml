@@ -5,7 +5,7 @@ install:
     - go get github.com/lib/pq
     - cd src/marmelab.com/uptime/poller
 before_script:
-    - psql -c 'create database uptimeTest' -U postgres
+    - createdb uptimeTest -U postgres
     - psql -f /usr/src/db/migration/createTable.sql --username=postgres uptimeTest
     - psql -c '\connect uptimeTest' -f /usr/src/db/fixtures/test_fixtures.sql --username=postgres uptimeTest
 script:
