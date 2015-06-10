@@ -1,5 +1,7 @@
 language: go
-
+addons:
+    hosts:
+        - db
 install:
     - go get golang.org/x/net/icmp
     - go get github.com/lib/pq
