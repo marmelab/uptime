@@ -20,9 +20,9 @@ load_fixtures:
 
 init_db_test:
 	@docker-compose up -d db
-	@docker exec uptime_db_1 createdb --username=postgres uptime 
+	@docker exec uptime_db_1 createdb --username=postgres uptimeTest 
 	@docker exec uptime_db_1 psql -f /usr/src/db/migration/createTable.sql --username=postgres uptimeTest
-	@docker exec uptime_db_1 psql -c '\connect uptimeTest' -f /usr/src/db/fixtures/test_fixtures.sql --username=postgres uptime
+	@docker exec uptime_db_1 psql -c '\connect uptimeTest' -f /usr/src/db/fixtures/test_fixtures.sql --username=postgres uptimeTest
 	@docker-compose kill db
 	@echo "init_db_test completed"
 run:

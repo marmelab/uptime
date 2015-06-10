@@ -10,10 +10,11 @@ type Target_data struct {
 	Status bool `json:"status"`
 }
 
+
 func AddTarget(destination string) (*sql.DB) {
 	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
-	var expectedTarget target.Target_data{Destination=destination}
-	_,_ = db.Exec("INSERT Destination (destination) VALUES($1)", expectedTarget.Destination)
+	expectedTarget := Target_data{Destination: destination}
+	_, _ = db.Exec("INSERT INTO Destination (destination) VALUES($1)", expectedTarget.Destination)
 	return db
 }
 
