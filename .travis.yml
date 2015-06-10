@@ -6,10 +6,14 @@ install:
     - go get golang.org/x/net/icmp
     - go get github.com/lib/pq
 before_script:
+    - createdb uptime -U postgres
+    - psql -f migration/createTable.sql --username=postgres uptime
+    - psql -c '\connect uptime' -f fixtures/fixtures.sql --username=postgres uptime
     - createdb uptimeTest -U postgres
     - psql -f migration/createTable.sql --username=postgres uptimeTest
     - psql -c '\connect uptimeTest' -f fixtures/test_fixtures.sql --username=postgres uptimeTest
 script:
+    - cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json
     - cd src/marmelab.com/uptime/poller
     - go test
     - cd ../api/test
