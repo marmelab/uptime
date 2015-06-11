@@ -1,16 +1,34 @@
 package test
 
 import (
-	"../database"
-	Target "../target"
+	"../repositories"
+	"../target"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"reflect"
 	"testing"
+	"log"
+	"../../poller"
 )
 
+func connectToDB() (*sql.DB, error){
+	configdb := poller.RetrieveConfDbFromJsonFile("conf_test.json")
+	return sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
+}
+func addTarget(destination string) (target.Target_data, *sql.DB) {
+	var result target.Target_data
+	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
+	expectedTarget := target.Target_data{Destination: destination}
+	_ = db.QueryRow("INSERT INTO Destination (destination) VALUES($1) RETURNING id", expectedTarget.Destination).Scan(&result.Id)
+	return result, db
+}
+
+func emptyDatabase(db *sql.DB) {
+	_, _ = db.Exec("TRUNCATE Destination")
+}
+
 func TestGetDbShouldNotTriggerError(t *testing.T) {
-	db, err := database.GetDb()
+	db, err := repositories.GetDb()
 	if err != nil {
 		t.Error("getDb should not raise a error", err)
 	}
@@ -20,29 +38,31 @@ func TestGetDbShouldNotTriggerError(t *testing.T) {
 }
 
 func TestAddValidTargetShouldNotTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
-	errorAddTarget := database.AddTarget(db, "youtube.fr")
+	db, _ := connectToDB()
+	newTarget := target.Target_data{Destination: "youtube.fr"}
+	newTargetAdded, errorAddTarget := repositories.AddTarget(db, newTarget)
 	if errorAddTarget != nil {
-		t.Error("Error add a valid target should not trigger a error")
+		t.Error("Error add a valid target should not trigger a error", errorAddTarget)
 	}
-	row, err := db.Query("SELECT destination FROM Destination WHERE destination = $1", "youtube.fr")
+	row, err := db.Query("SELECT * FROM Destination WHERE id = $1", newTargetAdded.Id)
 	defer row.Close()
-	var destination string
+	var actualTarget target.Target_data
 	for row.Next() {
-		error := row.Scan(&destination)
+		error := row.Scan(&actualTarget.Id, &actualTarget.Destination)
 		if error != nil {
 			t.Error("Error addTarget doesn't add the target in database", err)
 		}
 	}
-	if !reflect.DeepEqual("youtube.fr", destination) {
+	if !reflect.DeepEqual(actualTarget.Destination, newTarget.Destination) {
 		t.Error("the row returned is different to the row inserted")
 	}
-	Target.DeleteTarget(db, "youtube.fr")
+	emptyDatabase(db)
 }
 
 func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
-	errorAddTarget := database.AddTarget(db, "")
+	db, _ := connectToDB()
+	newTarget := target.Target_data{Destination: ""}
+	_, errorAddTarget := repositories.AddTarget(db, newTarget)
 	if errorAddTarget == nil {
 		t.Error("Error add a invalid target should trigger a error", errorAddTarget)
 	}
@@ -58,33 +78,33 @@ func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
 }
 
 func TestGetValidTargetShouldNotTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	actualTarget, error := database.GetTarget(db, "youtube.com")
+	_, db := addTarget("youtube.com")
+	actualTarget, error := repositories.GetTarget(db, "youtube.com")
 	if error != nil {
 		t.Error("Error get a valid target should not raise a error", error)
 	}
 	if !reflect.DeepEqual("youtube.com", actualTarget.Destination) {
 		t.Error("Error get a valid target should return the same target as inserted")
 	}
-	Target.DeleteTarget(db, "youtube.com")
+	emptyDatabase(db)
 }
 
 func TestGetInvalidTargetShouldTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	actualTarget, error := database.GetTarget(db, "")
+	_, db := addTarget("youtube.com")
+	actualTarget, error := repositories.GetTarget(db, "")
 	if error == nil {
-		t.Error("Error get a inexistante target should raise a error", error)
+		t.Error("Error get a inexistant target should raise a error", error)
 	}
 	if reflect.DeepEqual("youtube.com", actualTarget.Destination) {
 		t.Error("Error expectedTarget actualTarget should be nil")
 	}
-	Target.DeleteTarget(db, "youtube.com")
+	emptyDatabase(db)
 }
 
-func TestGetTargetsShouldNotTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	_ = Target.AddTarget("facebook.com")
-	actualTargets, error := database.GetTargets(db)
+func TestGetTargetsWithLastResultShouldNotTriggerError(t *testing.T) {
+	_, db := addTarget("youtube.com")
+	_, _ = addTarget("facebook.com")
+	actualTargets, error := repositories.GetTargetsWithLastResult(db)
 	if error != nil {
 		t.Error("Error get targets should not raise a error", error)
 	}
@@ -92,67 +112,69 @@ func TestGetTargetsShouldNotTriggerError(t *testing.T) {
 	if reflect.DeepEqual(actualTargets, rows) {
 		t.Error("Error expectedTarget actualTarget should be nil")
 	}
-	Target.DeleteTarget(db, "youtube.com")
-	Target.DeleteTarget(db, "facebook.com")
+	emptyDatabase(db)
+	emptyDatabase(db)
 }
 
 func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	expectedTarget2 := "facebook.com"
-	error := database.UpdateTarget(db, expectedTarget2, "youtube.com")
+	returned, db := addTarget("youtube.com")
+	expectedTarget := target.Target_data{Destination: "facebook.com"}
+	log.Print(returned.Id)
+	error := repositories.UpdateTarget(db, expectedTarget,returned.Id)
 	if error != nil {
 		t.Error("replace a valid target with a valid target should not raise a error")
 	}
-	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", expectedTarget2)
+	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", expectedTarget.Destination)
 	var destination string
 	for row.Next() {
 		_ = row.Scan(&destination)
 	}
-	if !reflect.DeepEqual(expectedTarget2, destination) {
+	if !reflect.DeepEqual(expectedTarget.Destination, destination) {
 		t.Error("Error expectedTarget and actualTarget are different")
 	}
-	Target.DeleteTarget(db, "facebook.com	")
+	emptyDatabase(db)
 }
 
 func TestUpdateInvalideTargetShouldTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	expectedTarget2 := "facebook.com"
-	error := database.UpdateTarget(db, expectedTarget2, "")
+	_, db := addTarget("youtube.com")
+	expectedTarget := target.Target_data{Destination: "facebook.com"}
+	error := repositories.UpdateTarget(db, expectedTarget, -4)
 	if error == nil {
 		t.Error("replace a invalid target should raise a error")
 	}
-	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", expectedTarget2)
+	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", expectedTarget.Destination)
 	if reflect.DeepEqual("youtube.com", row) {
 		t.Error("Error expectedTarget actualTarget should be different")
 	}
-	Target.DeleteTarget(db, "youtube.com")
+	emptyDatabase(db)
 }
 
 func TestDeleteValidTargetShouldNotTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	error := database.DeleteTarget(db, "youtube.com")
+	returned, db := addTarget("youtube.com")
+	returned2, error := repositories.DeleteTarget(db, returned.Id)
+	expectedTarget := target.Target_data{Id: returned2.Id, Destination: "youtube.com"}
 	if error != nil {
 		t.Error("delete a valid target should not raise a error")
 	}
-	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", "youtube.com")
-	var destination string
+	row, _ := db.Query("SELECT * FROM Destination WHERE id = $1", returned2.Id)
+	var actualTarget target.Target_data
 	for row.Next() {
-		_ = row.Scan(&destination)
+		_ = row.Scan(&actualTarget.Id, & actualTarget.Destination)
 	}
-	if reflect.DeepEqual("youtube", destination) {
+	if reflect.DeepEqual(expectedTarget, actualTarget) {
 		t.Error("Error expectedTarget and actualTarget are different")
 	}
 }
 
 func TestDeleteInvalidTargetShouldNotTriggerError(t *testing.T) {
-	db := Target.AddTarget("youtube.com")
-	error := database.DeleteTarget(db, "")
+	_, db := addTarget("youtube.com")
+	_, error := repositories.DeleteTarget(db, -1)
 	if error == nil {
 		t.Error("delete a invalid target should raise a error")
 	}
-	_, err := db.Query("SELECT destination FROM Destination WHERE destination = $1", "youtube.com")
+	_, err := db.Query("SELECT destination FROM Destination WHERE id = $1", 1)
 	if err != nil {
 		t.Error("get a target should not raise a error")
 	}
-	Target.DeleteTarget(db, "youtube.com")
+	emptyDatabase(db)
 }
