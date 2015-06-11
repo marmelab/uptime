@@ -2,11 +2,11 @@ package database
 
 import (
 	"../../poller"
+	Target "../target"
 	"database/sql"
 	"errors"
 	_ "github.com/lib/pq"
 	"log"
-	Target "../target"
 )
 
 var Db *sql.DB

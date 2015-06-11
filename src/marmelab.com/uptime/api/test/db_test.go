@@ -5,7 +5,6 @@ import (
 	Target "../target"
 	"database/sql"
 	_ "github.com/lib/pq"
-	//"log"
 	"reflect"
 	"testing"
 )
@@ -22,38 +21,36 @@ func TestGetDbShouldNotTriggerError(t *testing.T) {
 
 func TestAddValidTargetShouldNotTriggerError(t *testing.T) {
 	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
-	expectedTarget := "youtube.fr"
-	errorAddTarget := database.AddTarget(db, expectedTarget)
+	errorAddTarget := database.AddTarget(db, "youtube.fr")
 	if errorAddTarget != nil {
-		t.Error("Error add a valid target should not trigger a error")	
+		t.Error("Error add a valid target should not trigger a error")
 	}
-	row, err := db.Query("SELECT destination FROM Destination WHERE destination = $1", expectedTarget)
+	row, err := db.Query("SELECT destination FROM Destination WHERE destination = $1", "youtube.fr")
 	defer row.Close()
-	var dest string
+	var destination string
 	for row.Next() {
-		error := row.Scan(&dest)
+		error := row.Scan(&destination)
 		if error != nil {
 			t.Error("Error addTarget doesn't add the target in database", err)
 		}
 	}
-	actualTarget := dest
-	if !reflect.DeepEqual(expectedTarget, actualTarget) {
-		t.Error("Error addTarget doesn't add the target in database")
+	if !reflect.DeepEqual("youtube.fr", destination) {
+		t.Error("the row returned is different to the row inserted")
 	}
 	Target.DeleteTarget(db, "youtube.fr")
 }
 
 func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
 	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
-	errorAddTarget := database.AddTarget(db, "")	
+	errorAddTarget := database.AddTarget(db, "")
 	if errorAddTarget == nil {
 		t.Error("Error add a invalid target should trigger a error", errorAddTarget)
 	}
 	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", "")
 	defer row.Close()
-	var dest string
+	var destination string
 	for row.Next() {
-		error := row.Scan(&dest)
+		error := row.Scan(&destination)
 		if error == nil {
 			t.Error("Error scan a  invalid target should trigger a error", error)
 		}
@@ -107,11 +104,11 @@ func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 		t.Error("replace a valid target with a valid target should not raise a error")
 	}
 	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", expectedTarget2)
-	var dest string
+	var destination string
 	for row.Next() {
-		_ = row.Scan(&dest)
+		_ = row.Scan(&destination)
 	}
-	if !reflect.DeepEqual(expectedTarget2, dest) {
+	if !reflect.DeepEqual(expectedTarget2, destination) {
 		t.Error("Error expectedTarget and actualTarget are different")
 	}
 	Target.DeleteTarget(db, "facebook.com	")
@@ -138,11 +135,11 @@ func TestDeleteValidTargetShouldNotTriggerError(t *testing.T) {
 		t.Error("delete a valid target should not raise a error")
 	}
 	row, _ := db.Query("SELECT destination FROM Destination WHERE destination = $1", "youtube.com")
-	var dest string
+	var destination string
 	for row.Next() {
-		_ = row.Scan(&dest)
+		_ = row.Scan(&destination)
 	}
-	if reflect.DeepEqual("youtube", dest) {
+	if reflect.DeepEqual("youtube", destination) {
 		t.Error("Error expectedTarget and actualTarget are different")
 	}
 }
