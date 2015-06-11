@@ -17,7 +17,7 @@ func connectToDB() (*sql.DB, error){
 }
 func addTarget(destination string) (target.Target_data, *sql.DB) {
 	var result target.Target_data
-	db, _ := sql.Open("postgres", "host=db user=postgres dbname=uptimeTest sslmode=disable")
+	db, _ := connectToDB()
 	expectedTarget := target.Target_data{Destination: destination}
 	_ = db.QueryRow("INSERT INTO Destination (destination) VALUES($1) RETURNING id", expectedTarget.Destination).Scan(&result.Id)
 	return result, db

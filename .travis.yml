@@ -13,4 +13,8 @@ before_script:
     - psql -f migration/createTable.sql --username=postgres uptimeTest
     - psql -c '\connect uptimeTest' -f fixtures/test_fixtures.sql --username=postgres uptimeTest
 script:
-    - make test
+    - cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json
+    - cd src/marmelab.com/uptime/poller
+    - go test
+    - cd ../api/test
+    - go test
