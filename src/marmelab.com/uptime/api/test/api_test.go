@@ -1,7 +1,7 @@
 package test
 
 import (
-	"../../api"
+	"../handlers"
 	"net/http"
 	"reflect"
 	"testing"
@@ -14,7 +14,7 @@ func TestSetCorsShouldEffectivelySetCORSHeaders(t *testing.T) {
 	expectedH.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
 	actualH := &http.Header{}
-	main.SetCors(actualH)
+	handlers.SetCors(actualH)
 
 	if !reflect.DeepEqual(expectedH, actualH) {
 		t.Error("Error SetCors doesn't allow CORS")

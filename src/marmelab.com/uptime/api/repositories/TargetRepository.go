@@ -7,23 +7,15 @@ import (
 	"errors"
 	_ "github.com/lib/pq"
 	"log"
-	"fmt"
 )
 
 var db *sql.DB
 
 func GetDb() (db *sql.DB, err error) {
 	if db == nil {
-		configdb := poller.RetrieveConfDbFromJsonFile("../../conf.json")["database"]
+		configdb := poller.RetrieveConfDbFromJsonFile("../conf.json")["database"]
 		database := configdb.(map[string]interface{})
-		db, err = sql.Open("postgres", fmt.Sprintf(
-			"host=%v",
-			database["host"],
-			"user=%v",
-			database["user"],
-			"dbname=%v",
-			database["dbname"],
-		))
+		db, err = sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
 	}
 	return db, err
 }
@@ -42,17 +34,17 @@ func AddTarget(db *sql.DB, newTarget target.Target_data) (target.Target_data, er
 	return result, nil
 }
 
-func GetTarget(db *sql.DB, destination string) (target.Target_data, error) {
+func GetTarget(db *sql.DB, id int) (target.Target_data, error) {
 	var target_data target.Target_data
 	if db == nil {
 		error := errors.New("db = nil ")
 		return target_data, error
 	}
-	if destination == "" {
-		error := errors.New("destination = nil ")
+	if id <= 0 {
+		error := errors.New("id = nil ")
 		return target_data, error
 	}
-	row, err := db.Query("SELECT * from destination WHERE destination = $1", destination)
+	row, err := db.Query("SELECT * from destination WHERE id = $1", id)
 	if err != nil {
 		return target_data, err
 	}

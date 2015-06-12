@@ -78,8 +78,8 @@ func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
 }
 
 func TestGetValidTargetShouldNotTriggerError(t *testing.T) {
-	_, db := addTarget("youtube.com")
-	actualTarget, error := repositories.GetTarget(db, "youtube.com")
+	result, db := addTarget("youtube.com")
+	actualTarget, error := repositories.GetTarget(db, result.Id)
 	if error != nil {
 		t.Error("Error get a valid target should not raise a error", error)
 	}
@@ -91,7 +91,7 @@ func TestGetValidTargetShouldNotTriggerError(t *testing.T) {
 
 func TestGetInvalidTargetShouldTriggerError(t *testing.T) {
 	_, db := addTarget("youtube.com")
-	actualTarget, error := repositories.GetTarget(db, "")
+	actualTarget, error := repositories.GetTarget(db, -1)
 	if error == nil {
 		t.Error("Error get a inexistant target should raise a error", error)
 	}
