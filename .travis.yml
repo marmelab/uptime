@@ -7,7 +7,7 @@ install:
     - go get github.com/lib/pq
 before_script:
     - createdb uptime -U postgres
-    - psql -f migration/createTable.sql --username=postgres uptime
+    - psql -f var/schema.sql --username=postgres uptime
     - psql -c '\connect uptime' -f fixtures/fixtures.sql --username=postgres uptime
     - createdb uptimeTest -U postgres
     - psql -f migration/createTable.sql --username=postgres uptimeTest
