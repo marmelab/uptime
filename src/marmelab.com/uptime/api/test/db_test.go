@@ -12,7 +12,7 @@ import (
 )
 
 func connectToDB() (*sql.DB, error){
-	configdb := poller.RetrieveConfDbFromJsonFile("conf_test.json")
+	configdb := poller.RetrieveConfDbFromJsonFile("./conf_test.json")
 	return sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
 }
 func addTarget(destination string) (target.Target_data, *sql.DB) {

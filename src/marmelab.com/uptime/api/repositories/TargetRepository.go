@@ -7,6 +7,7 @@ import (
 	"errors"
 	_ "github.com/lib/pq"
 	"log"
+	"fmt"
 )
 
 var db *sql.DB
@@ -15,7 +16,14 @@ func GetDb() (db *sql.DB, err error) {
 	if db == nil {
 		configdb := poller.RetrieveConfDbFromJsonFile("../../conf.json")["database"]
 		database := configdb.(map[string]interface{})
-		db, err = sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+		db, err = sql.Open("postgres", fmt.Sprintf(
+			"host=%v",
+			database["host"],
+			"user=%v",
+			database["user"],
+			"dbname=%v",
+			database["dbname"],
+		))
 	}
 	return db, err
 }
