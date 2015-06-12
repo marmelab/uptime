@@ -5,6 +5,7 @@ addons:
 install:
     - go get golang.org/x/net/icmp
     - go get github.com/lib/pq
+    - go get github.com/gorilla/mux
 before_script:
     - createdb uptime -U postgres
     - psql -f var/schema.sql --username=postgres uptime
