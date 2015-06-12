@@ -26,17 +26,6 @@ init_db_test:
 	@docker-compose kill db
 	@echo "init_db_test completed"
 
-# test:
-# 	@make init_db_test
-#     @cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json
-#     @cd src/marmelab.com/uptime/poller
-#     @go test
-#     @cd ../api/test
-#     @go test
-
-# go_test:
-# 	@docker-compose run make test
-
 run:
 	docker-compose up -d webpack
 	docker-compose up -d watcher
