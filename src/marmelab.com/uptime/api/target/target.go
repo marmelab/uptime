@@ -1,7 +1,8 @@
 package target
 
 type Target_data struct {
-	Id int `json:"id"`
+	Id          int    `json:"id"`
 	Destination string `json:"destination"`
-	Status bool `json:"status"`
+	Status      bool   `json:"status"`
 }
+

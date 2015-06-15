@@ -1,0 +1,7 @@
+{
+	"host": "db",
+	"user": "postgres",
+	"password": "",
+	"dbname": "uptimeTest",
+	"sslmode": "disable"
+}

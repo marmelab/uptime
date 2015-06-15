@@ -11,4 +11,3 @@ CREATE TABLE results(
 	duration integer,
 	created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
-
