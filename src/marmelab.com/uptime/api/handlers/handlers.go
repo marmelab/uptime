@@ -52,13 +52,13 @@ func ShowTarget(w http.ResponseWriter, r *http.Request) {
 	id, _ :=strconv.Atoi(vars["id"])
 	db, errorGetDb:= repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print(errorGetDb)
+		log.Print("errorGetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return		
 	}
 	newTarget, errorGetTarget := repositories.GetTarget(db, id)
 	if errorGetTarget != nil {
-		log.Print(errorGetTarget)
+		log.Print("errorGetTarget", errorGetTarget)
 		http.Error(w, http.StatusText(500), 500)
 		return	
 	}

@@ -1,98 +1,69 @@
 package test
 
 import (
-	"../handlers"
+	Router "../router"
 	"net/http"
-	"reflect"
 	"testing"
+	"log"
+	"bytes"
+	"encoding/json"
 )
 
+func newServer() {
+	router := Router.NewRouter()
+	log.Fatal(http.ListenAndServe(":8384", router))
+}
+
+func TestBeforeTest(t *testing.T) {
+	go newServer()
+}
 func TestRetrieveTargetsShouldNotTriggerError(t *testing.T) {
-	/*
-	je monte un serveur
-	j'appel la méthode
-	je créer une request get et je controle le résultat
-	*/
+	response, err := http.Get("http://localhost:8384/targets")
+	if response.StatusCode != http.StatusOK {
+		t.Error("Error, RetrieveTargets should not return a error", err)
+	}
 }
 
-func TestShowTargetWithNullIdShouldTriggerError() {
-	/*
-	je monte un serveur
-	j'appel la méthode avec id = 0
-	je créer une request get et je controle le résultat
-	*/	
+
+func TestShowTargetWithValidIdShouldNotTriggerError(t *testing.T) {
+	response, err := http.Get("http://localhost:8384/targets/1")
+	if response.StatusCode != http.StatusOK {
+		t.Error("Error, ShowTarget should not return a error", err)
+	}
 }
 
-func TestShowTargetWithNegatifIdShouldTriggerError() {
-	/*
-	je monte un serveur
-	j'appel la méthode avec id = -1
-	je créer une request get et je controle le résultat
-	*/	
+func TestShowTargetWithBadIdsShouldTriggerError(t *testing.T) {
+	ids := [3]string{"-1","0","14235581485"}
+	for i := 0; i < 3; i++ {
+		response, err := http.Get("http://localhost:8384/targets/"+ids[i])
+		if response.StatusCode == http.StatusOK {
+			t.Error("Error, ShowTarget should return a error", err)
+		}	
+	}
 }
 
-func TestShowTargetWithValidIdShouldNotTriggerError() {
-	/*
-	je monte un serveur
-	j'appel la méthode avec id = 1
-	je créer une request get et je controle le résultat
-	*/
+func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
+	data,_ := json.Marshal("testCreateTarget")
+	_, error := http.NewRequest("POST", "http://localhost:8384/targets", bytes.NewBuffer(data))
+	if error != nil {
+		t.Error("Error, CreateTarget should not return a error", error)
+	}
 }
 
-func TestShowTargetWithNBigIdShouldTriggerError() {
-	/*
-	je monte un serveur
-	j'appel la méthode avec id = 20000
-	je créer une request get et je controle le résultat
-	*/	
+func TestUpdateTargetWithNullIdShouldTriggerError(t *testing.T) {
+	data,_ := json.Marshal("testUpdateTarget")
+	_, error := http.NewRequest("PUT", "http://localhost:8384/targets/1", bytes.NewBuffer(data))
+	if error != nil {
+		t.Error("Error, UpdateTarget should not return a error", error)
+	}	
 }
 
-func TestCreateTargetWithValidDataShouldNotTriggerError() {
-	/*
-	je monte un serveur
-	j'appel la méthode avec une bonne target
-	je créer une request get et je controle le résultat
-	*/
+func TestDeleteTargetWithValidIdShouldTriggerError(t *testing.T) {
+	_, error := http.NewRequest("DELETE", "http://localhost:8384/targets/1", nil)
+	if error != nil {
+		t.Error("Error, DeleteTarget should not return a error", error)
+	}
 }
 
-func TestCreateTargetWithInvalidDataShouldNotTriggerError() {
-	/*
-	je monte un serveur
-	j'appel la méthode avec nil
-	je créer une request get et je controle le résultat
-	*/
-}
-
-func TestUpdateTargetWithNullIdShouldTriggerError() {
-	
-}
-
-func TestUpdateTargetWithNegatifIdShouldTriggerError() {
- 	
-}
-
-func TestUpdateTargetWithValidIdShouldTriggerError() {
-	
-}
-
-func TestUpdateTargetWithBigIdShouldTriggerError() {
-	
-}
-
-func TestDeleteTargetWithNullIdShouldTriggerError() {
-	
-}
-
-func TestDeleteTargetWithNegatifIdShouldTriggerError() {
- 	
-}
-
-func TestDeleteTargetWithValidIdShouldTriggerError() {
-	
-}
-
-func TestDeleteTargetWithBigIdShouldTriggerError() {
-	
-}
 
 

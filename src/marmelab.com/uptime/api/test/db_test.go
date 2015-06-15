@@ -7,7 +7,6 @@ import (
 	_ "github.com/lib/pq"
 	"reflect"
 	"testing"
-	"log"
 	"../../poller"
 )
 
@@ -119,7 +118,6 @@ func TestGetTargetsWithLastResultShouldNotTriggerError(t *testing.T) {
 func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 	returned, db := addTarget("youtube.com")
 	expectedTarget := target.Target_data{Destination: "facebook.com"}
-	log.Print(returned.Id)
 	error := repositories.UpdateTarget(db, expectedTarget,returned.Id)
 	if error != nil {
 		t.Error("replace a valid target with a valid target should not raise a error")
