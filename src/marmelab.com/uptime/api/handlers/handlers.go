@@ -1,12 +1,12 @@
 package handlers
 
 import (
-	"encoding/json"
-	"net/http"
-	"github.com/gorilla/mux"
-	"log"
 	"../repositories"
 	"../target"
+	"encoding/json"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 	"strconv"
 )
 
@@ -19,17 +19,17 @@ func SetCors(w *http.Header) {
 func RetrieveTargets(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
-	db, errorGetDb:= repositories.GetDb()
+	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		log.Print(errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 	rows, errGetTargets := repositories.GetTargetsWithLastResult(db)
 	if errGetTargets != nil {
 		log.Print(errGetTargets)
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 	targets := make([]target.Target_data, 0)
 	for rows.Next() {
@@ -40,7 +40,7 @@ func RetrieveTargets(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
-		targets = append(targets,newTarget)
+		targets = append(targets, newTarget)
 	}
 	json.NewEncoder(w).Encode(targets)
 }
@@ -49,22 +49,21 @@ func ShowTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	vars := mux.Vars(r)
-	id, _ :=strconv.Atoi(vars["id"])
-	db, errorGetDb:= repositories.GetDb()
+	id, _ := strconv.Atoi(vars["id"])
+	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		log.Print("errorGetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 	newTarget, errorGetTarget := repositories.GetTarget(db, id)
 	if errorGetTarget != nil {
 		log.Print("errorGetTarget", errorGetTarget)
 		http.Error(w, http.StatusText(500), 500)
-		return	
+		return
 	}
-	json.NewEncoder(w).Encode(newTarget)		
+	json.NewEncoder(w).Encode(newTarget)
 }
-
 
 func CreateTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
@@ -76,16 +75,16 @@ func CreateTarget(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	db, errorGetDb:= repositories.GetDb()
+	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		log.Print(errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 	_, errAddTarget := repositories.AddTarget(db, newTarget)
 	if errAddTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 }
 
@@ -95,22 +94,22 @@ func UpdateTarget(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 	var newTarget target.Target_data
 	vars := mux.Vars(r)
-	id, _ :=strconv.Atoi(vars["id"])
+	id, _ := strconv.Atoi(vars["id"])
 	error := decoder.Decode(&newTarget)
 	if error != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	db, errorGetDb:= repositories.GetDb()
+	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		log.Print(errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 	errorUpdateTarget := repositories.UpdateTarget(db, newTarget, id)
 	if errorUpdateTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 }
 
@@ -118,16 +117,16 @@ func DeleteTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	vars := mux.Vars(r)
-	id, _ :=strconv.Atoi(vars["id"])
-	db, errorGetDb:= repositories.GetDb()
+	id, _ := strconv.Atoi(vars["id"])
+	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		log.Print(errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
-		return		
+		return
 	}
 	_, errorDeleteTarget := repositories.DeleteTarget(db, id)
 	if errorDeleteTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
-		return		
-	}	
+		return
+	}
 }

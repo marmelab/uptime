@@ -7,13 +7,17 @@ import (
 	"errors"
 	_ "github.com/lib/pq"
 	"log"
+	"path/filepath"
+	"runtime"
 )
 
 var db *sql.DB
 
 func GetDb() (db *sql.DB, err error) {
+	_, filename, _, _ := runtime.Caller(1)
+	pathh := filepath.Join(filepath.Dir(filename), "../../conf.json")
 	if db == nil {
-		configdb := poller.RetrieveConfDbFromJsonFile("../../conf.json")["database"]
+		configdb := poller.RetrieveConfDbFromJsonFile(pathh)["database"]
 		database := configdb.(map[string]interface{})
 		db, err = sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
 	}

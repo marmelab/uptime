@@ -2,11 +2,11 @@ package test
 
 import (
 	Router "../router"
-	"net/http"
-	"testing"
-	"log"
 	"bytes"
 	"encoding/json"
+	"log"
+	"net/http"
+	"testing"
 )
 
 func newServer() {
@@ -24,7 +24,6 @@ func TestRetrieveTargetsShouldNotTriggerError(t *testing.T) {
 	}
 }
 
-
 func TestShowTargetWithValidIdShouldNotTriggerError(t *testing.T) {
 	response, err := http.Get("http://localhost:8384/targets/1")
 	if response.StatusCode != http.StatusOK {
@@ -33,17 +32,17 @@ func TestShowTargetWithValidIdShouldNotTriggerError(t *testing.T) {
 }
 
 func TestShowTargetWithBadIdsShouldTriggerError(t *testing.T) {
-	ids := [3]string{"-1","0","14235581485"}
+	ids := [3]string{"-1", "0", "14235581485"}
 	for i := 0; i < 3; i++ {
-		response, err := http.Get("http://localhost:8384/targets/"+ids[i])
+		response, err := http.Get("http://localhost:8384/targets/" + ids[i])
 		if response.StatusCode == http.StatusOK {
 			t.Error("Error, ShowTarget should return a error", err)
-		}	
+		}
 	}
 }
 
 func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
-	data,_ := json.Marshal("testCreateTarget")
+	data, _ := json.Marshal("testCreateTarget")
 	_, error := http.NewRequest("POST", "http://localhost:8384/targets", bytes.NewBuffer(data))
 	if error != nil {
 		t.Error("Error, CreateTarget should not return a error", error)
@@ -51,11 +50,11 @@ func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
 }
 
 func TestUpdateTargetWithNullIdShouldTriggerError(t *testing.T) {
-	data,_ := json.Marshal("testUpdateTarget")
+	data, _ := json.Marshal("testUpdateTarget")
 	_, error := http.NewRequest("PUT", "http://localhost:8384/targets/1", bytes.NewBuffer(data))
 	if error != nil {
 		t.Error("Error, UpdateTarget should not return a error", error)
-	}	
+	}
 }
 
 func TestDeleteTargetWithValidIdShouldTriggerError(t *testing.T) {
@@ -64,6 +63,3 @@ func TestDeleteTargetWithValidIdShouldTriggerError(t *testing.T) {
 		t.Error("Error, DeleteTarget should not return a error", error)
 	}
 }
-
-
-
