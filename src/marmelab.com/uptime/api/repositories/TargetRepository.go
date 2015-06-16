@@ -77,7 +77,7 @@ func GetTarget(db *sql.DB, id int) (target.Target_data, error) {
 	return target_data, nil
 }
 
-func GetTargetsWithLastResult(db *sql.DB) (*sql.Rows, error) {
+func GetTargetsWithLastResult(db *sql.DB, page int, perPage int) (*sql.Rows, error) {
 	if db == nil {
 		error := errors.New("db = nil ")
 		return nil, error
