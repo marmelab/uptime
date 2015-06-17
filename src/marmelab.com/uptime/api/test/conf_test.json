@@ -3,5 +3,6 @@
 	"user": "postgres",
 	"password": "",
 	"dbname": "uptimeTest",
-	"sslmode": "disable"
+	"sslmode": "disable",
+	"port": "8384"
 }

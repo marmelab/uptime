@@ -16,18 +16,18 @@ func SetCors(w *http.Header) {
 	w.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 }
 
-func RetrieveTargets(w http.ResponseWriter, r *http.Request) {
+func GetTargets(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print(errorGetDb)
+		log.Print("ERROR GetDb",errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 	rows, errGetTargets := repositories.GetTargetsWithLastResult(db)
 	if errGetTargets != nil {
-		log.Print(errGetTargets)
+		log.Print("ERROR GetTargets", errGetTargets)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
@@ -36,7 +36,7 @@ func RetrieveTargets(w http.ResponseWriter, r *http.Request) {
 		var newTarget target.Target_data
 		error := rows.Scan(&newTarget.Id, &newTarget.Destination, &newTarget.Status)
 		if error != nil {
-			log.Print(error)
+			log.Print("ERROR Scan GetTargets",error)
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
@@ -45,27 +45,27 @@ func RetrieveTargets(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(targets)
 }
 
-func ShowTarget(w http.ResponseWriter, r *http.Request) {
+func GetTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print("errorGetDb", errorGetDb)
+		log.Print("ERROR GetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 	newTarget, errorGetTarget := repositories.GetTarget(db, id)
 	if errorGetTarget != nil {
-		log.Print("errorGetTarget", errorGetTarget)
+		log.Print("ERROR GetTarget", errorGetTarget)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
 	json.NewEncoder(w).Encode(newTarget)
 }
 
-func CreateTarget(w http.ResponseWriter, r *http.Request) {
+func PostTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	decoder := json.NewDecoder(r.Body)
@@ -77,7 +77,7 @@ func CreateTarget(w http.ResponseWriter, r *http.Request) {
 	}
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print(errorGetDb)
+		log.Print("ERROR GetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
@@ -88,7 +88,7 @@ func CreateTarget(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func UpdateTarget(w http.ResponseWriter, r *http.Request) {
+func PutTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	decoder := json.NewDecoder(r.Body)
@@ -102,7 +102,7 @@ func UpdateTarget(w http.ResponseWriter, r *http.Request) {
 	}
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print(errorGetDb)
+		log.Print("ERROR GetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
@@ -120,7 +120,7 @@ func DeleteTarget(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(vars["id"])
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print(errorGetDb)
+		log.Print("ERROR GetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}

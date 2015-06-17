@@ -16,28 +16,28 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
-		"RetrieveTargets",
+		"GetTargets",
 		"GET",
 		"/targets",
-		handlers.RetrieveTargets,
+		handlers.GetTargets,
 	},
 	Route{
-		"CreateTarget",
+		"PostTarget",
 		"POST",
 		"/targets",
-		handlers.CreateTarget,
+		handlers.PostTarget,
 	},
 	Route{
-		"ShowTarget",
+		"GetTarget",
 		"GET",
 		"/targets/{id}",
-		handlers.ShowTarget,
+		handlers.GetTarget,
 	},
 	Route{
-		"UpdateTarget",
+		"PutTarget",
 		"PUT",
 		"/targets/{id}",
-		handlers.UpdateTarget,
+		handlers.PutTarget,
 	},
 	Route{
 		"DeleteTarget",

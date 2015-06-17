@@ -15,9 +15,9 @@ var db *sql.DB
 
 func GetDb() (db *sql.DB, err error) {
 	_, filename, _, _ := runtime.Caller(1)
-	pathh := filepath.Join(filepath.Dir(filename), "../../conf.json")
+	path := filepath.Join(filepath.Dir(filename), "../../conf.json")
 	if db == nil {
-		configdb := poller.RetrieveConfDbFromJsonFile(pathh)["database"]
+		configdb := poller.RetrieveConfDbFromJsonFile(path)["database"]
 		database := configdb.(map[string]interface{})
 		db, err = sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
 	}
@@ -45,7 +45,7 @@ func GetTarget(db *sql.DB, id int) (target.Target_data, error) {
 		return target_data, error
 	}
 	if id <= 0 {
-		error := errors.New("id = nil ")
+		error := errors.New("id invalid ")
 		return target_data, error
 	}
 	row, err := db.Query("SELECT * from destination WHERE id = $1", id)
