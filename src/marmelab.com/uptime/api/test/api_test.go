@@ -1,7 +1,7 @@
 package test
 
 import (
-	"../handlers"
+	"marmelab.com/uptime/api/handlers"
 	"net/http"
 	"reflect"
 	"testing"
