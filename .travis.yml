@@ -19,5 +19,7 @@ script:
     - cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json
     - cd src/marmelab.com/uptime/poller
     - go test
-    - cd ../api/test && CONFIG_PATH=../test/conf_test.json go test
-    - cd ../config && go test
+    - cd ../api/test
+    - CONFIG_PATH=../test/conf_test.json go test
+    - cd ../../config
+    - go test

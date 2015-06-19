@@ -24,8 +24,7 @@ func GetDb() (db *sql.DB, err error) {
 	}
 
 	if db == nil {
-		database := config["database"].(map[string]interface{})
-		db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+		db, err := sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
 		return db, err
 	}
 	return db, err
