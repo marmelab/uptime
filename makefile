@@ -2,6 +2,7 @@ setup:
 	@cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json
 	@docker-compose run watcher go get golang.org/x/net/icmp 
 	@docker-compose run api go get github.com/lib/pq
+	@docker-compose run api go get github.com/gorilla/mux
 	@docker-compose run client npm install
 	@echo "Setup completed!"
 

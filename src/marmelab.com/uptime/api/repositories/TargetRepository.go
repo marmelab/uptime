@@ -7,24 +7,25 @@ import (
 	"errors"
 	_ "github.com/lib/pq"
 	"log"
-	"fmt"
+	"os"
 )
 
 var db *sql.DB
 
 func GetDb() (db *sql.DB, err error) {
-	if db == nil {
-		configdb := poller.RetrieveConfDbFromJsonFile("../../conf.json")["database"]
-		database := configdb.(map[string]interface{})
-		db, err = sql.Open("postgres", fmt.Sprintf(
-			"host=%v",
-			database["host"],
-			"user=%v",
-			database["user"],
-			"dbname=%v",
-			database["dbname"],
-		))
+	configPath := os.Getenv("CONFIG_PATH")
+	if (configPath == "") {
+		configPath = "../conf.json"
+		if db == nil {
+			configdb := poller.RetrieveConfDbFromJsonFile(configPath)["database"]
+			database := configdb.(map[string]interface{})
+			db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+			return db, err
+		}
+		return db, err
 	}
+	configdb := poller.RetrieveConfDbFromJsonFile(configPath)
+	db, err = sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
 	return db, err
 }
 
@@ -42,17 +43,17 @@ func AddTarget(db *sql.DB, newTarget target.Target_data) (target.Target_data, er
 	return result, nil
 }
 
-func GetTarget(db *sql.DB, destination string) (target.Target_data, error) {
+func GetTarget(db *sql.DB, id int) (target.Target_data, error) {
 	var target_data target.Target_data
 	if db == nil {
 		error := errors.New("db = nil ")
 		return target_data, error
 	}
-	if destination == "" {
-		error := errors.New("destination = nil ")
+	if id <= 0 {
+		error := errors.New("id invalid ")
 		return target_data, error
 	}
-	row, err := db.Query("SELECT * from destination WHERE destination = $1", destination)
+	row, err := db.Query("SELECT * from destination WHERE id = $1", id)
 	if err != nil {
 		return target_data, err
 	}
@@ -75,7 +76,7 @@ func GetTargetsWithLastResult(db *sql.DB) (*sql.Rows, error) {
 			) AS rank
 			FROM results
 		)
-		SELECT D.id, D.destination, LR.status = 'good'
+		SELECT D.id, D.destination, LR.status = 'good' AS reachable
 		FROM destination D
 		LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
 	`)
