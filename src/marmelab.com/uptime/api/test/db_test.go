@@ -1,16 +1,16 @@
 package test
 
 import (
+	"../../poller"
 	"../repositories"
 	"../target"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"reflect"
 	"testing"
-	"../../poller"
 )
 
-func connectToDB() (*sql.DB, error){
+func connectToDB() (*sql.DB, error) {
 	configdb := poller.RetrieveConfDbFromJsonFile("./conf_test.json")
 	return sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
 }
@@ -23,7 +23,7 @@ func addTarget(destination string) (target.Target_data, *sql.DB) {
 }
 
 func emptyDatabase(db *sql.DB) {
-	_, _ = db.Exec("TRUNCATE Destination")
+	_, _ = db.Exec("TRUNCATE Destination, results")
 }
 
 func TestGetDbShouldNotTriggerError(t *testing.T) {
@@ -74,6 +74,7 @@ func TestAddInvalidTargetShouldTriggerError(t *testing.T) {
 			t.Error("Error scan a  invalid target should trigger a error", error)
 		}
 	}
+	emptyDatabase(db)
 }
 
 func TestGetValidTargetShouldNotTriggerError(t *testing.T) {
@@ -118,7 +119,7 @@ func TestGetTargetsWithLastResultShouldNotTriggerError(t *testing.T) {
 func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 	returned, db := addTarget("youtube.com")
 	expectedTarget := target.Target_data{Destination: "facebook.com"}
-	error := repositories.UpdateTarget(db, expectedTarget,returned.Id)
+	error := repositories.UpdateTarget(db, expectedTarget, returned.Id)
 	if error != nil {
 		t.Error("replace a valid target with a valid target should not raise a error")
 	}
@@ -157,11 +158,12 @@ func TestDeleteValidTargetShouldNotTriggerError(t *testing.T) {
 	row, _ := db.Query("SELECT * FROM Destination WHERE id = $1", returned2.Id)
 	var actualTarget target.Target_data
 	for row.Next() {
-		_ = row.Scan(&actualTarget.Id, & actualTarget.Destination)
+		_ = row.Scan(&actualTarget.Id, &actualTarget.Destination)
 	}
 	if reflect.DeepEqual(expectedTarget, actualTarget) {
 		t.Error("Error expectedTarget and actualTarget are different")
 	}
+	emptyDatabase(db)
 }
 
 func TestDeleteInvalidTargetShouldNotTriggerError(t *testing.T) {

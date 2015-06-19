@@ -7,20 +7,25 @@ import (
 	"errors"
 	_ "github.com/lib/pq"
 	"log"
-	"path/filepath"
-	"runtime"
+	"os"
 )
 
 var db *sql.DB
 
 func GetDb() (db *sql.DB, err error) {
-	_, filename, _, _ := runtime.Caller(1)
-	path := filepath.Join(filepath.Dir(filename), "../../conf.json")
-	if db == nil {
-		configdb := poller.RetrieveConfDbFromJsonFile(path)["database"]
-		database := configdb.(map[string]interface{})
-		db, err = sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+	configPath := os.Getenv("CONFIG_PATH")
+	if (configPath == "") {
+		configPath = "../conf.json"
+		if db == nil {
+			configdb := poller.RetrieveConfDbFromJsonFile(configPath)["database"]
+			database := configdb.(map[string]interface{})
+			db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+			return db, err
+		}
+		return db, err
 	}
+	configdb := poller.RetrieveConfDbFromJsonFile(configPath)
+	db, err = sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
 	return db, err
 }
 
@@ -71,7 +76,7 @@ func GetTargetsWithLastResult(db *sql.DB) (*sql.Rows, error) {
 			) AS rank
 			FROM results
 		)
-		SELECT D.id, D.destination, LR.status = 'good'
+		SELECT D.id, D.destination, LR.status = 'good' AS reachable
 		FROM destination D
 		LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
 	`)

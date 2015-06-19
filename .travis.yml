@@ -18,4 +18,4 @@ script:
     - cd src/marmelab.com/uptime/poller
     - go test
     - cd ../api/test
-    - go test
+    - CONFIG_PATH=../test/conf_test.json go test

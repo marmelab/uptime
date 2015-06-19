@@ -1,89 +1,124 @@
- package test
+package test
 
-// import (
-// 	Router "../router"
-// 	"bytes"
-// 	"encoding/json"
-// 	"log"
-// 	"net/http"
-// 	"testing"
-// 	"runtime"
-// 	"path/filepath"
-// 	"../../poller"
-// 	"io/ioutil"
-// )
+import (
+	Router "../router"
+	"../target"
+	"bytes"
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strconv"
+	"testing"
+)
 
-// func newServer() {
-// 	_, filename, _, _ := runtime.Caller(1)
-// 	_ = filepath.Join(filepath.Dir(filename), "conf.json")
-// 	log.Print(">>>>>>>>>>>>>>>1", filepath.Dir(filename))
-// 	config := poller.RetrieveConfDbFromJsonFile("./conf_test.json")
-// 	router := Router.NewRouter()
-// 	log.Fatal(http.ListenAndServe(":"+config["port"].(string), router))
-// }
+func newServer() {
+	config := map[string]string{"port": "8384"}
+	router := Router.NewRouter()
+	log.Fatal(http.ListenAndServe(":"+config["port"], router))
+}
 
-// func TestBeforeTest(t *testing.T) {
-// 	go newServer()
-// }
-// func TestRetrieveTargetsShouldNotTriggerError(t *testing.T) {
-// 	_, db := addTarget("testaddtarget1")
-// 	_, _ = addTarget("testaddtarget2")
-// 	var listOfTarget []string
-// 	response, err := http.Get("http://localhost:8384/targets")
-// 	if response.StatusCode != http.StatusOK {
-// 		t.Error("Error, RetrieveTargets should not return a error", err)
-// 	}
-// 	body, err := ioutil.ReadAll(response.Body)
-// 	response.Body.Close()
-// 	if err != nil {
-// 		t.Error("Error, RetrieveTargets should not return a error", err)
-// 	}
-// 	err = json.Unmarshal(body, &listOfTarget)
-// 	if err != nil {
-// 		t.Error("Error, RetrieveTargets should not return a error", err)
-// 	}
-// 	if(listOfTarget[0] != "testaddtarget1" || listOfTarget[1] != "testaddtarget2") {
-// 		t.Error("Error, RetrieveTargets should not return a error", err)
-// 	}
-// 	emptyDatabase(db)
-// }
+func TestBeforeTest(t *testing.T) {
+	go newServer()
+}
+func TestGetTargetsShouldNotTriggerError(t *testing.T) {
+	addTarget("google.fr")
+	addTarget("youtube.fr")
+	var listOfTarget []target.Target_data
+	response, err := http.Get("http://localhost:8384/targets")
+	if response.StatusCode != http.StatusOK {
+		t.Error("Error, GetTargets should not return a error", err)
+	}
+	body, err := ioutil.ReadAll(response.Body)
+	response.Body.Close()
+	if err != nil {
+		t.Error("Error, GetTargets should not return a error", err)
+	}
+	err = json.Unmarshal(body, &listOfTarget)
+	if err != nil {
+		t.Error("Error, GetTargets should not return a error", err)
+	}
+	if listOfTarget[0].Destination != "google.fr" {
+		t.Error("Error, GetTargets should not return a error", err)
+	}
+	db, _ := connectToDB()
+	emptyDatabase(db)
+}
 
-// func TestShowTargetWithValidIdShouldNotTriggerError(t *testing.T) {
-// 	response, err := http.Get("http://localhost:8384/targets/1")
-// 	if response.StatusCode != http.StatusOK {
-// 		t.Error("Error, ShowTarget should not return a error", err)
-// 	}
-// }
+func TestGetTargetWithValidIdShouldNotTriggerError(t *testing.T) {
+	res, db := addTarget("google.fr")
+	response, err := http.Get("http://localhost:8384/targets/" + strconv.Itoa(res.Id)) // TODO
+	if response.StatusCode != http.StatusOK {
+		t.Error("Error, ShowTarget should not return a error", err)
+	}
+	var getTarget target.Target_data
+	body, err := ioutil.ReadAll(response.Body)
+	response.Body.Close()
+	err = json.Unmarshal(body, &getTarget)
+	log.Print(getTarget)
+	if getTarget.Destination != "google.fr" {
+		t.Error("Error, GetTarget should not return a error", err)
+	}
+	emptyDatabase(db)
+}
 
-// func TestShowTargetWithBadIdsShouldTriggerError(t *testing.T) {
-// 	ids := [3]string{"-1", "0", "14235581485"}
-// 	for i := 0; i < 3; i++ {
-// 		response, err := http.Get("http://localhost:8384/targets/" + ids[i])
-// 		if response.StatusCode == http.StatusOK {
-// 			t.Error("Error, ShowTarget should return a error", err)
-// 		}
-// 	}
-// }
+func TestGetTargetWithBadIdsShouldTriggerError(t *testing.T) {
+	ids := [3]string{"-1", "0", "14235581485"}
+	for i := 0; i < 3; i++ {
+		response, err := http.Get("http://localhost:8384/targets/" + ids[i])
+		if response.StatusCode == http.StatusOK {
+			t.Error("Error, ShowTarget should return a error", err)
+		}
+	}
+}
 
-// func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
-// 	data, _ := json.Marshal("testCreateTarget")
-// 	_, error := http.NewRequest("POST", "http://localhost:8384/targets", bytes.NewBuffer(data))
-// 	if error != nil {
-// 		t.Error("Error, CreateTarget should not return a error", error)
-// 	}
-// }
+func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
+	newTarget := target.Target_data{Destination: "blablabla", Status: false}
+	data, _ := json.Marshal(newTarget)
+	req, error := http.NewRequest("POST", "http://localhost:8384/targets", bytes.NewBuffer(data))
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if resp.StatusCode != 200 {
+		t.Error("Error, UpdateTarget should not return a error", resp.StatusCode)
+	}
+	if err != nil {
+		t.Error("Error, UpdateTarget should not return a error", err)
+	}
+	if error != nil {
+		t.Error("Error, CreateTarget should not return a error", error)
+	}
+	defer resp.Body.Close()
+	db, _ := connectToDB()
+	emptyDatabase(db)
+}
 
-// func TestUpdateTargetWithNullIdShouldTriggerError(t *testing.T) {
-// 	data, _ := json.Marshal("testUpdateTarget")
-// 	_, error := http.NewRequest("PUT", "http://localhost:8384/targets/1", bytes.NewBuffer(data))
-// 	if error != nil {
-// 		t.Error("Error, UpdateTarget should not return a error", error)
-// 	}
-// }
+func TestUpdateTargetWithNullIdShouldTriggerError(t *testing.T) {
+	res, db := addTarget("google.fr")
+	data, _ := json.Marshal("testUpdateTarget")
+	req, error := http.NewRequest("PUT", "http://localhost:8384/targets/"+strconv.Itoa(res.Id), bytes.NewBuffer(data))
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if resp.StatusCode != 200 {
+		t.Error("Error, UpdateTarget should not return a error", resp.StatusCode)
+	}
+	if err != nil {
+		t.Error("Error, UpdateTarget should not return a error", err)
+	}
+	if error != nil {
+		t.Error("Error, UpdateTarget should not return a error", error)
+	}
+	emptyDatabase(db)
+}
 
-// func TestDeleteTargetWithValidIdShouldTriggerError(t *testing.T) {
-// 	_, error := http.NewRequest("DELETE", "http://localhost:8384/targets/1", nil)
-// 	if error != nil {
-// 		t.Error("Error, DeleteTarget should not return a error", error)
-// 	}
-// }
+func TestDeleteTargetWithValidIdShouldTriggerError(t *testing.T) {
+	res, _ := addTarget("google.fr")
+	req, error := http.NewRequest("DELETE", "http://localhost:8384/targets/"+strconv.Itoa(res.Id), nil)
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if resp.StatusCode != 200 {
+		t.Error("Error, UpdateTarget should not return a error", resp.StatusCode)
+	}
+	if error != nil {
+		t.Error("Error, DeleteTarget should not return a error", err)
+	}
+}

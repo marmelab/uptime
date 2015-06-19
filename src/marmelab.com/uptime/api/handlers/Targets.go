@@ -21,7 +21,7 @@ func GetTargets(w http.ResponseWriter, r *http.Request) {
 	SetCors(&header)
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
-		log.Print("ERROR GetDb",errorGetDb)
+		log.Print("ERROR GetDb", errorGetDb)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
@@ -36,7 +36,7 @@ func GetTargets(w http.ResponseWriter, r *http.Request) {
 		var newTarget target.Target_data
 		error := rows.Scan(&newTarget.Id, &newTarget.Destination, &newTarget.Status)
 		if error != nil {
-			log.Print("ERROR Scan GetTargets",error)
+			log.Print("ERROR Scan GetTargets ", error)
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
@@ -70,7 +70,7 @@ func PostTarget(w http.ResponseWriter, r *http.Request) {
 	SetCors(&header)
 	decoder := json.NewDecoder(r.Body)
 	var newTarget target.Target_data
-	error := decoder.Decode(&newTarget.Destination)
+	error := decoder.Decode(&newTarget)
 	if error != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
@@ -95,7 +95,7 @@ func PutTarget(w http.ResponseWriter, r *http.Request) {
 	var newTarget target.Target_data
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-	error := decoder.Decode(&newTarget)
+	error := decoder.Decode(&newTarget.Destination)
 	if error != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
