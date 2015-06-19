@@ -1,8 +1,9 @@
 package main
 
 import (
-	"./api/target"
-	"./poller"
+	"marmelab.com/uptime/api/target"
+	"marmelab.com/uptime/config"
+	"marmelab.com/uptime/poller"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -17,7 +18,11 @@ func main() {
 	var duration int
 	var id int
 	for true {
-		conf := poller.RetrieveConfDbFromJsonFile("/usr/src/watcher/src/marmelab.com/uptime/conf.json")
+		conf, configErr := config.GetConfig("./conf.json")
+		if configErr != nil {
+			log.Fatal(configErr)
+		}
+
 		res, err := http.Get(conf["urlApiIp"].(string))
 		if err != nil {
 			log.Fatal(err)

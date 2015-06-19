@@ -1,9 +1,9 @@
 package test
 
 import (
-	"../../poller"
-	"../repositories"
-	"../target"
+	"marmelab.com/uptime/config"
+	"marmelab.com/uptime/api/repositories"
+	"marmelab.com/uptime/api/target"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"reflect"
@@ -11,8 +11,12 @@ import (
 )
 
 func connectToDB() (*sql.DB, error) {
-	configdb := poller.RetrieveConfDbFromJsonFile("./conf_test.json")
-	return sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
+	config, err := config.GetConfig("./conf_test.json")
+	if (err != nil) {
+		return nil, err;
+	}
+
+	return sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
 }
 func addTarget(destination string) (target.Target_data, *sql.DB) {
 	var result target.Target_data

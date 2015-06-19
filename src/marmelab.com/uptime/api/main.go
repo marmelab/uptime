@@ -1,14 +1,21 @@
 package main
 
 import (
+	"marmelab.com/uptime/config"
 	"log"
 	"net/http"
-	"./router"
-	"../poller"
+	"marmelab.com/uptime/api/router"
 )
 
 func main() {
-	config := poller.RetrieveConfDbFromJsonFile("../conf.json")
+	config, err := config.GetConfig("../conf.json")
+	if (err != nil) {
+		log.Fatal(err)
+	}
+
 	router := router.NewRouter()
-	log.Fatal(http.ListenAndServe(":"+config["port"].(string), router))
+
+	port := config["port"].(string)
+	log.Println("API listening on port " + port)
+	log.Fatal(http.ListenAndServe(":" + port, router))
 }

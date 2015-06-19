@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"../../poller"
-	"../target"
+	"marmelab.com/uptime/config"
+	"marmelab.com/uptime/api/target"
 	"database/sql"
 	"errors"
 	_ "github.com/lib/pq"
@@ -15,17 +15,22 @@ var db *sql.DB
 func GetDb() (db *sql.DB, err error) {
 	configPath := os.Getenv("CONFIG_PATH")
 	if (configPath == "") {
-		configPath = "../conf.json"
-		if db == nil {
-			configdb := poller.RetrieveConfDbFromJsonFile(configPath)["database"]
-			database := configdb.(map[string]interface{})
-			db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
-			return db, err
-		}
+		configPath = "../../conf.json"
+	}
+
+	config, configErr := config.GetConfig(configPath)
+	if configErr != nil {
+		return nil, configErr
+	}
+
+	if db == nil {
+		database := config["database"].(map[string]interface{})
+		db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
 		return db, err
 	}
-	configdb := poller.RetrieveConfDbFromJsonFile(configPath)
-	db, err = sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
+	return db, err
+
+	db, err = sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
 	return db, err
 }
 

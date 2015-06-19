@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"../repositories"
-	"../target"
+	"marmelab.com/uptime/api/repositories"
+	"marmelab.com/uptime/api/target"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
