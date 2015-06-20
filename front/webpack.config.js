@@ -2,18 +2,20 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
 	entry: {
-		App: [
-		'whatwg-fetch',
-		'webpack-dev-server/client?http://localhost:8080',
-		'webpack/hot/only-dev-server',
-		'./src/main.js'
+		'uptime-admin.js': [
+			'webpack-dev-server/client?http://localhost:8080',
+			'webpack/hot/only-dev-server',
+			'./node_modules/react-admin/app/ReactAdmin',
+			'./src/conf.js'
+		],
+		'index.html': [
+			'./index.html'
 		]
 	},
 	output: {
-		filename: "app/bundle.js",
+		filename: "app/[name]",
 		publicPath: "http://localhost:8080/"
 	},
-
 	plugins: [
 		new webpack.ProvidePlugin({
 			$: "jquery",
@@ -27,10 +29,12 @@ module.exports = {
 			allChunks: true
 		})
 	],
-	
-	module:{
+
+	module: {
 		loaders: [
-			{ test: /\.js$/, loaders: ['react-hot', 'jsx-loader', 'babel-loader'], exclude: /node_modules/ },
+			{ test: /\.html$/, loaders: ['html'] },
+			{ test: /node_modules\/react-admin\/.*js$/, loaders: ['babel'] },
+			{ test: /\.js$/, loaders: ['react-hot', 'jsx-loader', 'babel'], exclude: /node_modules/ },
 			{ test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
 			{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'file' }
 		]
