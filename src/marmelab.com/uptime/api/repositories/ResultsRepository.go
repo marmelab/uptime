@@ -1,0 +1,114 @@
+package repositories
+
+import (
+	"../../poller"
+	"database/sql"
+	"errors"
+	_ "github.com/lib/pq"
+	"log"
+	"os"
+)
+
+var db *sql.DB
+
+func GetDb() (db *sql.DB, err error) {
+	configPath := os.Getenv("CONFIG_PATH")
+	if (configPath == "") {
+		configPath = "../conf.json"
+		if db == nil {
+			configdb := poller.RetrieveConfDbFromJsonFile(configPath)["database"]
+			database := configdb.(map[string]interface{})
+			db, err := sql.Open("postgres", "host="+database["host"].(string)+" user="+database["user"].(string)+" dbname="+database["dbname"].(string)+" sslmode="+database["sslmode"].(string)+"")
+			return db, err
+		}
+		return db, err
+	}
+	configdb := poller.RetrieveConfDbFromJsonFile(configPath)
+	db, err = sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
+	return db, err
+}
+
+func AddResult(db *sql.DB, newResult target.Target_data) (target.Target_data, error) {
+	var result target.Target_data
+	if db == nil {
+		error := errors.New("db = nil ")
+		return result, error
+	}
+	if newResult.Destination == "" {
+		error := errors.New("newResult = nil ")
+		return result, error
+	}
+	_ = db.QueryRow("INSERT INTO Destination (destination) VALUES($1) RETURNING id", newResult.Destination).Scan(&result.Id)
+	return result, nil
+}
+
+func GetTarget(db *sql.DB, id int) (target.Target_data, error) {
+	var target_data target.Target_data
+	if db == nil {
+		error := errors.New("db = nil ")
+		return target_data, error
+	}
+	if id <= 0 {
+		error := errors.New("id invalid ")
+		return target_data, error
+	}
+	row, err := db.Query("SELECT * from destination WHERE id = $1", id)
+	if err != nil {
+		return target_data, err
+	}
+	for row.Next() {
+		_ = row.Scan(&target_data.Id, &target_data.Destination)
+	}
+	return target_data, nil
+}
+
+func GetTargetsWithLastResult(db *sql.DB) (*sql.Rows, error) {
+	if db == nil {
+		error := errors.New("db = nil ")
+		return nil, error
+	}
+	rows, QueryError := db.Query(`
+		WITH last_results AS (
+			SELECT *, ROW_NUMBER() OVER(
+				PARTITION BY destination
+				ORDER BY created_at DESC
+			) AS rank
+			FROM results
+		)
+		SELECT D.id, D.destination, LR.status = 'good' AS reachable
+		FROM destination D
+		LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
+	`)
+	if QueryError != nil {
+		log.Print("request error ", QueryError)
+		return nil, QueryError
+	}
+	return rows, nil
+}
+
+func UpdateTarget(db *sql.DB, newResult target.Target_data, oldTargetId int) error {
+	if db == nil {
+		error := errors.New("db = nil ")
+		return error
+	}
+	if newResult.Destination == "" || oldTargetId <= 0 {
+		error := errors.New("newResult = nil or oldTarget is wrong")
+		return error
+	}
+	_, err := db.Exec("UPDATE destination SET destination = $1 WHERE id = $2", newResult.Destination, oldTargetId)
+	return err
+}
+
+func DeleteTarget(db *sql.DB, target_dataId int) (target.Target_data, error) {
+	var result target.Target_data
+	if db == nil {
+		error := errors.New("db = nil ")
+		return result, error
+	}
+	if target_dataId <= 0 {
+		error := errors.New("target_dataId is wrong ")
+		return result, error
+	}
+	_ = db.QueryRow("DELETE FROM Destination WHERE id = $1 RETURNING *", target_dataId).Scan(&result.Id)
+	return result, nil
+}

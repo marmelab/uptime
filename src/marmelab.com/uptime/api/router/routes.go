@@ -45,4 +45,34 @@ var routes = Routes{
 		"/targets/{id}",
 		handlers.DeleteTarget,
 	},
+	Route{
+		"GetResults",
+		"GET",
+		"/results",
+		handlers.GetResults,
+	},
+	Route{
+		"PostResult",
+		"POST",
+		"/results",
+		handlers.PostResult,
+	},
+	Route{
+		"GetResult",
+		"GET",
+		"/results/{id}",
+		handlers.GetResult,
+	},
+	Route{
+		"PutResult",
+		"PUT",
+		"/results/{id}",
+		handlers.PutResult,
+	},
+	Route{
+		"DeleteResult",
+		"DELETE",
+		"/results",
+		handlers.DeleteResult,
+	},
 }
