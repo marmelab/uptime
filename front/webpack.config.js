@@ -5,7 +5,6 @@ module.exports = {
 		'uptime-admin.js': [
 			'webpack-dev-server/client?http://localhost:8080',
 			'webpack/hot/only-dev-server',
-			'./node_modules/react-admin/app/ReactAdmin',
 			'./src/conf.js'
 		],
 		'index.html': [
@@ -20,7 +19,8 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			$: "jquery",
 			jQuery: "jquery",
-			"window.jQuery": "jquery"
+			"window.jQuery": "jquery",
+			React: "react"
 		}),
 		new webpack.DefinePlugin({
 			"API_BASE_URL": "'http://localhost:8383'"
@@ -38,5 +38,8 @@ module.exports = {
 			{ test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
 			{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'file' }
 		]
-	}
+	},
+    node: {
+        fs: 'empty'
+    }
 };
