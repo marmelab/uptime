@@ -2,19 +2,13 @@ package handlers
 
 import (
 	"../repositories"
-	"../target"
+	"../../poller"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"strconv"
 )
-
-func SetCors(w *http.Header) {
-	w.Set("Access-Control-Allow-Origin", "*")
-	w.Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
-}
 
 func GetResults(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
@@ -31,18 +25,18 @@ func GetResults(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	targets := make([]target.Target_data, 0)
+	results := make([]poller.Response, 0)
 	for rows.Next() {
-		var newTarget target.Target_data
-		error := rows.Scan(&newTarget.Id, &newTarget.Destination, &newTarget.Status)
+		var newResult poller.Response
+		error := rows.Scan(&newResult.Target_id, &newResult.Destination, &newResult.Status, $newResult.Time)
 		if error != nil {
 			log.Print("ERROR Scan GetResults ", error)
 			http.Error(w, http.StatusText(500), 500)
 			return
 		}
-		targets = append(targets, newTarget)
+		results = append(results, newResult)
 	}
-	json.NewEncoder(w).Encode(targets)
+	json.NewEncoder(w).Encode(results)
 }
 
 func GetResult(w http.ResponseWriter, r *http.Request) {
@@ -56,21 +50,21 @@ func GetResult(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	newTarget, errorGetTarget := repositories.GetResult(db, id)
+	newResult, errorGetTarget := repositories.GetResult(db, id)
 	if errorGetTarget != nil {
 		log.Print("ERROR GetResult", errorGetTarget)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	json.NewEncoder(w).Encode(newTarget)
+	json.NewEncoder(w).Encode(newResult)
 }
 
 func PostResult(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	decoder := json.NewDecoder(r.Body)
-	var newTarget target.Target_data
-	error := decoder.Decode(&newTarget)
+	var newResult poller.Response
+	error := decoder.Decode(&newResult)
 	if error != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
@@ -81,7 +75,7 @@ func PostResult(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	_, errAddTarget := repositories.AddTarget(db, newTarget)
+	_, errAddTarget := repositories.AddTarget(db, newResult)
 	if errAddTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
@@ -92,10 +86,10 @@ func PutResult(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
 	decoder := json.NewDecoder(r.Body)
-	var newTarget target.Target_data
+	var newResult poller.Response
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-	error := decoder.Decode(&newTarget.Destination)
+	error := decoder.Decode(&newResult.Destination)
 	if error != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
@@ -106,7 +100,7 @@ func PutResult(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	errorUpdateTarget := repositories.UpdateTarget(db, newTarget, id)
+	errorUpdateTarget := repositories.UpdateTarget(db, newResult, id)
 	if errorUpdateTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
