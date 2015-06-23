@@ -20,6 +20,6 @@ script:
     - cd src/marmelab.com/uptime/poller
     - go test
     - cd ../api/test
-    - CONFIG_PATH=../test/conf_test.json go test
+    - CONFIG_PATH=./conf_test.json go test
     - cd ../../config
     - go test
