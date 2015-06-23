@@ -1,10 +1,10 @@
 package main
 
 import (
-	"marmelab.com/uptime/config"
+	"../config"
 	"log"
 	"net/http"
-	"marmelab.com/uptime/api/router"
+	"./router"
 )
 
 func main() {

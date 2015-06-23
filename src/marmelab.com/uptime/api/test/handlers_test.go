@@ -1,8 +1,8 @@
 package test
 
 import (
-	Router "marmelab.com/uptime/api/router"
-	"marmelab.com/uptime/api/target"
+	Router "../router"
+	"../target"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"

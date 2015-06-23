@@ -1,9 +1,9 @@
 package test
 
 import (
-	"marmelab.com/uptime/config"
-	"marmelab.com/uptime/api/repositories"
-	"marmelab.com/uptime/api/target"
+	"../../config"
+	"../repositories"
+	"../target"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"reflect"

@@ -2,7 +2,7 @@ package router
 
 import (
 	"net/http"
-	"marmelab.com/uptime/api/handlers"
+	"../handlers"
 )
 
 type Route struct {

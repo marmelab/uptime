@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"marmelab.com/uptime/config"
-	"marmelab.com/uptime/api/target"
+	"../../config"
+	"../target"
 	"database/sql"
 	"errors"
 	_ "github.com/lib/pq"
