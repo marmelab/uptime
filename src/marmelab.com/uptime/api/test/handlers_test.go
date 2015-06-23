@@ -78,6 +78,15 @@ func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
 	req, error := http.NewRequest("POST", "http://localhost:8384/targets", bytes.NewBuffer(data))
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	decoder := json.NewDecoder(resp.Body)
+	var actualTarget target.Target_data
+	errDecode := decoder.Decode(&actualTarget)
+	if errDecode != nil {
+		t.Error("Error : ", errDecode)
+	}
+	if actualTarget.Destination != newTarget.Destination {
+		t.Error("Error, target updated is different from exepected ")
+	}
 	if resp.StatusCode != 200 {
 		t.Error("Error, UpdateTarget should not return a error", resp.StatusCode)
 	}
