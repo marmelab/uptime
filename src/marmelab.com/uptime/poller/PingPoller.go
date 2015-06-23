@@ -13,6 +13,7 @@ import (
 )
 
 type Response struct {
+	Id int
 	Destination string
 	Status      string
 	Time        int

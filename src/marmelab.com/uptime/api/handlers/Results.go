@@ -28,7 +28,7 @@ func GetResults(w http.ResponseWriter, r *http.Request) {
 	results := make([]poller.Response, 0)
 	for rows.Next() {
 		var newResult poller.Response
-		error := rows.Scan(&newResult.Target_id, &newResult.Destination, &newResult.Status, $newResult.Time)
+		error := rows.Scan(&newResult.Target_id, &newResult.Target_id, &newResult.Destination, &newResult.Status, &newResult.Time, &newResult.Created_at)
 		if error != nil {
 			log.Print("ERROR Scan GetResults ", error)
 			http.Error(w, http.StatusText(500), 500)
@@ -75,11 +75,12 @@ func PostResult(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	_, errAddTarget := repositories.AddTarget(db, newResult)
+	resultAdded, errAddTarget := repositories.AddResult(db, newResult)
 	if errAddTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
+	json.NewEncoder(w).Encode(resultAdded)
 }
 
 func PutResult(w http.ResponseWriter, r *http.Request) {
@@ -100,11 +101,12 @@ func PutResult(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	errorUpdateTarget := repositories.UpdateTarget(db, newResult, id)
+	resultUpdated, errorUpdateTarget := repositories.UpdateResult(db, newResult, id)
 	if errorUpdateTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
+	json.NewEncoder(w).Encode(resultUpdated)
 }
 
 func DeleteResult(w http.ResponseWriter, r *http.Request) {
@@ -118,9 +120,10 @@ func DeleteResult(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	_, errorDeleteTarget := repositories.DeleteResult(db, id)
+	resultDeleted, errorDeleteTarget := repositories.DeleteResult(db, id)
 	if errorDeleteTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
+	json.NewEncoder(w).Encode(resultDeleted)
 }
