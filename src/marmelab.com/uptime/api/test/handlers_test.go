@@ -1,8 +1,8 @@
 package test
 
 import (
-	Router "../router"
-	"../target"
+	Router "marmelab.com/uptime/api/router"
+	"marmelab.com/uptime/api/target"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -92,9 +92,11 @@ func TestCreateTargetWithValidDataShouldNotTriggerError(t *testing.T) {
 	emptyDatabase(db)
 }
 
-func TestUpdateTargetWithNullIdShouldTriggerError(t *testing.T) {
+func TestUpdateTargetWithValidIdShouldTriggerError(t *testing.T) {
 	res, db := addTarget("google.fr")
-	data, _ := json.Marshal("testUpdateTarget")
+	targetForUpdate := target.Target_data{Destination: "testUpdateTarget"}
+	data, _ := json.Marshal(targetForUpdate)
+	log.Print("....................", res)
 	req, error := http.NewRequest("PUT", "http://localhost:8384/targets/"+strconv.Itoa(res.Id), bytes.NewBuffer(data))
 	client := &http.Client{}
 	resp, err := client.Do(req)

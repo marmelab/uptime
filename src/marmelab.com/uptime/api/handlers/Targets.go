@@ -81,11 +81,12 @@ func PostTarget(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	_, errAddTarget := repositories.AddTarget(db, newTarget)
+	targetAdded, errAddTarget := repositories.AddTarget(db, newTarget)
 	if errAddTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
+	json.NewEncoder(w).Encode(targetAdded)
 }
 
 func PutTarget(w http.ResponseWriter, r *http.Request) {
@@ -95,8 +96,9 @@ func PutTarget(w http.ResponseWriter, r *http.Request) {
 	var newTarget target.Target_data
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-	error := decoder.Decode(&newTarget.Destination)
+	error := decoder.Decode(&newTarget)
 	if error != nil {
+		log.Print(error)
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
@@ -106,11 +108,12 @@ func PutTarget(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	errorUpdateTarget := repositories.UpdateTarget(db, newTarget, id)
+	newTarget, errorUpdateTarget := repositories.UpdateTarget(db, newTarget, id)
 	if errorUpdateTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
+	json.NewEncoder(w).Encode(newTarget)
 }
 
 func DeleteTarget(w http.ResponseWriter, r *http.Request) {
@@ -124,9 +127,10 @@ func DeleteTarget(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	_, errorDeleteTarget := repositories.DeleteTarget(db, id)
+	targetDeleted, errorDeleteTarget := repositories.DeleteTarget(db, id)
 	if errorDeleteTarget != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
+	json.NewEncoder(w).Encode(targetDeleted)
 }

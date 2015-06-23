@@ -15,20 +15,25 @@ var db *sql.DB
 func GetDb() (db *sql.DB, err error) {
 	configPath := os.Getenv("CONFIG_PATH")
 	if (configPath == "") {
-		configPath = "../../conf.json"
+		configPath = "/usr/src/api/src/marmelab.com/uptime/conf.json"
 	}
-
 	config, configErr := config.GetConfig(configPath)
 	if configErr != nil {
 		return nil, configErr
 	}
-
-	if db == nil {
-		db, err := sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
-		return db, err
+	if(config["database"] != nil) {
+		configdb := config["database"].(map[string]interface{})
+		if db == nil {
+			db, err := sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
+			return db, err
+		}
+	} else {
+		if db == nil {
+			db, err := sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
+			return db, err
+		}
 	}
 	return db, err
-
 	db, err = sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
 	return db, err
 }
@@ -43,7 +48,7 @@ func AddTarget(db *sql.DB, newTarget target.Target_data) (target.Target_data, er
 		error := errors.New("newTarget = nil ")
 		return result, error
 	}
-	_ = db.QueryRow("INSERT INTO Destination (destination) VALUES($1) RETURNING id", newTarget.Destination).Scan(&result.Id)
+	_ = db.QueryRow("INSERT INTO Destination (destination) VALUES($1) RETURNING id, destination", newTarget.Destination).Scan(&result.Id, &result.Destination)
 	return result, nil
 }
 
@@ -91,17 +96,20 @@ func GetTargetsWithLastResult(db *sql.DB) (*sql.Rows, error) {
 	return rows, nil
 }
 
-func UpdateTarget(db *sql.DB, newTarget target.Target_data, oldTargetId int) error {
+func UpdateTarget(db *sql.DB, newTarget target.Target_data, oldTargetId int) (target.Target_data, error) {
+	var result target.Target_data
 	if db == nil {
 		error := errors.New("db = nil ")
-		return error
+		return  result, error
 	}
 	if newTarget.Destination == "" || oldTargetId <= 0 {
 		error := errors.New("newTarget = nil or oldTarget is wrong")
-		return error
+		return result, error
 	}
-	_, err := db.Exec("UPDATE destination SET destination = $1 WHERE id = $2", newTarget.Destination, oldTargetId)
-	return err
+	_, err := db.Exec("UPDATE destination SET destination = $1 WHERE id = $2 ", newTarget.Destination, oldTargetId)
+	result.Destination = newTarget.Destination
+	result.Id = oldTargetId
+	return result, err
 }
 
 func DeleteTarget(db *sql.DB, target_dataId int) (target.Target_data, error) {
@@ -114,6 +122,6 @@ func DeleteTarget(db *sql.DB, target_dataId int) (target.Target_data, error) {
 		error := errors.New("target_dataId is wrong ")
 		return result, error
 	}
-	_ = db.QueryRow("DELETE FROM Destination WHERE id = $1 RETURNING *", target_dataId).Scan(&result.Id)
+	_ = db.QueryRow("DELETE FROM Destination WHERE id = $1 RETURNING id, destination", target_dataId).Scan(&result.Id, &result.Destination)
 	return result, nil
 }

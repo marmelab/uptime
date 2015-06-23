@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	config, err := config.GetConfig("../conf.json")
+	config, err := config.GetConfig("/usr/src/api/src/marmelab.com/uptime/conf.json")
 	if (err != nil) {
 		log.Fatal(err)
 	}

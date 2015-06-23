@@ -42,7 +42,7 @@ func TestGetDbShouldNotTriggerError(t *testing.T) {
 
 func TestAddValidTargetShouldNotTriggerError(t *testing.T) {
 	db, _ := connectToDB()
-	newTarget := target.Target_data{Destination: "youtube.fr"}
+	newTarget := target.Target_data{Destination: "AddValidTarget"}
 	newTargetAdded, errorAddTarget := repositories.AddTarget(db, newTarget)
 	if errorAddTarget != nil {
 		t.Error("Error add a valid target should not trigger a error", errorAddTarget)
@@ -123,7 +123,7 @@ func TestGetTargetsWithLastResultShouldNotTriggerError(t *testing.T) {
 func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 	returned, db := addTarget("youtube.com")
 	expectedTarget := target.Target_data{Destination: "facebook.com"}
-	error := repositories.UpdateTarget(db, expectedTarget, returned.Id)
+	updatedTarget, error := repositories.UpdateTarget(db, expectedTarget, returned.Id)
 	if error != nil {
 		t.Error("replace a valid target with a valid target should not raise a error")
 	}
@@ -132,7 +132,7 @@ func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 	for row.Next() {
 		_ = row.Scan(&destination)
 	}
-	if !reflect.DeepEqual(expectedTarget.Destination, destination) {
+	if !reflect.DeepEqual(updatedTarget.Destination, destination) {
 		t.Error("Error expectedTarget and actualTarget are different")
 	}
 	emptyDatabase(db)
@@ -141,7 +141,7 @@ func TestUpdateValideTargetShouldNotTriggerError(t *testing.T) {
 func TestUpdateInvalideTargetShouldTriggerError(t *testing.T) {
 	_, db := addTarget("youtube.com")
 	expectedTarget := target.Target_data{Destination: "facebook.com"}
-	error := repositories.UpdateTarget(db, expectedTarget, -4)
+	_, error := repositories.UpdateTarget(db, expectedTarget, -4)
 	if error == nil {
 		t.Error("replace a invalid target should raise a error")
 	}

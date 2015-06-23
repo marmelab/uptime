@@ -17,6 +17,5 @@ func GetConfig(configPath string) (map[string]interface{}, error) {
 	if err != nil {
 		return nil, errors.New("Unable to parse JSON configuration: " + err.Error())
 	}
-
 	return config, nil
 }
