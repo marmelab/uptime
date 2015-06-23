@@ -96,10 +96,18 @@ func TestUpdateTargetWithValidIdShouldTriggerError(t *testing.T) {
 	res, db := addTarget("google.fr")
 	targetForUpdate := target.Target_data{Destination: "testUpdateTarget"}
 	data, _ := json.Marshal(targetForUpdate)
-	log.Print("....................", res)
 	req, error := http.NewRequest("PUT", "http://localhost:8384/targets/"+strconv.Itoa(res.Id), bytes.NewBuffer(data))
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	decoder := json.NewDecoder(resp.Body)
+	var newTarget target.Target_data
+	errDecode := decoder.Decode(&newTarget)
+	if errDecode != nil {
+		t.Error("Error : ", errDecode)
+	}
+	if newTarget.Destination != targetForUpdate.Destination {
+		t.Error("Error, target updated is different from exepected ")
+	}
 	if resp.StatusCode != 200 {
 		t.Error("Error, UpdateTarget should not return a error", resp.StatusCode)
 	}
@@ -117,6 +125,15 @@ func TestDeleteTargetWithValidIdShouldTriggerError(t *testing.T) {
 	req, error := http.NewRequest("DELETE", "http://localhost:8384/targets/"+strconv.Itoa(res.Id), nil)
 	client := &http.Client{}
 	resp, err := client.Do(req)
+	decoder := json.NewDecoder(resp.Body)
+	var newTarget target.Target_data
+	errDecode := decoder.Decode(&newTarget)
+	if errDecode != nil {
+		t.Error("Error : ", errDecode)
+	}
+	if newTarget.Destination != "google.fr" {
+		t.Error("Error, target updated is different from exepected ")
+	}
 	if resp.StatusCode != 200 {
 		t.Error("Error, UpdateTarget should not return a error", resp.StatusCode)
 	}

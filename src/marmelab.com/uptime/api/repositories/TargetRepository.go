@@ -34,8 +34,6 @@ func GetDb() (db *sql.DB, err error) {
 		}
 	}
 	return db, err
-	db, err = sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
-	return db, err
 }
 
 func AddTarget(db *sql.DB, newTarget target.Target_data) (target.Target_data, error) {
