@@ -27,6 +27,7 @@ func AddResult(db *sql.DB, newResult poller.Response) (poller.Response, error) {
 
 func GetResult(db *sql.DB, id int) (poller.Response, error) {
 	var result poller.Response
+	var errScan error
 	if db == nil {
 		error := errors.New("db = nil ")
 		return result, error
@@ -40,7 +41,10 @@ func GetResult(db *sql.DB, id int) (poller.Response, error) {
 		return result, err
 	}
 	for row.Next() {
-		_ = row.Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
+		errScan = row.Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
+		if(errScan != nil) {
+			return result, errScan
+		}
 	}
 	return result, nil
 }
