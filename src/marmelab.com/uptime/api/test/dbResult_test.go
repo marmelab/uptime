@@ -139,9 +139,9 @@ func TestDeleteValidResultShouldNotTriggerError(t *testing.T) {
 	targetAdded1, db := addTarget("testAdd")
 	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
 	result, _ := addResult(newResult)
-	returned2, error := repositories.DeleteTarget(db, result.Id)
+	returned2, error := repositories.DeleteResult(db, result.Id)
 	if error != nil {
-		t.Error("delete a valid resultResultd not raise a error")
+		t.Error("delete a valid resultResultd should not raise a error")
 	}
 	_, errorQuery := db.Query("SELECT destination FROM result WHERE id = $1", returned2.Id)
 	if errorQuery == nil {
@@ -154,7 +154,7 @@ func TestDeleteInvalidResultShouldTriggerError(t *testing.T) {
 	targetAdded1, db := addTarget("testAdd")
 	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
 	_, _ = addResult(newResult)
-	_, error := repositories.DeleteTarget(db, -1)
+	_, error := repositories.DeleteResult(db, -1)
 	if error == nil {
 		t.Error("delete a invalid result should raise a error", error)
 	}
