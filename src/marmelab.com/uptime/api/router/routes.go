@@ -72,7 +72,7 @@ var routes = Routes{
 	Route{
 		"DeleteResult",
 		"DELETE",
-		"/results",
+		"/results/{id}",
 		handlers.DeleteResult,
 	},
 }

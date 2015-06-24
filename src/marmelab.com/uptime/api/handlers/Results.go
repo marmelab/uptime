@@ -28,7 +28,7 @@ func GetResults(w http.ResponseWriter, r *http.Request) {
 	results := make([]poller.Response, 0)
 	for rows.Next() {
 		var newResult poller.Response
-		error := rows.Scan(&newResult.Target_id, &newResult.Target_id, &newResult.Destination, &newResult.Status, &newResult.Time, &newResult.Created_at)
+		error := rows.Scan(&newResult.Id, &newResult.Target_id, &newResult.Destination, &newResult.Status, &newResult.Time, &newResult.Created_at)
 		if error != nil {
 			log.Print("ERROR Scan GetResults ", error)
 			http.Error(w, http.StatusText(500), 500)
@@ -90,7 +90,7 @@ func PutResult(w http.ResponseWriter, r *http.Request) {
 	var newResult poller.Response
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
-	error := decoder.Decode(&newResult.Destination)
+	error := decoder.Decode(&newResult)
 	if error != nil {
 		http.Error(w, http.StatusText(500), 500)
 		return

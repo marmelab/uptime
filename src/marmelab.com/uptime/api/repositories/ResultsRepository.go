@@ -18,7 +18,11 @@ func AddResult(db *sql.DB, newResult poller.Response) (poller.Response, error) {
 		error := errors.New("newResult = nil ")
 		return result, error
 	}
-	_ = db.QueryRow("INSERT INTO results (destination, status, duration) VALUES($1, $2, $3) RETURNING id, target_id, destination, status, duration, created_at" , newResult.Destination, newResult.Status, newResult.Time).Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
+	if newResult.Status == "" {
+		error := errors.New("newResult = nil ")
+		return result, error
+	}
+	_ = db.QueryRow("INSERT INTO results (target_id, destination, status, duration) VALUES($1, $2, $3, $4) RETURNING id, target_id, destination, status, duration, created_at" , &newResult.Target_id, newResult.Destination, newResult.Status, newResult.Time).Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
 	return result, nil
 }
 
