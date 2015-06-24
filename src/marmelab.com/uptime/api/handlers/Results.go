@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"../repositories"
 	"../../poller"
+	"../repositories"
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"log"

@@ -1,8 +1,8 @@
 package test
 
 import (
-	"../repositories"
 	"../../poller"
+	"../repositories"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"reflect"
@@ -12,24 +12,24 @@ import (
 func addResult(expectedTarget poller.Response) (poller.Response, *sql.DB) {
 	var result poller.Response
 	db, _ := connectToDB()
-	_ = db.QueryRow("INSERT INTO results (target_id, destination, status, duration) VALUES($1, $2, $3, $4) RETURNING id",expectedTarget.Target_id ,expectedTarget.Destination, &expectedTarget.Status, &expectedTarget.Time).Scan(&result.Id)
+	_ = db.QueryRow("INSERT INTO results (target_id, destination, status, duration) VALUES($1, $2, $3, $4) RETURNING id", expectedTarget.Target_id, expectedTarget.Destination, &expectedTarget.Status, &expectedTarget.Time).Scan(&result.Id)
 	return result, db
 }
 
 func TestAddValidResultShouldNotTriggerError(t *testing.T) {
-	db, _ := connectToDB()
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	targetAdded, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
 	newResultAdded, errorAddResult := repositories.AddResult(db, newResult)
 	if errorAddResult != nil {
 		t.Error("Error add a valid result should not trigger a error", errorAddResult)
 	}
-	row, err := db.Query("SELECT * FROM results WHERE id = $1", newResultAdded.Id)
+	row, _ := db.Query("SELECT * FROM results WHERE id = $1", newResultAdded.Id)
 	defer row.Close()
 	var actualResult poller.Response
 	for row.Next() {
-		error := row.Scan(&actualResult.Id, &actualResult.Target_id, &actualResult.Destination, &actualResult.Status, &actualResult.Time )
+		error := row.Scan(&actualResult.Id, &actualResult.Target_id, &actualResult.Destination, &actualResult.Status, &actualResult.Time, &actualResult.Created_at)
 		if error != nil {
-			t.Error("Error addResult doesn't add the target in database", err)
+			t.Error("Error addResult doesn't add the target in database", error)
 		}
 	}
 	if !reflect.DeepEqual(actualResult.Destination, newResult.Destination) {
@@ -48,7 +48,7 @@ func TestAddValidResultShouldNotTriggerError(t *testing.T) {
 }
 
 func TestAddInvalidResultShouldTriggerError(t *testing.T) {
-	db, _ := connectToDB()
+	_, db := addTarget("testAdd")
 	newResult := poller.Response{Target_id: 0, Destination: "", Status: "", Time: -1}
 	_, errorAddResult := repositories.AddResult(db, newResult)
 	if errorAddResult == nil {
@@ -58,7 +58,8 @@ func TestAddInvalidResultShouldTriggerError(t *testing.T) {
 }
 
 func TestGetValidResultShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	targetAdded, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
 	result, db := addResult(newResult)
 	actualResult, error := repositories.GetResult(db, result.Id)
 	if error != nil {
@@ -87,9 +88,11 @@ func TestGetInvalidResultShouldTriggerError(t *testing.T) {
 }
 
 func TestGetResultsShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	newResult2 := poller.Response{Target_id: 2, Destination: "AddValidTarget2", Status: "failed", Time: 1111}
-	_, db := addResult(newResult)
+	targetAdded1, db := addTarget("testAdd")
+	targetAdded2, _ := addTarget("testAdd2")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	newResult2 := poller.Response{Target_id: targetAdded2.Id, Destination: "AddValidTarget2", Status: "failed", Time: 1111}
+	_, _ = addResult(newResult)
 	_, _ = addResult(newResult2)
 	actualResults, error := repositories.GetResults(db)
 	if error != nil {
@@ -103,14 +106,15 @@ func TestGetResultsShouldNotTriggerError(t *testing.T) {
 }
 
 func TestUpdateValideResultShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	result, db := addResult(newResult)
-	newResult2 := poller.Response{Target_id: 1, Destination: "AddValidTarget2", Status: "good", Time: 1111}
-	updatedResult, error := repositories.UpdateResult(db, newResult2, result.Id)
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	result, _ := addResult(newResult)
+	newResult2 := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget2", Status: "good", Time: 1111}
+	_, error := repositories.UpdateResult(db, newResult2, result.Id)
 	if error != nil {
 		t.Error("replace a valid result with a valid result should not raise a error")
 	}
-	row, _ := db.Query("SELECT destination FROM results WHERE id = $1", updatedResult.Id)
+	row, _ := db.Query("SELECT destination FROM results WHERE id = $1", result.Id)
 	var destination string
 	for row.Next() {
 		_ = row.Scan(&destination)
@@ -132,29 +136,27 @@ func TestUpdateInvalideResultShouldTriggerError(t *testing.T) {
 }
 
 func TestDeleteValidResultShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	result, db := addResult(newResult)
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	result, _ := addResult(newResult)
 	returned2, error := repositories.DeleteTarget(db, result.Id)
 	if error != nil {
 		t.Error("delete a valid resultResultd not raise a error")
 	}
-	row, _ := db.Query("SELECT destination FROM result WHERE id = $1", returned2.Id)
-	var actualResult poller.Response
-	for row.Next() {
-		_ = row.Scan(&actualResult.Destination)
-	}
-	if reflect.DeepEqual(newResult.Destination, actualResult.Destination) {
-		t.Error("Error newResult should be deleted so different from actualResult")
+	_, errorQuery := db.Query("SELECT destination FROM result WHERE id = $1", returned2.Id)
+	if errorQuery == nil {
+		t.Error("Select a deleted result should return a error")
 	}
 	emptyDatabase(db)
 }
 
-func TestDeleteInvalidResultShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	_, db := addResult(newResult)
+func TestDeleteInvalidResultShouldTriggerError(t *testing.T) {
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	_, _ = addResult(newResult)
 	_, error := repositories.DeleteTarget(db, -1)
-	if error != nil {
-		t.Error("delete a invalid result should not raise a error")
+	if error == nil {
+		t.Error("delete a invalid result should raise a error", error)
 	}
 	emptyDatabase(db)
 }

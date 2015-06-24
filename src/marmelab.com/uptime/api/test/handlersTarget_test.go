@@ -1,7 +1,6 @@
 package test
 
 import (
-	Router "../router"
 	"../target"
 	"bytes"
 	"encoding/json"
@@ -12,15 +11,6 @@ import (
 	"testing"
 )
 
-func newServer() {
-	config := map[string]string{"port": "8384"}
-	router := Router.NewRouter()
-	log.Fatal(http.ListenAndServe(":"+config["port"], router))
-}
-
-func TestBeforeTest(t *testing.T) {
-	go newServer()
-}
 func TestGetTargetsShouldNotTriggerError(t *testing.T) {
 	addTarget("google.fr")
 	addTarget("youtube.fr")

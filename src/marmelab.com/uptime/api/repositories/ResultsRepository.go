@@ -18,11 +18,10 @@ func AddResult(db *sql.DB, newResult poller.Response) (poller.Response, error) {
 		error := errors.New("newResult = nil ")
 		return result, error
 	}
-	if newResult.Status == "" {
-		error := errors.New("newResult = nil ")
-		return result, error
+	errorQuery := db.QueryRow("INSERT INTO results (target_id, destination, status, duration) VALUES($1, $2, $3, $4) RETURNING *", newResult.Target_id, newResult.Destination, newResult.Status, newResult.Time).Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
+	if errorQuery != nil {
+		return result, errorQuery
 	}
-	_ = db.QueryRow("INSERT INTO results (target_id, destination, status, duration) VALUES($1, $2, $3, $4) RETURNING id, target_id, destination, status, duration, created_at" , &newResult.Target_id, newResult.Destination, newResult.Status, newResult.Time).Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
 	return result, nil
 }
 
@@ -70,13 +69,7 @@ func UpdateResult(db *sql.DB, newResult poller.Response, oldTargetId int) (polle
 		return result, error
 	}
 	_, err := db.Exec("UPDATE results SET destination = $1, status = $2, duration = $3 WHERE id = $4", newResult.Destination, newResult.Status, newResult.Time, oldTargetId)
-	result.Id = oldTargetId
-	result.Target_id = newResult.Target_id
-	result.Destination = newResult.Destination
-	result.Status = newResult.Status
-	result.Time = newResult.Time
-	result.Created_at = newResult.Created_at
-	return result, err
+	return newResult, err
 }
 
 func DeleteResult(db *sql.DB, resultId int) (poller.Response, error) {
@@ -89,6 +82,9 @@ func DeleteResult(db *sql.DB, resultId int) (poller.Response, error) {
 		error := errors.New("resultId is wrong ")
 		return result, error
 	}
-	_ = db.QueryRow("DELETE FROM results WHERE id = $1 RETURNING *", resultId).Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
+	errorQuery := db.QueryRow("DELETE FROM results WHERE id = $1 RETURNING *", resultId).Scan(&result.Id, &result.Target_id, &result.Destination, &result.Status, &result.Time, &result.Created_at)
+	if errorQuery != nil {
+		return result, errorQuery
+	}
 	return result, nil
 }

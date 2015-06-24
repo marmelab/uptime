@@ -2,6 +2,7 @@ package test
 
 import (
 	"../../poller"
+	Router "../router"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -11,11 +12,23 @@ import (
 	"testing"
 )
 
+func newServer() {
+	config := map[string]string{"port": "8384"}
+	router := Router.NewRouter()
+	log.Fatal(http.ListenAndServe(":"+config["port"], router))
+}
+
+func TestBeforeTest(t *testing.T) {
+	go newServer()
+}
+
 func TestGetResultsHandlerShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	newResult2 := poller.Response{Target_id: 2, Destination: "AddValidTarge2", Status: "good", Time: 1111}
+	targetAdded1, db := addTarget("testAdd")
+	targetAdded2, _ := addTarget("testAdd2")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	newResult2 := poller.Response{Target_id: targetAdded2.Id, Destination: "AddValidTarge2", Status: "good", Time: 1111}
 	addResult(newResult)
-	_, db := addResult(newResult2)
+	addResult(newResult2)
 	var listOfResult []poller.Response
 	response, err := http.Get("http://localhost:8384/results")
 	if response.StatusCode != http.StatusOK {
@@ -40,8 +53,9 @@ func TestGetResultsHandlerShouldNotTriggerError(t *testing.T) {
 }
 
 func TestGetResultWithValidIdShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 2, Destination: "AddValidTarge2", Status: "good", Time: 1111}
-	res, db := addResult(newResult)
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarge2", Status: "good", Time: 1111}
+	res, _ := addResult(newResult)
 	response, err := http.Get("http://localhost:8384/results/" + strconv.Itoa(res.Id))
 	if response.StatusCode != http.StatusOK {
 		t.Error("Error, ShowResult should not return a error", err)
@@ -68,7 +82,8 @@ func TestGetResultWithBadIdsShouldTriggerError(t *testing.T) {
 }
 
 func TestCreateResultWithValidDataShouldNotTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 2, Destination: "AddValidTarge2", Status: "good", Time: 1111}
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarge2", Status: "good", Time: 1111}
 	data, _ := json.Marshal(newResult)
 	req, error := http.NewRequest("POST", "http://localhost:8384/results", bytes.NewBuffer(data))
 	client := &http.Client{}
@@ -80,7 +95,7 @@ func TestCreateResultWithValidDataShouldNotTriggerError(t *testing.T) {
 		t.Error("Error : ", errDecode)
 	}
 	if actualResult.Destination != newResult.Destination {
-		t.Error("Error, result updated is different from exepected ")
+		t.Error("Error, result updated is different from expected ")
 	}
 	if resp.StatusCode != 200 {
 		t.Error("Error, CreateResult should not return a error", resp.StatusCode)
@@ -92,21 +107,21 @@ func TestCreateResultWithValidDataShouldNotTriggerError(t *testing.T) {
 		t.Error("Error, CreateResult should not return a error", error)
 	}
 	defer resp.Body.Close()
-	db, _ := connectToDB()
 	emptyDatabase(db)
 }
 
 func TestUpdateResultWithValidIdShouldTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	res, db := addResult(newResult)
-	newResult2 := poller.Response{Target_id: 1, Destination: "AddValidTarge2", Status: "good", Time: 1111}
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	res, _ := addResult(newResult)
+	newResult2 := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarge2", Status: "good", Time: 1111}
 	data, _ := json.Marshal(newResult2)
 	req, error := http.NewRequest("PUT", "http://localhost:8384/results/"+strconv.Itoa(res.Id), bytes.NewBuffer(data))
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	decoder := json.NewDecoder(resp.Body)
 	var result poller.Response
-	errDecode := decoder.Decode(&newResult)
+	errDecode := decoder.Decode(&result)
 	if errDecode != nil {
 		t.Error("Error : ", errDecode)
 	}
@@ -126,8 +141,9 @@ func TestUpdateResultWithValidIdShouldTriggerError(t *testing.T) {
 }
 
 func TestDeleteResultWithValidIdShouldTriggerError(t *testing.T) {
-	newResult := poller.Response{Target_id: 1, Destination: "AddValidTarget", Status: "good", Time: 1111}
-	res, db := addResult(newResult)
+	targetAdded1, db := addTarget("testAdd")
+	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarget", Status: "good", Time: 1111}
+	res, _ := addResult(newResult)
 	req, error := http.NewRequest("DELETE", "http://localhost:8384/results/"+strconv.Itoa(res.Id), nil)
 	client := &http.Client{}
 	resp, err := client.Do(req)

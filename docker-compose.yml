@@ -16,7 +16,7 @@ api:
     volumes:
         - .:/usr/src/api
     working_dir: /usr/src/api/src/marmelab.com/uptime/api
-    command: sleep 123456 #go run main.go
+    command: go run main.go
     ports:
         - "8383:8383"
     links:

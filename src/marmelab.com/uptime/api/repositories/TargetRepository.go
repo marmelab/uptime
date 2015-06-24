@@ -14,14 +14,14 @@ var db *sql.DB
 
 func GetDb() (db *sql.DB, err error) {
 	configPath := os.Getenv("CONFIG_PATH")
-	if (configPath == "") {
+	if configPath == "" {
 		configPath = "/usr/src/api/src/marmelab.com/uptime/conf.json"
 	}
 	config, configErr := config.GetConfig(configPath)
 	if configErr != nil {
 		return nil, configErr
 	}
-	if(config["database"] != nil) {
+	if config["database"] != nil {
 		configdb := config["database"].(map[string]interface{})
 		if db == nil {
 			db, err := sql.Open("postgres", "host="+configdb["host"].(string)+" user="+configdb["user"].(string)+" dbname="+configdb["dbname"].(string)+" sslmode="+configdb["sslmode"].(string)+"")
@@ -98,7 +98,7 @@ func UpdateTarget(db *sql.DB, newTarget target.Target_data, oldTargetId int) (ta
 	var result target.Target_data
 	if db == nil {
 		error := errors.New("db = nil ")
-		return  result, error
+		return result, error
 	}
 	if newTarget.Destination == "" || oldTargetId <= 0 {
 		error := errors.New("newTarget = nil or oldTarget is wrong")
