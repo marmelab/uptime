@@ -4,11 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
+	"log"
 )
 
 func GetConfig(configPath string) (map[string]interface{}, error) {
 	rawConfig, err := ioutil.ReadFile(configPath)
 	if err != nil {
+		log.Print(err)
 		return nil, errors.New("Configuration file not found: " + configPath)
 	}
 
