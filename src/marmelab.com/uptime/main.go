@@ -1,9 +1,9 @@
 package main
 
 import (
-	"marmelab.com/uptime/api/target"
-	"marmelab.com/uptime/config"
-	"marmelab.com/uptime/poller"
+	"./api/target"
+	"./config"
+	"./poller"
 	"encoding/json"
 	"io/ioutil"
 	"log"
