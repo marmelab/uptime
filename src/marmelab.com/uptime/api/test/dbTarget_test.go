@@ -12,8 +12,8 @@ import (
 
 func connectToDB() (*sql.DB, error) {
 	config, err := config.GetConfig("./conf_test.json")
-	if (err != nil) {
-		return nil, err;
+	if err != nil {
+		return nil, err
 	}
 
 	return sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
