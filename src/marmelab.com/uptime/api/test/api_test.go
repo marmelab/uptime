@@ -23,7 +23,7 @@ func TestSetCorsShouldEffectivelySetCORSHeaders(t *testing.T) {
 
 func TestSetContentTypeShouldEffectivelySetCORSHeaders(t *testing.T) {
 	expectedH := &http.Header{}
-	w.Set("Content-Type", "application/json")
+	expectedH.Set("Content-Type", "application/json")
 
 	actualH := &http.Header{}
 	handlers.SetContentType(actualH)
