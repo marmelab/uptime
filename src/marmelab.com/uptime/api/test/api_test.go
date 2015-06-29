@@ -21,7 +21,7 @@ func TestSetCorsShouldEffectivelySetCORSHeaders(t *testing.T) {
 	}
 }
 
-func TestSetContentTypeShouldEffectivelySetCORSHeaders(t *testing.T) {
+func TestSetContentTypeShouldEffectivelySetHeader(t *testing.T) {
 	expectedH := &http.Header{}
 	expectedH.Set("Content-Type", "application/json")
 
@@ -31,4 +31,8 @@ func TestSetContentTypeShouldEffectivelySetCORSHeaders(t *testing.T) {
 	if !reflect.DeepEqual(expectedH, actualH) {
 		t.Error("Error SetContentType doesn't set Content-Type as json")
 	}
+}
+
+func TestSetContentTypeWorksForGetRequest() {
+
 }
