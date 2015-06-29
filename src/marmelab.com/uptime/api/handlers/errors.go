@@ -16,3 +16,7 @@ func error500(w http.ResponseWriter, err error, message string) {
 	http.Error(w, http.StatusText(500), 500)
 	return
 }
+
+func SetContentType(w *http.Header) {
+	w.Set("Content-Type", "application/json")
+}
