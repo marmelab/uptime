@@ -13,6 +13,7 @@ import (
 func GetTargets(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	SetContentType(&header)
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		error500(w, errorGetDb, "errorGetDb")
@@ -37,6 +38,7 @@ func GetTargets(w http.ResponseWriter, r *http.Request) {
 func GetTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	SetContentType(&header)
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 	db, errorGetDb := repositories.GetDb()
@@ -54,6 +56,7 @@ func GetTarget(w http.ResponseWriter, r *http.Request) {
 func PostTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	SetContentType(&header)
 	decoder := json.NewDecoder(r.Body)
 	var newTarget target.Target_data
 	error := decoder.Decode(&newTarget)
@@ -74,6 +77,7 @@ func PostTarget(w http.ResponseWriter, r *http.Request) {
 func PutTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	SetContentType(&header)
 	decoder := json.NewDecoder(r.Body)
 	var newTarget target.Target_data
 	vars := mux.Vars(r)
@@ -96,6 +100,7 @@ func PutTarget(w http.ResponseWriter, r *http.Request) {
 func DeleteTarget(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	SetContentType(&header)
 	vars := mux.Vars(r)
 	id, _ := strconv.Atoi(vars["id"])
 	db, errorGetDb := repositories.GetDb()

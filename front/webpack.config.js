@@ -2,17 +2,18 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
 	entry: {
-		'uptime-admin.js': [
+		'uptime-admin': [
 			'webpack-dev-server/client?http://localhost:8080',
 			'webpack/hot/only-dev-server',
-			'./src/conf.js'
+			'./src/conf.js',
+			'react-admin/build/react-admin-standalone.min.css'
 		],
 		'index.html': [
 			'./index.html'
 		]
 	},
 	output: {
-		filename: "app/[name]",
+        filename: 'build/[name].min.js',
 		publicPath: "http://localhost:8080/"
 	},
 	plugins: [
@@ -33,10 +34,10 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.html$/, loaders: ['html'] },
-			{ test: /node_modules\/react-admin\/.*js$/, loaders: ['babel'] },
 			{ test: /\.js$/, loaders: ['react-hot', 'jsx-loader', 'babel'], exclude: /node_modules/ },
 			{ test: /\.scss$/, loader: ExtractTextPlugin.extract('css!sass') },
-			{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'file' }
+			{ test: /\.css$/, loader: ExtractTextPlugin.extract('css') },
+			{ test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'file' },
 		]
 	},
     node: {

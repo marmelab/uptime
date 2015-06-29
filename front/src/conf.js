@@ -1,12 +1,35 @@
-var ReactAdmin = require('../node_modules/react-admin/app/ReactAdmin');
+var React = require('react');
+var ReactRouter = require('react-router');
+var ReactAdmin = require('react-admin/build/react-admin-standalone.min');
 
-    function configureApp(nga, fieldViewConfiguration, components, routes, restful, autoload) {
-        var admin = nga.application('rest-admin backend demo') // application main title
-            .baseApiUrl('http://localhost:8383/'); // main API endpoint
+function configureApp(nga, fieldViewConfiguration, components, routes, restful, autoload) {
+    var admin = nga.application('Uptime').baseApiUrl('http://localhost:8383/');
 
+	var targets = nga.entity('targets').readOnly();
+	var results = nga.entity('results').readOnly();
 
-        return admin;
-    }
+    admin
+        .addEntity(targets)
+//        .addEntity(results);
 
-    React.render(<ReactAdmin configureApp={configureApp} />, document.getElementById('uptime-admin'));
+	targets.dashboardView().title('Recent targets');
+
+	targets.listView()
+		.fields([
+			nga.field('id').label('#'),
+			nga.field('destination')
+		]);
+// targets.views['ListView']
+//     .title('All targets')
+//     .description('List of targets ')
+//     .infinitePagination(false)
+//     .fields([
+//         nga.field('id').label('ID')
+//     ])
+//     .listActions(['show', 'edit', 'delete']);
+
+    return admin;
+}
+
+React.render(<ReactAdmin configureApp={configureApp} />, document.getElementById('uptime-admin'));
 
