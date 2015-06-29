@@ -26,10 +26,10 @@ func TestSetContentTypeShouldEffectivelySetCORSHeaders(t *testing.T) {
 	expectedH.Set("Content-Type", "application/json")
 
 	actualH := &http.Header{}
-	handlers.SetContent(actualH)
+	handlers.SetContentType(actualH)
 
 	if !reflect.DeepEqual(expectedH, actualH) {
-		t.Error("Error SetContent doesn't allow CORS")
+		t.Error("Error SetContentType doesn't set Content-Type as json")
 	}
 }
 
