@@ -94,7 +94,7 @@ func TestGetResultsShouldNotTriggerError(t *testing.T) {
 	newResult2 := poller.Response{Target_id: targetAdded2.Id, Destination: "AddValidTarget2", Status: "failed", Time: 1111}
 	_, _ = addResult(newResult)
 	_, _ = addResult(newResult2)
-	actualResults, error := repositories.GetResults(db)
+	actualResults, error := repositories.GetResults(db, 0, 0)
 	if error != nil {
 		t.Error("Error get targets should not raise a error", error)
 	}

@@ -108,7 +108,7 @@ func TestGetInvalidTargetShouldTriggerError(t *testing.T) {
 func TestGetTargetsWithLastResultShouldNotTriggerError(t *testing.T) {
 	_, db := addTarget("youtube.com")
 	_, _ = addTarget("facebook.com")
-	actualTargets, error := repositories.GetTargetsWithLastResult(db)
+	actualTargets, error := repositories.GetTargetsWithLastResult(db, 0, 0)
 	if error != nil {
 		t.Error("Error get targets should not raise a error", error)
 	}
