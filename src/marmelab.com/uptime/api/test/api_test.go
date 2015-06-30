@@ -33,6 +33,3 @@ func TestSetContentTypeShouldEffectivelySetHeader(t *testing.T) {
 	}
 }
 
-func TestSetContentTypeWorksForGetRequest() {
-
-}
