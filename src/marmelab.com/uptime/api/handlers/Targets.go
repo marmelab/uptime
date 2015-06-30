@@ -13,9 +13,8 @@ import (
 func GetTargets(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
-	vars := mux.Vars(r)
-	page, _ := strconv.Atoi(vars["page"])
-	perPage, _ := strconv.Atoi(vars["perPage"])
+	page := parseQueryValues(r, "page")
+	perPage := parseQueryValues(r, "perPage")
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		error500(w, errorGetDb, "errorGetDb")

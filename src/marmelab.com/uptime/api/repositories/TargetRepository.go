@@ -82,6 +82,12 @@ func GetTargetsWithLastResult(db *sql.DB, page int, perPage int) (*sql.Rows, err
 		error := errors.New("db = nil ")
 		return nil, error
 	}
+	if page <= 0 {
+		page = 1
+	}
+	if perPage <= 0 {
+		perPage = 20
+	}
 	rows, queryError := db.Query(`
 		WITH last_results AS (
 			SELECT *, ROW_NUMBER() OVER(
@@ -92,8 +98,8 @@ func GetTargetsWithLastResult(db *sql.DB, page int, perPage int) (*sql.Rows, err
 		)
 		SELECT D.id, D.destination, LR.status = 'good' AS reachable
 		FROM destination D
-		LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1);
-	`)
+		LEFT JOIN last_results LR ON (D.destination = LR.destination AND rank = 1) LIMIT $1 OFFSET $2;
+	`, perPage, page)
 	if queryError != nil {
 		log.Print("request error ", queryError)
 		return nil, queryError
