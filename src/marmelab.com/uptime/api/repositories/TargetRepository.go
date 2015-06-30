@@ -82,8 +82,8 @@ func GetTargetsWithLastResult(db *sql.DB, page int, perPage int) (*sql.Rows, err
 		error := errors.New("db = nil ")
 		return nil, error
 	}
-	if page <= 0 {
-		page = 1
+	if page < 0 {
+		page = 0
 	}
 	if perPage <= 0 {
 		perPage = 20

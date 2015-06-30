@@ -54,7 +54,7 @@ func GetResults(db *sql.DB, page int, perPage int) (*sql.Rows, error) {
 		error := errors.New("db = nil ")
 		return nil, error
 	}
-	if page <= 0 {
+	if page < 0 {
 		page = 1
 	}
 	if perPage <= 0 {

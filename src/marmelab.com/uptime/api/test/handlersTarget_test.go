@@ -17,7 +17,7 @@ func TestGetTargetsShouldNotTriggerError(t *testing.T) {
 	var listOfTarget []target.Target_data
 	response, err := http.Get("http://localhost:8384/targets")
 	if response.StatusCode != http.StatusOK {
-		t.Error("Error, GetTargets should not return a error", err)
+		t.Error("Error, GetTargets should return 200 as code", err)
 	}
 	body, err := ioutil.ReadAll(response.Body)
 	response.Body.Close()
@@ -28,8 +28,9 @@ func TestGetTargetsShouldNotTriggerError(t *testing.T) {
 	if err != nil {
 		t.Error("Error, GetTargets should not return a error", err)
 	}
+	log.Print(listOfTarget)
 	if listOfTarget[0].Destination != "google.fr" {
-		t.Error("Error, GetTargets should not return a error", err)
+		t.Error("Error, GetTargets should return the same object as inserted", err)
 	}
 	db, _ := connectToDB()
 	emptyDatabase(db)
