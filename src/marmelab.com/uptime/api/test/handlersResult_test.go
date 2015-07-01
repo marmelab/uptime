@@ -2,7 +2,6 @@ package test
 
 import (
 	"../../poller"
-	Router "../router"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -11,16 +10,6 @@ import (
 	"strconv"
 	"testing"
 )
-
-func newServer() {
-	config := map[string]string{"port": "8384"}
-	router := Router.NewRouter()
-	log.Fatal(http.ListenAndServe(":"+config["port"], router))
-}
-
-func TestBeforeTest(t *testing.T) {
-	go newServer()
-}
 
 func TestGetResultsHandlerShouldNotTriggerError(t *testing.T) {
 	targetAdded1, db := addTarget("testAdd")

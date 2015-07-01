@@ -16,6 +16,24 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
+		"OptionsHandler",
+		"OPTIONS",
+		"/",
+		handlers.OptionsHandler,
+	},
+	Route{
+		"OptionsHandler",
+		"OPTIONS",
+		"/{*}",
+		handlers.OptionsHandler,
+	},
+	Route{
+		"OptionsHandler",
+		"OPTIONS",
+		"/{*}/{*}",
+		handlers.OptionsHandler,
+	},
+	Route{
 		"GetTargets",
 		"GET",
 		"/targets",
