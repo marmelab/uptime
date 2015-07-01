@@ -4,12 +4,12 @@ import (
 	"net/http"
 	"testing"
 	"log"
-	Router "../router"
+	"../router"
 )
 
 func newServer() {
 	config := map[string]string{"port": "8384"}
-	router := Router.NewRouter()
+	router := router.NewRouter()
 	log.Fatal(http.ListenAndServe(":"+config["port"], router))
 }
 
