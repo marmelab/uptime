@@ -12,11 +12,13 @@ import (
 func GetResults(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	page := parseQueryValues(r, "page")
+	perPage := parseQueryValues(r, "perPage")
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		error500(w, errorGetDb, " errorGetDb")
 	}
-	rows, errGetResults := repositories.GetResults(db)
+	rows, errGetResults := repositories.GetResults(db, page, perPage)
 	if errGetResults != nil {
 		error500(w, errGetResults, "errGetResults")
 	}

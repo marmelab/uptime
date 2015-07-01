@@ -13,11 +13,13 @@ import (
 func GetTargets(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 	SetCors(&header)
+	page := parseQueryValues(r, "page")
+	perPage := parseQueryValues(r, "perPage")
 	db, errorGetDb := repositories.GetDb()
 	if errorGetDb != nil {
 		error500(w, errorGetDb, "errorGetDb")
 	}
-	rows, errGetTargets := repositories.GetTargetsWithLastResult(db)
+	rows, errGetTargets := repositories.GetTargetsWithLastResult(db,page,perPage)
 	if errGetTargets != nil {
 		error500(w, errGetTargets, " error GetTargets")
 		return

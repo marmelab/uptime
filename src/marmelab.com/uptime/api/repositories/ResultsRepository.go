@@ -49,12 +49,18 @@ func GetResult(db *sql.DB, id int) (poller.Response, error) {
 	return result, nil
 }
 
-func GetResults(db *sql.DB) (*sql.Rows, error) {
+func GetResults(db *sql.DB, page int, perPage int) (*sql.Rows, error) {
 	if db == nil {
 		error := errors.New("db = nil ")
 		return nil, error
 	}
-	rows, QueryError := db.Query("SELECT * from results")
+	if page < 0 {
+		page = 0
+	}
+	if perPage <= 0 {
+		perPage = 20
+	}
+	rows, QueryError := db.Query("SELECT * from results LIMIT $1 OFFSET $2", perPage, page)
 	if QueryError != nil {
 		log.Print("request error ", QueryError)
 		return nil, QueryError
