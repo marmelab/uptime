@@ -64,6 +64,7 @@ func TestGetResultWithValidIdShouldNotTriggerError(t *testing.T) {
 	body, err := ioutil.ReadAll(response.Body)
 	response.Body.Close()
 	err = json.Unmarshal(body, &getResult)
+	log.Print(getResult)
 	if getResult.Destination != "AddValidTarge2" {
 		t.Error("Error, GetResult should not return a error", err)
 	}
@@ -160,20 +161,6 @@ func TestDeleteResultWithValidIdShouldTriggerError(t *testing.T) {
 	}
 	if error != nil {
 		t.Error("Error, DeleteResult should not return a error", err)
-	}
-	emptyDatabase(db)
-}
-
-func TestSetContentTypeWorksForGetRequest(t *testing.T) {
-	targetAdded1, db := addTarget("testAdd")
-	newResult := poller.Response{Target_id: targetAdded1.Id, Destination: "AddValidTarge2", Status: "good", Time: 1111}
-	res, _ := addResult(newResult)
-	response, err := http.Get("http://localhost:8384/results/" + strconv.Itoa(res.Id))
-	if response.StatusCode != http.StatusOK {
-		t.Error("Error, ShowResult should not return a error", err)
-	}
-	if response.Header.Get("Content-Type") != "application/json" {
-		t.Error("SetContentType didn't set Content-Type of the response")
 	}
 	emptyDatabase(db)
 }
