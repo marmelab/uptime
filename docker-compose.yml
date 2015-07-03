@@ -20,7 +20,6 @@ api:
     command: go run main.go
     ports:
         - "8383:8383"
-        - "8384:8384"
     links:
         - "db"
 

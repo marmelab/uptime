@@ -32,9 +32,6 @@ run:
 	docker-compose up -d watcher
 	docker-compose up -d --no-deps client
 
-run_test_server:
-	@docker-compose up -d api
-	@docker exec -ti uptime_api_1 go run testUtilities/testingServer.go
 clear:
 	@docker-compose kill
 	@docker-compose rm
