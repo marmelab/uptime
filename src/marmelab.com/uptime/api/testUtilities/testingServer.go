@@ -13,5 +13,5 @@ func newServer() {
 }
 
 func main() {
-	go newServer()
+	newServer()
 }
