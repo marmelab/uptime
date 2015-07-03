@@ -10,6 +10,7 @@ watcher:
     links:
         - "api"
         - "website"
+    restart: always
 api:
     image: golang
     environment:
@@ -22,6 +23,7 @@ api:
         - "8383:8383"
     links:
         - "db"
+    restart: always
 
 website:
     image: nginx
@@ -34,6 +36,7 @@ db:
     image: postgres
     volumes:
         - .:/usr/src/db
+    restart: always
 
 webpack:
     image: iojs:1.6.3
@@ -55,3 +58,4 @@ client:
     command: node /usr/src/client/server.js
     links:
         - "api"
+    restart: always
