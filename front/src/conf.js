@@ -30,6 +30,15 @@ function configureApp(nga, fieldViewConfiguration, components, routes, restful, 
 			nga.field('Time'),
 			nga.field('Created_at')
 		]);
+
+    targets.views['CreateView']
+        .fields([
+            nga.field('title') // the default edit field type is 'string', and displays as a text input
+                .attributes({ placeholder: 'the targets title' }) // you can add custom attributes, too
+                .validation({ required: true, minlength: 1, maxlength: 240 }), // add validation rules for fields
+            nga.field('destination', 'text'), // text field type translates to a textarea
+        ]);
+    ];
 // targets.views['ListView']
 //     .title('All targets')
 //     .description('List of targets ')
