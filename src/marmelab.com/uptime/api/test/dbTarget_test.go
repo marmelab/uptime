@@ -15,7 +15,6 @@ func connectToDB() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return sql.Open("postgres", "host="+config["host"].(string)+" user="+config["user"].(string)+" dbname="+config["dbname"].(string)+" sslmode="+config["sslmode"].(string)+"")
 }
 func addTarget(destination string) (target.Target_data, *sql.DB) {
