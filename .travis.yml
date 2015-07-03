@@ -14,6 +14,9 @@ before_script:
     - createdb uptimeTest -U postgres
     - psql -f var/schema.sql --username=postgres uptimeTest
     - psql -c '\connect uptimeTest' -f fixtures/test_fixtures.sql --username=postgres uptimeTest
+    - cd src/marmelab.com/uptime/api/testUtilisies
+    - CONFIG_PATH=../test/conf_test.json go run testingServer.go
+    - cd ../../../..
 
 script:
     - cp src/marmelab.com/uptime/conf.json.dist src/marmelab.com/uptime/conf.json

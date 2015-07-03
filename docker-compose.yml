@@ -20,6 +20,7 @@ api:
     command: go run main.go
     ports:
         - "8383:8383"
+        - "8384:8384"
     links:
         - "db"
 
@@ -44,14 +45,3 @@ webpack:
     command: ./node_modules/.bin/webpack-dev-server --progress --hot --host=0.0.0.0
     ports:
         - "8080:8080"
-
-client:
-    image: iojs:1.6.3
-    ports:
-        - "8000:8000"
-    volumes:
-        - ./front:/usr/src/client
-    working_dir: /usr/src/client
-    command: node /usr/src/client/server.js
-    links:
-        - "api"
