@@ -18,9 +18,11 @@ func TestBeforeTest(t *testing.T) {
 }
 
 func TestOptionsHandlerShouldNotRaiseErrorAndSetStatusCode(t *testing.T) {
-	req, _ := http.NewRequest("OPTIONS", "http://localhost:8384/results", nil)
+	req, err := http.NewRequest("OPTIONS", "http://localhost:8384/results", nil)
+	log.Print("ici", err)
 	client := &http.Client{}
-	resp, _ := client.Do(req)
+	resp, error := client.Do(req)
+	log.Print("la", error)
 	if resp.StatusCode != http.StatusOK {
 		t.Error("Error,  OptionsHandler should return 200", resp.StatusCode)
 	}
