@@ -1,5 +1,9 @@
 # Uptime
 
+:warning: Before installing this project you must know that uptime is outdated and not maintained anymore by marmelab's team.
+
+If you are interested to maintain this project, please [open an issue](https://github.com/marmelab/uptime/issues).
+
 ## Setup
 
 In order to make the project functional, you have to run following command:
